@@ -1,0 +1,270 @@
+// Usuarios CRUD — Pure CSS Grid layout
+
+:host { display: block; }
+
+.page-bg { --background: #F3F6FD; }
+
+/* ── Toolbar ── */
+.shell-toolbar {
+  --background: rgba(243, 246, 253, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  --border-color: rgba(124, 58, 237, 0.08);
+
+  ion-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.4px;
+    color: #1E1B4B;
+  }
+}
+
+/* ── Page scroll ── */
+.page-scroll {
+  padding: 32px 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 640px) { padding: 16px; }
+}
+
+/* ── Header ── */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+
+  h2 {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    margin: 0 0 4px;
+    background: linear-gradient(135deg, #7C3AED 0%, #e11d48 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    font-size: 0.88rem;
+    color: #9CA3AF;
+    margin: 0;
+  }
+}
+
+/* ── Segment ── */
+.segment-bar {
+  margin-bottom: 24px;
+
+  ion-segment {
+    max-width: 440px;
+    --background: #EDE9FE;
+    border-radius: 14px;
+    padding: 3px;
+  }
+
+  ion-segment-button {
+    --border-radius: 11px;
+    --color: #6B7280;
+    --color-checked: #7C3AED;
+    --indicator-color: #FFFFFF;
+    --indicator-box-shadow: 0 4px 12px rgba(124, 58, 237, 0.18);
+    font-weight: 600;
+    font-size: 0.85rem;
+    min-height: 36px;
+  }
+}
+
+/* ── Skeleton grid ── */
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.skeleton-card {
+  background: #FFFFFF;
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid rgba(124, 58, 237, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  background: #FFFFFF;
+  border-radius: 28px;
+  border: 2px dashed rgba(124, 58, 237, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+
+  .empty-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 24px;
+    background: rgba(124, 58, 237, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    color: #1E1B4B;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: #9CA3AF;
+    margin: 0 auto 24px;
+    max-width: 280px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  ion-button {
+    --background: linear-gradient(135deg, #7C3AED, #e11d48);
+    --border-radius: 13px;
+    font-weight: 700;
+    height: 46px;
+  }
+}
+
+/* ══════════════════════════════════════════
+   USUARIOS GRID — auto-fill cards
+══════════════════════════════════════════ */
+.usuarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.user-card {
+  background: #FFFFFF;
+  border-radius: 22px;
+  border: 1px solid rgba(124, 58, 237, 0.07);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.055);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+              box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin: 0;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 48px rgba(107, 82, 217, 0.16);
+  }
+
+  ion-card-content {
+    display: flex;
+    align-items: center;
+    padding: 18px 20px;
+    gap: 14px;
+  }
+}
+
+.user-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 800;
+  flex-shrink: 0;
+  color: white;
+  letter-spacing: -0.5px;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  &.root        { background: linear-gradient(135deg, #DC2626, #F97316); box-shadow: 0 6px 16px rgba(220, 38, 38, 0.30); }
+  &.admin       { background: linear-gradient(135deg, #7C3AED, #e11d48); box-shadow: 0 6px 16px rgba(124, 58, 237, 0.30); }
+  &.director    { background: linear-gradient(135deg, #6366F1, #7C3AED); box-shadow: 0 6px 16px rgba(99, 102, 241, 0.30); }
+  &.funcionario { background: linear-gradient(135deg, #0D9488, #10B981); box-shadow: 0 6px 16px rgba(13, 148, 136, 0.30); }
+  &.medium      { background: linear-gradient(135deg, #475569, #64748B); box-shadow: 0 6px 16px rgba(71, 85, 105, 0.25); }
+}
+
+.user-card:hover .user-avatar {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+
+  .user-header {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 5px;
+
+    h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #1E1B4B;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+      letter-spacing: -0.3px;
+    }
+  }
+
+  p {
+    margin: 0 0 3px;
+    font-size: 0.8rem;
+    color: #9CA3AF;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    ion-icon { flex-shrink: 0; font-size: 12px; }
+  }
+}
+
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Inactive state ── */
+.card-inactive {
+  opacity: 0.55;
+  filter: grayscale(25%);
+  border-style: dashed !important;
+}
+
+/* ── Mobile FAB ── */
+.mobile-only {
+  display: none;
+  @media (max-width: 640px) { display: block; }
+}
+
+.btn-add {
+  font-weight: 700;
+  @media (max-width: 640px) { display: none; }
+}
+
+/* ── Animations ── */
+.fade-in          { animation: fadeIn  0.5s ease both; }
+.fade-in-delayed  { animation: fadeIn  0.5s ease 0.15s both; }
+.slide-up         { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes fadeIn  { from { opacity: 0; }              to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }

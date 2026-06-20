@@ -1,0 +1,117 @@
+@use 'sass:color';
+
+$border-radius: 16px;
+$color-safe: #2ecc71;
+$color-warning: #f1c40f;
+$color-warning-high: #e67e22;
+$color-critical: #e74c3c;
+$color-custom: #3498db;
+
+.paciente-card {
+  padding: 16px;
+  border-radius: $border-radius;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  margin-bottom: 12px;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.patient-info {
+  .patient-name {
+    margin: 0 0 4px 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #2c3e50;
+    letter-spacing: -0.2px;
+  }
+  .patient-rut {
+    font-size: 0.85rem;
+    color: #95a5a6;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+}
+
+.alert-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.3px;
+
+  &.safe {
+    background: rgba($color-safe, 0.1);
+    color: color.adjust($color-safe, $lightness: -10%);
+  }
+  &.warning {
+    background: rgba($color-warning, 0.15);
+    color: color.adjust($color-warning, $lightness: -20%);
+  }
+  &.critical {
+    background: rgba($color-critical, 0.1);
+    color: $color-critical;
+    animation: pulseAlert 2s infinite;
+  }
+  &.custom {
+    background: rgba($color-custom, 0.1);
+    color: $color-custom;
+  }
+}
+
+.progress-section {
+  width: 100%;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #aeb6bf;
+  margin-bottom: 8px;
+  
+  .label-current {
+    font-weight: 700;
+    color: #34495e;
+  }
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #ecf0f1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.safe { background-color: $color-safe; }
+  &.warning { background-color: $color-warning; }
+  &.critical { background-color: $color-critical; }
+  &.custom { background-color: $color-custom; }
+}
+
+@keyframes pulseAlert {
+  0% { box-shadow: 0 0 0 0 rgba($color-critical, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba($color-critical, 0); }
+  100% { box-shadow: 0 0 0 0 rgba($color-critical, 0); }
+}

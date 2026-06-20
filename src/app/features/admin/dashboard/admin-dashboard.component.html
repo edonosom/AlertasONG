@@ -1,0 +1,235 @@
+<div class="w-full h-full text-slate-800 flex flex-col xl:flex-row gap-6">
+
+  <!-- Left Column (Main Dashboard Content) -->
+  <div class="flex-1 flex flex-col gap-6 min-w-0">
+    
+    <!-- Top Row: Hero Card & Stacked Metrics -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6" *ngIf="!metricsError()">
+      
+      <!-- Hero Card (Overview) -->
+      <div class="bg-gradient-to-br from-[#5944B2] to-[#402C84] rounded-[32px] p-8 flex flex-col justify-between shadow-[0_20px_40px_rgba(89,68,178,0.35)] relative overflow-hidden h-full min-h-[280px]">
+        
+        <!-- Abstract Glass Shape Background -->
+        <div class="absolute bottom-0 left-0 w-full h-[60%] bg-white/5 rounded-t-[40px] blur-[2px]"></div>
+        <svg class="absolute bottom-0 left-0 w-full opacity-30 pointer-events-none" viewBox="0 0 400 150" fill="none" preserveAspectRatio="none">
+          <path d="M0 100 C100 150, 200 50, 400 100 L400 150 L0 150 Z" fill="url(#hero-gradient)"/>
+          <defs>
+            <linearGradient id="hero-gradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <div class="flex justify-between items-start relative z-10">
+          <h2 class="text-white font-bold tracking-wide text-lg m-0">Overview Clínico</h2>
+          <div class="bg-white/10 px-4 py-1.5 rounded-full text-white/90 text-xs font-semibold backdrop-blur-sm border border-white/10">Global</div>
+        </div>
+
+        <div class="flex justify-between items-end relative z-10 mt-12">
+          <!-- Total Centros -->
+          <div class="flex flex-col">
+            <span class="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Total Centros</span>
+            @if (metrics()) {
+              <span class="text-4xl font-black text-white leading-none tracking-tight">{{ metrics()!.centros_activos }}</span>
+            } @else {
+              <div class="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
+            }
+          </div>
+
+          <!-- Total Pacientes (Center Highlight) -->
+          <div class="flex flex-col items-center bg-white/10 p-4 rounded-3xl backdrop-blur-md border border-white/20 shadow-lg">
+             <span class="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Pacientes Totales</span>
+             @if (metrics()) {
+               <span class="text-4xl font-black text-white leading-none tracking-tight">{{ metrics()!.pacientes_totales }}</span>
+             } @else {
+               <div class="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
+             }
+          </div>
+
+          <!-- Funcionarios -->
+          <div class="flex flex-col items-end">
+            <span class="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Funcionarios</span>
+            @if (metrics()) {
+              <span class="text-4xl font-black text-white leading-none tracking-tight">{{ metrics()!.funcionarios_activos }}</span>
+            } @else {
+              <div class="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Stacked Metric Cards -->
+      <div class="flex flex-col gap-6">
+        
+        <!-- Directores Card -->
+        <div class="bg-gradient-to-r from-[#7E61E9] to-[#6A4DD4] rounded-[28px] p-5 flex items-center justify-between shadow-[0_15px_35px_rgba(126,97,233,0.3)] relative overflow-hidden flex-1 group cursor-pointer hover:-translate-y-1 transition-all">
+          <div class="absolute top-0 left-0 w-full h-1/2 bg-white/10 rounded-b-[40px]"></div>
+          
+          <div class="flex items-center gap-4 relative z-10">
+            <div class="w-14 h-14 bg-white/20 rounded-[20px] flex items-center justify-center border border-white/20 shadow-inner group-hover:scale-110 transition-transform">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-white font-bold text-lg leading-tight">Directores</span>
+              <span class="text-white/70 text-xs font-semibold">Activos en plataforma</span>
+            </div>
+          </div>
+          
+          <div class="relative z-10 pr-2">
+            @if (metrics()) {
+              <span class="text-3xl font-black text-white">{{ metrics()!.directores_activos }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Alertas/SLA Card (emerald) -->
+        <div class="bg-gradient-to-r from-[#e11d48] to-[#be123c] rounded-[28px] p-5 flex items-center justify-between shadow-[0_15px_35px_rgba(255,115,150,0.3)] relative overflow-hidden flex-1 group cursor-pointer hover:-translate-y-1 transition-all">
+          <div class="absolute top-0 left-0 w-full h-[40%] bg-white/20 rounded-b-[50px] mix-blend-overlay"></div>
+          
+          <div class="flex items-center gap-4 relative z-10">
+            <div class="w-14 h-14 bg-white/20 rounded-[20px] flex items-center justify-center border border-white/20 shadow-inner group-hover:scale-110 transition-transform">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-white font-bold text-lg leading-tight">Alertas</span>
+              <span class="text-white/70 text-xs font-semibold">Casos críticos</span>
+            </div>
+          </div>
+          
+          <div class="relative z-10 pr-2 flex items-center gap-2">
+            @if (metrics()) {
+              <span class="text-3xl font-black text-white">{{ metrics()!.alertas_criticas }}</span>
+            } @else {
+              <div class="w-10 h-8 bg-white/20 rounded animate-pulse"></div>
+            }
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Error Banner -->
+    <div *ngIf="metricsError()" class="bg-red-50 p-4 rounded-[20px] text-red-600 font-medium flex items-center gap-3">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      No se pudieron cargar las métricas. Intenta refrescar.
+    </div>
+
+    <!-- Bottom Row: Floating White Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+      
+      <!-- Card 1 -->
+      <a routerLink="/admin/centros" class="bg-white rounded-[32px] p-6 pt-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,136,128,0.08)] hover:-translate-y-1 transition-all relative flex flex-col items-center text-center cursor-pointer no-underline border border-transparent hover:border-[#008880]/10">
+        <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-[#008880] rounded-[20px] flex items-center justify-center shadow-[0_10px_20px_rgba(0,136,128,0.4)]">
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <strong class="text-slate-800 text-lg font-bold">Gestión de Centros</strong>
+        <span class="text-slate-400 text-xs font-semibold mb-6">Sucursales y regiones clínicas</span>
+        
+        <div class="w-full flex justify-between text-xs font-bold text-slate-500 mb-2">
+           <span>Capacidad</span>
+           <span class="text-[#008880]">85%</span>
+        </div>
+        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+           <div class="h-full bg-[#008880] rounded-full w-[85%]"></div>
+        </div>
+      </a>
+
+      <!-- Card 2 -->
+      <a routerLink="/admin/usuarios" class="bg-white rounded-[32px] p-6 pt-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,136,128,0.08)] hover:-translate-y-1 transition-all relative flex flex-col items-center text-center cursor-pointer no-underline border border-transparent hover:border-[#008880]/10">
+        <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-[#136962] rounded-[20px] flex items-center justify-center shadow-[0_10px_20px_rgba(19,105,98,0.4)]">
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <strong class="text-slate-800 text-lg font-bold">Control Jerárquico</strong>
+        <span class="text-slate-400 text-xs font-semibold mb-6">Administración de usuarios</span>
+        
+        <div class="w-full flex justify-between text-xs font-bold text-slate-500 mb-2">
+           <span>Activos</span>
+           <span class="text-[#136962]">92%</span>
+        </div>
+        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+           <div class="h-full bg-[#136962] rounded-full w-[92%]"></div>
+        </div>
+      </a>
+
+      <!-- Card 3 -->
+      <div class="bg-white rounded-[32px] p-6 pt-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] relative flex flex-col items-center text-center opacity-70">
+        <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-slate-400 rounded-[20px] flex items-center justify-center shadow-[0_10px_20px_rgba(148,163,184,0.4)]">
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <strong class="text-slate-800 text-lg font-bold">Auditoría Clínica</strong>
+        <span class="text-slate-400 text-xs font-semibold mb-6">Módulo en desarrollo</span>
+        
+        <div class="w-full flex justify-between text-xs font-bold text-slate-500 mb-2">
+           <span>Progreso</span>
+           <span class="text-slate-400">Próximamente</span>
+        </div>
+        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+           <div class="h-full bg-slate-300 rounded-full w-[15%]"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right Column (Info Panel) -->
+  <aside class="w-full xl:w-80 flex flex-col gap-6 flex-shrink-0">
+    
+    <!-- Staff Activo -->
+    <div class="bg-white rounded-[32px] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-slate-800 font-extrabold text-lg m-0 flex items-center gap-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Staff Activo
+        </h3>
+        <span class="text-[#008880] text-xs font-bold cursor-pointer hover:underline">Ver todos</span>
+      </div>
+      
+      <!-- Toggle Pill -->
+      <div class="bg-slate-50 rounded-full p-1 flex mb-6 border border-slate-100">
+        <button class="flex-1 bg-[#008880] text-white rounded-full py-1.5 text-xs font-bold shadow-sm">Directores</button>
+        <button class="flex-1 text-slate-500 rounded-full py-1.5 text-xs font-bold hover:text-slate-800">Psicólogos</button>
+      </div>
+
+      <!-- User List (Real) -->
+      <div class="flex flex-col gap-5 overflow-y-auto">
+        
+        @if (metrics()?.recent_users) {
+          @for (usr of metrics()!.recent_users; track usr.id) {
+            <div class="flex items-center justify-between">
+               <div class="flex items-center gap-3">
+                 <div class="relative">
+                   <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-600 font-bold flex items-center justify-center shadow-sm uppercase">
+                     {{ usr.nombre.charAt(0) }}{{ usr.apellido.charAt(0) }}
+                   </div>
+                   <div class="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full"
+                        [ngClass]="usr.is_online ? 'bg-green-400' : 'bg-slate-400'"></div>
+                 </div>
+                 <div class="flex flex-col">
+                   <span class="text-slate-800 font-bold text-sm">{{ usr.nombre }} {{ usr.apellido }}</span>
+                   <span class="text-slate-400 text-[10px] font-semibold uppercase">{{ usr.rol }}</span>
+                 </div>
+               </div>
+               <div class="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 cursor-pointer hover:bg-slate-100">
+                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+               </div>
+            </div>
+          }
+        } @else {
+          <!-- Skeleton -->
+          <div class="animate-pulse flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-slate-200"></div>
+            <div class="flex flex-col gap-2">
+              <div class="w-24 h-3 bg-slate-200 rounded"></div>
+              <div class="w-16 h-2 bg-slate-200 rounded"></div>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+
+  </aside>
+
+</div>

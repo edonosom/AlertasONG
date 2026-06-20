@@ -1,0 +1,78 @@
+<ion-content class="login-bg">
+  <div class="login-container">
+    
+    <div class="brand-section fade-in">
+      <div class="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center mb-6 shadow-lg shadow-teal-500/30 border-4 border-white/20 transform hover:rotate-12 hover:scale-110 transition-all duration-300 overflow-hidden bg-white">
+        <img src="assets/icon/favicon.png" alt="Logo" class="w-full h-full object-cover">
+      </div>
+      <h1 class="brand-title">Proyecto Alerta</h1>
+      <p class="brand-subtitle">Portal de Gestión Clínica</p>
+    </div>
+
+    <div class="glass-panel login-card slide-up">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        
+        <div class="input-group">
+          <ion-item lines="none" class="clinical-input">
+            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              formControlName="email"
+              type="email" 
+              placeholder="Correo electrónico"
+              [clearInput]="true">
+            </ion-input>
+          </ion-item>
+          @if (loginForm.controls.email.invalid && loginForm.controls.email.touched) {
+            <span class="error-text">Ingrese un correo clínico válido</span>
+          }
+        </div>
+
+        <div class="input-group">
+          <ion-item lines="none" class="clinical-input">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-input 
+              formControlName="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="Contraseña">
+            </ion-input>
+            <ion-icon [name]="showPassword() ? 'eye-off-outline' : 'eye-outline'" 
+                      slot="end" 
+                      color="medium" 
+                      class="cursor-pointer hover:text-teal-600 transition-colors"
+                      (click)="togglePassword()">
+            </ion-icon>
+          </ion-item>
+          @if (loginForm.controls.password.invalid && loginForm.controls.password.touched) {
+            <span class="error-text">La contraseña debe tener al menos 6 caracteres</span>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <div class="auth-error animate-pop">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <ion-button 
+          expand="block" 
+          type="submit" 
+          class="login-btn"
+          [disabled]="isLoading()">
+          @if (isLoading()) {
+            <ion-spinner name="crescent"></ion-spinner>
+          } @else {
+            Ingresar al Sistema
+          }
+        </ion-button>
+
+      </form>
+    </div>
+    
+    <p class="footer-text">
+      Acceso exclusivo para funcionarios autorizados.<br>
+      © 2026 ONG Sistema Clínico.
+    </p>
+
+  </div>
+</ion-content>

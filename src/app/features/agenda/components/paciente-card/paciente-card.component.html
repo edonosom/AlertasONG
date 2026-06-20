@@ -1,0 +1,41 @@
+<div class="paciente-card glass-panel">
+  <div class="card-header">
+    <div class="patient-info">
+      <h3 class="patient-name">{{ data().paciente_nombre_completo }}</h3>
+      <span class="patient-rut">{{ maskedRut() }}</span>
+    </div>
+    
+    <div class="alert-badge" [ngClass]="semanticColorClass()">
+      @if (data().tipo === 'PERSONALIZADA') {
+        <ion-icon name="notifications-outline"></ion-icon> Personal
+      } @else {
+        SLA: Día {{ data().dias_transcurridos }}
+      }
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-labels">
+      <span class="label-start">Día 0</span>
+      <span class="label-current">Día {{ data().dias_transcurridos }}</span>
+      <span class="label-end">Día 90</span>
+    </div>
+    
+    <div class="progress-track">
+      <div 
+        class="progress-fill" 
+        [ngClass]="semanticColorClass()"
+        [style.width.%]="progressPercentage()">
+      </div>
+    </div>
+  </div>
+
+  @if (data().tipo !== 'PERSONALIZADA' && data().estado_alerta === 'en_progreso') {
+    <div class="action-section" style="margin-top: 16px;">
+      <ion-button expand="block" color="primary" (click)="confirmarGestion()">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Confirmar Gestión en Sistema Gubernamental
+      </ion-button>
+    </div>
+  }
+</div>

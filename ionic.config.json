@@ -1,0 +1,7 @@
+{
+  "name": "Alertas",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
