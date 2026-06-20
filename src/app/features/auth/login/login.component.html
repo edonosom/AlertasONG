@@ -14,7 +14,7 @@
         
         <div class="input-group">
           <ion-item lines="none" class="clinical-input">
-            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+            <ion-icon [icon]="mailOutline" slot="start" color="medium"></ion-icon>
             <ion-input 
               formControlName="email"
               type="email" 
@@ -29,13 +29,13 @@
 
         <div class="input-group">
           <ion-item lines="none" class="clinical-input">
-            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-icon [icon]="lockClosedOutline" slot="start" color="medium"></ion-icon>
             <ion-input 
               formControlName="password"
               [type]="showPassword() ? 'text' : 'password'"
               placeholder="Contraseña">
             </ion-input>
-            <ion-icon [name]="showPassword() ? 'eye-off-outline' : 'eye-outline'" 
+            <ion-icon [icon]="showPassword() ? eyeOffOutline : eyeOutline" 
                       slot="end" 
                       color="medium" 
                       class="cursor-pointer hover:text-teal-600 transition-colors"
@@ -49,7 +49,7 @@
 
         @if (errorMessage()) {
           <div class="auth-error animate-pop">
-            <ion-icon name="alert-circle-outline"></ion-icon>
+            <ion-icon [icon]="alertCircleOutline"></ion-icon>
             {{ errorMessage() }}
           </div>
         }

@@ -16,6 +16,12 @@ import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleO
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  mailOutline = mailOutline;
+  lockClosedOutline = lockClosedOutline;
+  eyeOutline = eyeOutline;
+  eyeOffOutline = eyeOffOutline;
+  alertCircleOutline = alertCircleOutline;
+
   constructor() {
     addIcons({ mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleOutline });
   }

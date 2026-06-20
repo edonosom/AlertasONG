@@ -41,6 +41,7 @@
               }
             ],
             "styles": [
+              "src/tailwind-generated.css",
               "src/global.scss",
               "src/theme/variables.scss"
             ],
@@ -123,6 +124,7 @@
               }
             ],
             "styles": [
+              "src/tailwind-generated.css",
               "src/global.scss",
               "src/theme/variables.scss"
             ],
