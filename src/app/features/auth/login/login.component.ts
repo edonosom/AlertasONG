@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService, AuthResponse } from '../../../core/services/auth.service';
+import { addIcons } from 'ionicons';
+import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,9 @@ import { AuthService, AuthResponse } from '../../../core/services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  constructor() {
+    addIcons({ mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleOutline });
+  }
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
