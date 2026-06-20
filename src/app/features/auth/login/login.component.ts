@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonItem, IonIcon, IonInput, IonButton, IonSpinner } from '@ionic/angular/standalone';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleO
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IonContent, IonItem, IonIcon, IonInput, IonButton, IonSpinner],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
