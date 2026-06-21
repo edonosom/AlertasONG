@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://alertasongbackend-production.up.railway.app/api/v1'
+  apiUrl: 'https://alertasongbackend-production.up.railway.app/api'
 };
