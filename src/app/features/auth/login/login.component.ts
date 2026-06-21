@@ -1,44 +1,51 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonItem, IonIcon, IonInput, IonButton, IonSpinner } from '@ionic/angular/standalone';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService, AuthResponse } from '../../../core/services/auth.service';
-import { addIcons } from 'ionicons';
-import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IonContent, IonItem, IonIcon, IonInput, IonButton, IonSpinner],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  mailOutline = mailOutline;
-  lockClosedOutline = lockClosedOutline;
-  eyeOutline = eyeOutline;
-  eyeOffOutline = eyeOffOutline;
-  alertCircleOutline = alertCircleOutline;
-
-  constructor() {
-    addIcons({ mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, alertCircleOutline });
-  }
+export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  // Reactive Form tipado
+  // Form
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
-  // Estados Reactivos UI
+  // UI State
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
   showPassword = signal(false);
+  
+  emailFocused = false;
+  passFocused = false;
+
+  // Date/Time
+  currentTime = signal<Date>(new Date());
+  private timerInterval: any;
+
+  ngOnInit() {
+    this.timerInterval = setInterval(() => {
+      this.currentTime.set(new Date());
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+  }
 
   togglePassword() {
     this.showPassword.update(s => !s);
@@ -67,8 +74,7 @@ export class LoginComponent {
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);
-        // Extract exact message from backend if available
-        const msg = err.error?.message || 'Error de conexión con el servidor clínico.';
+        const msg = err.error?.message || 'Error de conexión con el servidor.';
         this.errorMessage.set(msg);
       }
     });
