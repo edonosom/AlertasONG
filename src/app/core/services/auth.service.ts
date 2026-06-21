@@ -23,13 +23,15 @@ export interface AuthResponse {
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly apiUrl = 'http://localhost:8000/api/v1';
+  private readonly apiUrl = environment.apiUrl;
 
   // Señal reactiva central que almacena el estado de autenticación
   currentUser = signal<User | null>(null);

@@ -38,12 +38,14 @@ export interface PacientesResponse {
   data: DirectorPaciente[];
 }
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class DirectorApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8000/api/v1/director';
+  private readonly apiUrl = `${environment.apiUrl}/director`;
 
   getFuncionarios(): Observable<FuncionariosResponse> {
     return this.http.get<FuncionariosResponse>(`${this.apiUrl}/funcionarios`);

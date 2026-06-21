@@ -35,12 +35,14 @@ export interface DetalleDiarioResponse {
   data: DetalleAlertaDia[];
 }
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AlertaApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8000/api/v1/agenda/alertas';
+  private readonly apiUrl = `${environment.apiUrl}/agenda/alertas`;
 
   getResumenMensual(year: number, month: number, extraParams?: any): Observable<CalendarioMensualResponse> {
     const params = { year, month, ...extraParams };
