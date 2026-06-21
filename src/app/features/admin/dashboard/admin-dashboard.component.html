@@ -1,230 +1,268 @@
-<div class="w-full h-full text-slate-800 flex flex-col xl:flex-row gap-6">
+<div class="w-full h-full flex flex-col xl:flex-row gap-5">
 
-  <!-- Left Column (Main Dashboard Content) -->
-  <div class="flex-1 flex flex-col gap-6 min-w-0">
-    
-    <!-- Top Row: Hero Card & Stacked Metrics -->
-    <div class="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6" *ngIf="!metricsError()">
-      
-      <!-- Hero Card (Overview) -->
-      <div class="bg-gradient-to-br from-[#5944B2] to-[#402C84] rounded-[32px] p-8 flex flex-col justify-between shadow-[0_20px_40px_rgba(89,68,178,0.35)] relative overflow-hidden h-full min-h-[280px]">
-        
-        <!-- Abstract Glass Shape Background -->
-        <div class="absolute bottom-0 left-0 w-full h-[60%] bg-white/5 rounded-t-[40px] blur-[2px]"></div>
-        <svg class="absolute bottom-0 left-0 w-full opacity-30 pointer-events-none" viewBox="0 0 400 150" fill="none" preserveAspectRatio="none">
-          <path d="M0 100 C100 150, 200 50, 400 100 L400 150 L0 150 Z" fill="url(#hero-gradient)"/>
-          <defs>
-            <linearGradient id="hero-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-        </svg>
+  <!-- ═══ Left Column ══════════════════════════════════════════ -->
+  <div class="flex-1 flex flex-col gap-5 min-w-0">
 
+    <!-- ── Hero + Metric Cards Row ────────────────────────── -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-5" *ngIf="!metricsError()">
+
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <!-- Animated glow orbs inside card -->
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+
+        <!-- Top row -->
         <div class="flex justify-between items-start relative z-10">
-          <h2 class="text-white font-bold tracking-wide text-lg m-0">Overview Clínico</h2>
-          <div class="bg-white/10 px-4 py-1.5 rounded-full text-white/90 text-xs font-semibold backdrop-blur-sm border border-white/10">Global</div>
+          <div>
+            <span class="hero-eyebrow">Panel de Control</span>
+            <h2 class="hero-title">Overview<br>Clínico</h2>
+          </div>
+          <span class="hero-badge">
+            <span class="online-dot" style="width:6px;height:6px;"></span>
+            Live
+          </span>
         </div>
 
-        <div class="flex justify-between items-end relative z-10 mt-12">
+        <!-- Bottom metrics row -->
+        <div class="flex justify-between items-end relative z-10 mt-auto pt-8">
+
           <!-- Total Centros -->
-          <div class="flex flex-col">
-            <span class="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Total Centros</span>
+          <div class="hero-metric">
+            <span class="hero-metric-label">Centros</span>
             @if (metrics()) {
-              <span class="text-4xl font-black text-white leading-none tracking-tight">{{ metrics()!.centros_activos }}</span>
+              <span class="hero-metric-value count-up">{{ metrics()!.centros_activos }}</span>
             } @else {
-              <div class="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
+              <div class="skeleton" style="width:52px;height:36px;border-radius:10px;"></div>
             }
           </div>
 
-          <!-- Total Pacientes (Center Highlight) -->
-          <div class="flex flex-col items-center bg-white/10 p-4 rounded-3xl backdrop-blur-md border border-white/20 shadow-lg">
-             <span class="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Pacientes Totales</span>
-             @if (metrics()) {
-               <span class="text-4xl font-black text-white leading-none tracking-tight">{{ metrics()!.pacientes_totales }}</span>
-             } @else {
-               <div class="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
-             }
+          <!-- Pacientes (central highlight) -->
+          <div class="hero-metric-center">
+            <span class="hero-metric-label" style="color:rgba(13,146,136,0.8);">Pacientes Totales</span>
+            @if (metrics()) {
+              <span class="hero-metric-value count-up" style="font-size:2.8rem;">{{ metrics()!.pacientes_totales }}</span>
+            } @else {
+              <div class="skeleton" style="width:64px;height:48px;border-radius:12px;"></div>
+            }
           </div>
 
           <!-- Funcionarios -->
-          <div class="flex flex-col items-end">
-            <span class="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Funcionarios</span>
+          <div class="hero-metric" style="align-items:flex-end;">
+            <span class="hero-metric-label">Funcionarios</span>
             @if (metrics()) {
-              <span class="text-4xl font-black text-white leading-none tracking-tight">{{ metrics()!.funcionarios_activos }}</span>
+              <span class="hero-metric-value count-up">{{ metrics()!.funcionarios_activos }}</span>
             } @else {
-              <div class="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
+              <div class="skeleton" style="width:52px;height:36px;border-radius:10px;"></div>
             }
           </div>
         </div>
       </div>
 
       <!-- Stacked Metric Cards -->
-      <div class="flex flex-col gap-6">
-        
+      <div class="flex flex-col gap-4">
+
         <!-- Directores Card -->
-        <div class="bg-gradient-to-r from-[#7E61E9] to-[#6A4DD4] rounded-[28px] p-5 flex items-center justify-between shadow-[0_15px_35px_rgba(126,97,233,0.3)] relative overflow-hidden flex-1 group cursor-pointer hover:-translate-y-1 transition-all">
-          <div class="absolute top-0 left-0 w-full h-1/2 bg-white/10 rounded-b-[40px]"></div>
-          
-          <div class="flex items-center gap-4 relative z-10">
-            <div class="w-14 h-14 bg-white/20 rounded-[20px] flex items-center justify-center border border-white/20 shadow-inner group-hover:scale-110 transition-transform">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div class="flex flex-col">
-              <span class="text-white font-bold text-lg leading-tight">Directores</span>
-              <span class="text-white/70 text-xs font-semibold">Activos en plataforma</span>
+        <div class="metric-card metric-purple">
+          <div class="metric-icon-wrap">
+            <div class="metric-icon metric-icon-pulse">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"
+                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
           </div>
-          
-          <div class="relative z-10 pr-2">
-            @if (metrics()) {
-              <span class="text-3xl font-black text-white">{{ metrics()!.directores_activos }}</span>
-            }
+          <div class="flex flex-col flex-1">
+            <span class="metric-label">Directores</span>
+            <span class="metric-sub">Activos en plataforma</span>
           </div>
+          @if (metrics()) {
+            <span class="metric-value count-up">{{ metrics()!.directores_activos }}</span>
+          } @else {
+            <div class="skeleton" style="width:40px;height:32px;border-radius:8px;"></div>
+          }
         </div>
 
-        <!-- Alertas/SLA Card (emerald) -->
-        <div class="bg-gradient-to-r from-[#e11d48] to-[#be123c] rounded-[28px] p-5 flex items-center justify-between shadow-[0_15px_35px_rgba(255,115,150,0.3)] relative overflow-hidden flex-1 group cursor-pointer hover:-translate-y-1 transition-all">
-          <div class="absolute top-0 left-0 w-full h-[40%] bg-white/20 rounded-b-[50px] mix-blend-overlay"></div>
-          
-          <div class="flex items-center gap-4 relative z-10">
-            <div class="w-14 h-14 bg-white/20 rounded-[20px] flex items-center justify-center border border-white/20 shadow-inner group-hover:scale-110 transition-transform">
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div class="flex flex-col">
-              <span class="text-white font-bold text-lg leading-tight">Alertas</span>
-              <span class="text-white/70 text-xs font-semibold">Casos críticos</span>
+        <!-- Alertas Card -->
+        <div class="metric-card metric-danger">
+          <div class="metric-icon-wrap">
+            <div class="metric-icon metric-icon-pulse metric-icon-danger">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
           </div>
-          
-          <div class="relative z-10 pr-2 flex items-center gap-2">
-            @if (metrics()) {
-              <span class="text-3xl font-black text-white">{{ metrics()!.alertas_criticas }}</span>
-            } @else {
-              <div class="w-10 h-8 bg-white/20 rounded animate-pulse"></div>
-            }
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="flex flex-col flex-1">
+            <span class="metric-label">Alertas Críticas</span>
+            <span class="metric-sub">Casos urgentes activos</span>
           </div>
+          @if (metrics()) {
+            <span class="metric-value count-up">{{ metrics()!.alertas_criticas }}</span>
+          } @else {
+            <div class="skeleton" style="width:40px;height:32px;border-radius:8px;"></div>
+          }
         </div>
 
       </div>
     </div>
 
     <!-- Error Banner -->
-    <div *ngIf="metricsError()" class="bg-red-50 p-4 rounded-[20px] text-red-600 font-medium flex items-center gap-3">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div *ngIf="metricsError()" class="error-banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
       No se pudieron cargar las métricas. Intenta refrescar.
     </div>
 
-    <!-- Bottom Row: Floating White Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-      
-      <!-- Card 1 -->
-      <a routerLink="/admin/centros" class="bg-white rounded-[32px] p-6 pt-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,136,128,0.08)] hover:-translate-y-1 transition-all relative flex flex-col items-center text-center cursor-pointer no-underline border border-transparent hover:border-[#008880]/10">
-        <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-[#008880] rounded-[20px] flex items-center justify-center shadow-[0_10px_20px_rgba(0,136,128,0.4)]">
-           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <!-- ── Quick Access Cards ─────────────────────────────── -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-2">
+
+      <!-- Centros -->
+      <a routerLink="/admin/centros" class="quick-card">
+        <div class="quick-icon-wrap" style="background: linear-gradient(135deg, #0D9288, #0A6E6A);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <strong class="text-slate-800 text-lg font-bold">Gestión de Centros</strong>
-        <span class="text-slate-400 text-xs font-semibold mb-6">Sucursales y regiones clínicas</span>
-        
-        <div class="w-full flex justify-between text-xs font-bold text-slate-500 mb-2">
-           <span>Capacidad</span>
-           <span class="text-[#008880]">85%</span>
+        <div class="flex flex-col gap-1">
+          <strong class="quick-title">Gestión de Centros</strong>
+          <span class="quick-sub">Sucursales y regiones clínicas</span>
         </div>
-        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-           <div class="h-full bg-[#008880] rounded-full w-[85%]"></div>
+        <div class="quick-bar-wrap">
+          <div class="quick-bar-header">
+            <span>Capacidad</span>
+            <span style="color: var(--clr-accent);">85%</span>
+          </div>
+          <div class="quick-bar-track">
+            <div class="quick-bar-fill" style="width: 85%; background: linear-gradient(90deg, #0D9288, #0A6E6A);"></div>
+          </div>
+        </div>
+        <div class="quick-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
       </a>
 
-      <!-- Card 2 -->
-      <a routerLink="/admin/usuarios" class="bg-white rounded-[32px] p-6 pt-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,136,128,0.08)] hover:-translate-y-1 transition-all relative flex flex-col items-center text-center cursor-pointer no-underline border border-transparent hover:border-[#008880]/10">
-        <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-[#136962] rounded-[20px] flex items-center justify-center shadow-[0_10px_20px_rgba(19,105,98,0.4)]">
-           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <!-- Usuarios -->
+      <a routerLink="/admin/usuarios" class="quick-card">
+        <div class="quick-icon-wrap" style="background: linear-gradient(135deg, #0369A1, #024F8C);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <strong class="text-slate-800 text-lg font-bold">Control Jerárquico</strong>
-        <span class="text-slate-400 text-xs font-semibold mb-6">Administración de usuarios</span>
-        
-        <div class="w-full flex justify-between text-xs font-bold text-slate-500 mb-2">
-           <span>Activos</span>
-           <span class="text-[#136962]">92%</span>
+        <div class="flex flex-col gap-1">
+          <strong class="quick-title">Control Jerárquico</strong>
+          <span class="quick-sub">Administración de usuarios</span>
         </div>
-        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-           <div class="h-full bg-[#136962] rounded-full w-[92%]"></div>
+        <div class="quick-bar-wrap">
+          <div class="quick-bar-header">
+            <span>Activos</span>
+            <span style="color: #0369A1;">92%</span>
+          </div>
+          <div class="quick-bar-track">
+            <div class="quick-bar-fill" style="width: 92%; background: linear-gradient(90deg, #0369A1, #024F8C);"></div>
+          </div>
+        </div>
+        <div class="quick-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
       </a>
 
-      <!-- Card 3 -->
-      <div class="bg-white rounded-[32px] p-6 pt-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] relative flex flex-col items-center text-center opacity-70">
-        <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-slate-400 rounded-[20px] flex items-center justify-center shadow-[0_10px_20px_rgba(148,163,184,0.4)]">
-           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <!-- Auditoría (coming soon) -->
+      <div class="quick-card quick-card-inactive">
+        <div class="quick-icon-wrap" style="background: linear-gradient(135deg, #374151, #1F2937);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  stroke="rgba(148,163,184,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <strong class="text-slate-800 text-lg font-bold">Auditoría Clínica</strong>
-        <span class="text-slate-400 text-xs font-semibold mb-6">Módulo en desarrollo</span>
-        
-        <div class="w-full flex justify-between text-xs font-bold text-slate-500 mb-2">
-           <span>Progreso</span>
-           <span class="text-slate-400">Próximamente</span>
+        <div class="flex flex-col gap-1">
+          <strong class="quick-title" style="color: rgba(148,163,184,0.7);">Auditoría Clínica</strong>
+          <span class="quick-sub">Módulo en desarrollo</span>
         </div>
-        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-           <div class="h-full bg-slate-300 rounded-full w-[15%]"></div>
+        <div class="quick-bar-wrap">
+          <div class="quick-bar-header">
+            <span>Progreso</span>
+            <span style="color: rgba(148,163,184,0.5);">15%</span>
+          </div>
+          <div class="quick-bar-track">
+            <div class="quick-bar-fill" style="width: 15%; background: #374151;"></div>
+          </div>
         </div>
+        <span class="soon-badge">Próximamente</span>
       </div>
 
     </div>
   </div>
 
-  <!-- Right Column (Info Panel) -->
-  <aside class="w-full xl:w-80 flex flex-col gap-6 flex-shrink-0">
-    
-    <!-- Staff Activo -->
-    <div class="bg-white rounded-[32px] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col flex-1">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-slate-800 font-extrabold text-lg m-0 flex items-center gap-2">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <!-- ═══ Right Column — Staff Panel ═══════════════════════════ -->
+  <aside class="w-full xl:w-[300px] flex flex-col gap-5 flex-shrink-0 xl:sticky xl:top-0 xl:h-[calc(100vh-120px)]">
+
+    <div class="staff-panel">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="staff-title">
+          <span class="staff-title-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
           Staff Activo
         </h3>
-        <span class="text-[#008880] text-xs font-bold cursor-pointer hover:underline">Ver todos</span>
-      </div>
-      
-      <!-- Toggle Pill -->
-      <div class="bg-slate-50 rounded-full p-1 flex mb-6 border border-slate-100">
-        <button class="flex-1 bg-[#008880] text-white rounded-full py-1.5 text-xs font-bold shadow-sm">Directores</button>
-        <button class="flex-1 text-slate-500 rounded-full py-1.5 text-xs font-bold hover:text-slate-800">Psicólogos</button>
+        <span class="staff-see-all">Ver todos →</span>
       </div>
 
-      <!-- User List (Real) -->
-      <div class="flex flex-col gap-5 overflow-y-auto">
-        
+      <!-- Toggle Tabs -->
+      <div class="staff-toggle mb-5">
+        <button class="staff-tab staff-tab-active">Directores</button>
+        <button class="staff-tab">Psicólogos</button>
+      </div>
+
+      <!-- User List -->
+      <div class="flex flex-col gap-4 overflow-y-auto flex-1 min-h-0 pr-1">
+
         @if (metrics()?.recent_users) {
           @for (usr of metrics()!.recent_users; track usr.id) {
-            <div class="flex items-center justify-between">
-               <div class="flex items-center gap-3">
-                 <div class="relative">
-                   <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-600 font-bold flex items-center justify-center shadow-sm uppercase">
-                     {{ usr.nombre.charAt(0) }}{{ usr.apellido.charAt(0) }}
-                   </div>
-                   <div class="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full"
-                        [ngClass]="usr.is_online ? 'bg-green-400' : 'bg-slate-400'"></div>
-                 </div>
-                 <div class="flex flex-col">
-                   <span class="text-slate-800 font-bold text-sm">{{ usr.nombre }} {{ usr.apellido }}</span>
-                   <span class="text-slate-400 text-[10px] font-semibold uppercase">{{ usr.rol }}</span>
-                 </div>
-               </div>
-               <div class="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 cursor-pointer hover:bg-slate-100">
-                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-               </div>
+            <div class="staff-item">
+              <div class="staff-avatar-wrap">
+                <div class="staff-avatar">
+                  {{ usr.nombre.charAt(0) }}{{ usr.apellido.charAt(0) }}
+                </div>
+                <span class="staff-status-dot"
+                      [ngClass]="usr.is_online ? 'staff-online' : 'staff-offline'">
+                </span>
+              </div>
+              <div class="flex flex-col flex-1 min-w-0">
+                <span class="staff-name">{{ usr.nombre }} {{ usr.apellido }}</span>
+                <span class="staff-role">{{ usr.rol }}</span>
+              </div>
+              <div class="staff-check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </div>
           }
         } @else {
-          <!-- Skeleton -->
-          <div class="animate-pulse flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-slate-200"></div>
-            <div class="flex flex-col gap-2">
-              <div class="w-24 h-3 bg-slate-200 rounded"></div>
-              <div class="w-16 h-2 bg-slate-200 rounded"></div>
+          <!-- Skeletons -->
+          @for (i of [1,2,3,4]; track i) {
+            <div class="staff-item" style="opacity: 0.5;">
+              <div class="skeleton" style="width:40px;height:40px;border-radius:12px;flex-shrink:0;"></div>
+              <div class="flex flex-col gap-2 flex-1">
+                <div class="skeleton" style="width:65%;height:12px;"></div>
+                <div class="skeleton" style="width:40%;height:10px;"></div>
+              </div>
             </div>
-          </div>
+          }
         }
 
       </div>
@@ -233,3 +271,425 @@
   </aside>
 
 </div>
+
+<style>
+/* ─── Hero Card ─────────────────────────────────────────────── */
+.hero-card {
+  background: linear-gradient(135deg, rgba(13,146,136,0.12) 0%, rgba(10,110,106,0.08) 50%, rgba(3,105,161,0.08) 100%);
+  border: 1px solid rgba(13, 146, 136, 0.18);
+  border-radius: 28px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(13, 146, 136, 0.06);
+  transition: all 0.3s ease;
+}
+.hero-card:hover {
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.35), 0 0 60px rgba(13, 146, 136, 0.1);
+}
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+}
+.hero-orb-1 {
+  width: 200px; height: 200px;
+  top: -60px; right: -40px;
+  background: radial-gradient(circle, rgba(13,146,136,0.25), transparent 70%);
+  animation: nebulaDrift 12s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 150px; height: 150px;
+  bottom: -40px; left: -30px;
+  background: radial-gradient(circle, rgba(3,105,161,0.2), transparent 70%);
+  animation: nebulaDrift 15s ease-in-out infinite reverse;
+}
+.hero-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(13, 146, 136, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: block;
+  margin-bottom: 6px;
+}
+.hero-title {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #F1F5F9;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 230, 118, 0.12);
+  border: 1px solid rgba(0, 230, 118, 0.25);
+  color: #00E676;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+}
+.hero-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hero-metric-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(13, 146, 136, 0.08);
+  border: 1px solid rgba(13, 146, 136, 0.18);
+  padding: 14px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+.hero-metric-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.hero-metric-value {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #F1F5F9;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* ─── Metric Cards ───────────────────────────────────────────── */
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px);
+  transition: all 0.25s ease;
+  flex: 1;
+}
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.12);
+}
+.metric-purple {
+  background: linear-gradient(135deg, rgba(3,105,161,0.15), rgba(2,79,140,0.08));
+  box-shadow: 0 4px 24px rgba(3,105,161,0.12);
+}
+.metric-purple:hover { box-shadow: 0 8px 30px rgba(3,105,161,0.2); }
+.metric-danger {
+  background: linear-gradient(135deg, rgba(255,71,87,0.15), rgba(198,40,40,0.08));
+  box-shadow: 0 4px 24px rgba(255,71,87,0.1);
+}
+.metric-danger:hover { box-shadow: 0 8px 30px rgba(255,71,87,0.2); }
+
+.metric-icon-wrap { position: relative; flex-shrink: 0; }
+.metric-icon {
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(3, 105, 161, 0.25);
+  border: 1px solid rgba(3, 105, 161, 0.3);
+  position: relative;
+}
+.metric-icon-danger {
+  background: rgba(255, 71, 87, 0.25);
+  border-color: rgba(255, 71, 87, 0.3);
+}
+/* Pulse ring on icon */
+.metric-icon-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 17px;
+  border: 1.5px solid rgba(3, 105, 161, 0.4);
+  animation: pulseRing 2.5s ease-in-out infinite;
+}
+.metric-icon-danger.metric-icon-pulse::before {
+  border-color: rgba(255, 71, 87, 0.4);
+}
+.metric-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #F1F5F9;
+}
+.metric-sub {
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.6);
+  font-weight: 500;
+}
+.metric-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #F1F5F9;
+  letter-spacing: -0.04em;
+  margin-left: auto;
+}
+
+/* ─── Error Banner ───────────────────────────────────────────── */
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: rgba(255, 71, 87, 0.1);
+  border: 1px solid rgba(255, 71, 87, 0.25);
+  border-radius: 16px;
+  color: #FF6B7A;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* ─── Quick Access Cards ─────────────────────────────────────── */
+.quick-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+.quick-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(13, 146, 136, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+.quick-card-inactive {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.quick-icon-wrap {
+  width: 48px; height: 48px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+.quick-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #F1F5F9;
+}
+.quick-sub {
+  font-size: 0.75rem;
+  color: rgba(148, 163, 184, 0.6);
+  font-weight: 500;
+}
+.quick-bar-wrap { display: flex; flex-direction: column; gap: 6px; }
+.quick-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(148, 163, 184, 0.6);
+}
+.quick-bar-track {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.quick-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1s ease;
+}
+.quick-arrow {
+  position: absolute;
+  top: 20px; right: 20px;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(148, 163, 184, 0.5);
+  transition: all 0.2s ease;
+}
+.quick-card:hover .quick-arrow {
+  background: rgba(13, 146, 136, 0.12);
+  border-color: rgba(13, 146, 136, 0.25);
+  color: var(--clr-accent);
+}
+.soon-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 12px;
+  border-radius: 100px;
+  align-self: flex-start;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ─── Staff Panel ────────────────────────────────────────────── */
+.staff-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 28px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-h-0: 0;
+  min-height: 0;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+.staff-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #F1F5F9;
+  margin: 0;
+}
+.staff-title-icon {
+  width: 28px; height: 28px;
+  border-radius: 9px;
+  background: rgba(13, 146, 136, 0.12);
+  border: 1px solid rgba(13, 146, 136, 0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--clr-accent);
+}
+.staff-see-all {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(13, 146, 136, 0.7);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.staff-see-all:hover { color: var(--clr-accent); }
+
+.staff-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+.staff-tab {
+  flex: 1;
+  padding: 7px 12px;
+  border-radius: 9px;
+  border: none; outline: none; cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  color: rgba(148, 163, 184, 0.6);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+.staff-tab-active {
+  background: rgba(13, 146, 136, 0.12);
+  color: var(--clr-accent);
+  border: 1px solid rgba(13, 146, 136, 0.2) !important;
+  box-shadow: 0 2px 10px rgba(13, 146, 136, 0.1);
+}
+
+.staff-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.02);
+}
+.staff-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(13, 146, 136, 0.1);
+}
+
+.staff-avatar-wrap { position: relative; flex-shrink: 0; }
+.staff-avatar {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0D9288, #0A6E6A);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.8rem; color: white;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.staff-status-dot {
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(8, 12, 24, 0.9);
+}
+.staff-online  {
+  background: #00E676;
+  box-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
+}
+.staff-offline { background: #475569; }
+
+.staff-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.staff-role {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(148, 163, 184, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.staff-check {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  background: rgba(0, 230, 118, 0.1);
+  border: 1px solid rgba(0, 230, 118, 0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: #00E676;
+  flex-shrink: 0;
+}
+
+@keyframes pulseRing {
+  0%   { transform: scale(0.95); opacity: 0.7; }
+  50%  { transform: scale(1.12); opacity: 0.2; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+@keyframes nebulaDrift {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  33%  { transform: translate(15px, -10px) rotate(120deg); }
+  66%  { transform: translate(-8px, 12px) rotate(240deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>

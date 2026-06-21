@@ -19,7 +19,7 @@ import { PacienteModalComponent } from './components/paciente-modal/paciente-mod
           <p class="text-gray-500 mt-1">Gestiona el seguimiento clínico y agenda sesiones</p>
         </div>
         
-        <button (click)="openModal()" class="flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-bold transition-all hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(236,72,153,0.3)] outline-none border-none cursor-pointer bg-gradient-to-r from-[#7C3AED] to-[#e11d48]">
+        <button (click)="openModal()" class="flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-bold transition-all hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(236,72,153,0.3)] outline-none border-none cursor-pointer bg-gradient-to-r from-[#0369A1] to-[#e11d48]">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Nuevo Paciente
         </button>
@@ -56,7 +56,7 @@ import { PacienteModalComponent } from './components/paciente-modal/paciente-mod
           <div class="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-row justify-between items-center transition-all hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(0,136,128,0.12)] border border-transparent hover:border-[#008880]/10 cursor-pointer" (click)="goToAgenda(p.id)">
             
             <div class="flex items-center gap-4 min-w-0">
-              <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg text-white flex-shrink-0 shadow-md bg-gradient-to-tr from-[#7C3AED] to-[#6366F1]">
+              <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg text-white flex-shrink-0 shadow-md bg-gradient-to-tr from-[#0369A1] to-[#6366F1]">
                 {{ p.nombre.charAt(0) }}{{ p.apellido.charAt(0) }}
               </div>
               <div class="flex flex-col min-w-0 pr-2">

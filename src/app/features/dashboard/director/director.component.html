@@ -1,137 +1,440 @@
-<div class="w-full h-full p-2 lg:p-4 flex flex-col gap-6 fade-in">
+<div class="w-full h-full flex flex-col gap-6 fade-in">
+
   <!-- Header -->
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+  <div class="page-header">
     <div>
-      <h2 class="text-3xl font-bold text-gray-800 m-0 leading-tight">Centro de Mando</h2>
-      <p class="text-gray-500 mt-1">Supervisión Estratégica de Equipo</p>
+      <h2 class="page-title">Centro de Mando</h2>
+      <p class="page-subtitle">Supervisión estratégica de equipo clínico</p>
     </div>
   </div>
 
-  <div class="flex flex-col xl:flex-row gap-6 flex-1 min-h-0">
-    
-    <!-- Columna Izquierda: Funcionarios -->
-    <div class="w-full xl:w-1/3 flex flex-col gap-4 bg-white rounded-[32px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] h-auto xl:h-full overflow-hidden flex-shrink-0">
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="text-slate-800 font-extrabold text-lg m-0">Mi Equipo</h3>
+  <div class="flex flex-col xl:flex-row gap-5 flex-1 min-h-0">
+
+    <!-- ─── Left: Funcionarios list ─────────────────────── -->
+    <div class="director-panel director-left">
+      <div class="director-panel-header">
+        <h3 class="director-panel-title">
+          <span class="panel-title-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Mi Equipo
+        </h3>
       </div>
-      
-      <div class="flex flex-col gap-3 overflow-y-auto custom-scrollbar flex-1 pr-2">
+
+      <div class="flex flex-col gap-3 overflow-y-auto flex-1 pr-1" style="scrollbar-width:thin;">
         @if (loadingFuncionarios()) {
-          <div class="animate-pulse flex gap-3 p-4 bg-slate-50 rounded-2xl">
-            <div class="w-12 h-12 bg-slate-200 rounded-full"></div>
-            <div class="flex flex-col gap-2 flex-1"><div class="h-4 bg-slate-200 rounded w-1/2"></div><div class="h-3 bg-slate-200 rounded w-1/3"></div></div>
-          </div>
+          @for (i of [1,2,3]; track i) {
+            <div class="func-skeleton">
+              <div class="skeleton" style="width:48px;height:48px;border-radius:14px;flex-shrink:0;"></div>
+              <div class="flex flex-col gap-2 flex-1">
+                <div class="skeleton" style="width:60%;height:13px;"></div>
+                <div class="skeleton" style="width:40%;height:10px;"></div>
+              </div>
+            </div>
+          }
         } @else {
           @for (f of funcionarios(); track f.id) {
             <div (click)="seleccionarFuncionario(f)"
-                 class="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all border-2"
-                 [ngClass]="selectedFuncionarioId() === f.id ? 'bg-teal-50 border-teal-200 shadow-sm' : 'bg-white border-transparent hover:bg-slate-50'">
-              <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg text-white shadow-md uppercase"
-                   [ngClass]="selectedFuncionarioId() === f.id ? 'bg-gradient-to-tr from-teal-600 to-emerald-500' : 'bg-slate-300'">
+                 class="func-item"
+                 [ngClass]="selectedFuncionarioId() === f.id ? 'func-item-active' : ''">
+              <div class="func-avatar"
+                   [ngClass]="selectedFuncionarioId() === f.id ? 'func-avatar-active' : ''">
                 {{ f.nombre.charAt(0) }}{{ f.apellido.charAt(0) }}
               </div>
-              <div class="flex flex-col">
-                <span class="text-slate-800 font-bold" [ngClass]="{'text-teal-700': selectedFuncionarioId() === f.id}">{{ f.nombre }} {{ f.apellido }}</span>
-                <span class="text-slate-400 text-xs font-semibold">Psicólogo(a) Clínico</span>
+              <div class="flex flex-col min-w-0">
+                <span class="func-name" [ngClass]="{'func-name-active': selectedFuncionarioId() === f.id}">
+                  {{ f.nombre }} {{ f.apellido }}
+                </span>
+                <span class="func-role">Psicólogo(a) Clínico</span>
               </div>
+              @if (selectedFuncionarioId() === f.id) {
+                <div class="func-selected-dot"></div>
+              }
             </div>
           }
         }
       </div>
     </div>
 
-    <!-- Columna Derecha: Pacientes -->
-    <div class="w-full xl:w-2/3 flex flex-col gap-4 bg-[#F8F9FD] rounded-[32px] p-6 shadow-inner h-auto xl:h-full overflow-hidden border border-slate-200/50">
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="text-slate-800 font-extrabold text-lg m-0">
+    <!-- ─── Right: Pacientes panel ───────────────────────── -->
+    <div class="director-panel director-right">
+      <div class="director-panel-header">
+        <h3 class="director-panel-title">
+          <span class="panel-title-icon" style="background:rgba(3,105,161,0.12);border-color:rgba(3,105,161,0.2);color:#0369A1;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
           {{ selectedFuncionarioId() ? 'Pacientes Asignados' : 'Selecciona un funcionario' }}
         </h3>
       </div>
-      
-      <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 pb-10 xl:pb-0">
+
+      <div class="flex-1 overflow-y-auto pr-1" style="scrollbar-width:thin;">
+
         @if (!selectedFuncionarioId()) {
-          <div class="h-full flex flex-col items-center justify-center text-slate-400 fade-in">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" class="mb-4 text-slate-300"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <!-- Empty: select funcionario -->
+          <div class="director-empty fade-in">
+            <div class="director-empty-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
             <p>Selecciona un funcionario del equipo para ver su carga clínica.</p>
           </div>
+
         } @else if (loadingPacientes()) {
-          <div class="flex justify-center py-10"><ion-spinner name="dots"></ion-spinner></div>
+          <div class="flex justify-center py-10">
+            <div class="loading-spinner"></div>
+          </div>
+
         } @else if (pacientes().length === 0) {
-          <div class="h-full flex flex-col items-center justify-center text-slate-400 slide-up">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" class="mb-4 text-green-300"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <!-- Empty: no patients -->
+          <div class="director-empty slide-up">
+            <div class="director-empty-icon" style="background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.2);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      stroke="#00E676" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
             <p>El funcionario no tiene pacientes asignados actualmente.</p>
           </div>
+
         } @else {
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 slide-up pb-10">
+          <div class="pacientes-grid slide-up stagger-children">
             @for (p of pacientes(); track p.id) {
-              <div class="bg-white p-5 rounded-[24px] shadow-sm hover:shadow-md transition-all border border-slate-100 flex flex-col gap-3 group relative overflow-hidden" [ngClass]="getSemanticColor(p)">
-                <div class="absolute top-0 left-0 w-1.5 h-full" [ngClass]="{'bg-red-500': p.alertas_pendientes_count, 'bg-green-400': !p.alertas_pendientes_count}"></div>
-                
-                <div class="flex justify-between items-start ml-2">
-                  <h4 class="font-bold text-slate-800 m-0">{{ p.nombre }} {{ p.apellido }}</h4>
-                  @if (p.alertas_pendientes_count && p.alertas_pendientes_count > 0) {
-                    <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      {{ p.alertas_pendientes_count }} alertas
-                    </span>
-                  }
+              <div class="paciente-card" [ngClass]="getSemanticColor(p)">
+
+                <!-- Alert indicator bar -->
+                <div class="paciente-bar"
+                     [ngClass]="p.alertas_pendientes_count ? 'paciente-bar-alert' : 'paciente-bar-ok'">
                 </div>
-                
-                <p class="text-xs text-slate-500 font-mono m-0 ml-2">{{ p.rut }}</p>
-                
-                <div class="flex items-center justify-between mt-2 ml-2">
-                  <span class="text-xs font-semibold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                    Día {{ p.dias_transcurridos || 0 }} de tratamiento
-                  </span>
-                  
-                  <div class="flex gap-2">
-                    <button class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-teal-600 hover:bg-teal-50 transition-colors border border-transparent hover:border-teal-200 outline-none cursor-pointer" title="Reasignar" (click)="abrirReasignacion(p)">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                    <a [routerLink]="['/pacientes', p.id, 'agenda']" class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 hover:bg-teal-600 hover:text-white transition-colors cursor-pointer border border-teal-200 hover:border-transparent outline-none">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
+
+                <!-- Content -->
+                <div class="flex flex-col gap-3 flex-1 pl-4">
+                  <div class="flex justify-between items-start">
+                    <h4 class="paciente-name">{{ p.nombre }} {{ p.apellido }}</h4>
+                    @if (p.alertas_pendientes_count && p.alertas_pendientes_count > 0) {
+                      <span class="alert-badge">
+                        <span class="alert-dot" style="width:5px;height:5px;"></span>
+                        {{ p.alertas_pendientes_count }} alerta{{ p.alertas_pendientes_count > 1 ? 's' : '' }}
+                      </span>
+                    }
+                  </div>
+
+                  <p class="paciente-rut">{{ p.rut }}</p>
+
+                  <div class="flex items-center justify-between">
+                    <span class="paciente-days">Día {{ p.dias_transcurridos || 0 }} de tratamiento</span>
+                    <div class="flex gap-2">
+                      <button class="pac-btn pac-btn-ghost" title="Reasignar" (click)="abrirReasignacion(p)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                          <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                      </button>
+                      <a [routerLink]="['/pacientes', p.id, 'agenda']" class="pac-btn pac-btn-accent">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                          <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
+
               </div>
             }
           </div>
         }
+
       </div>
     </div>
+
   </div>
+
 </div>
 
-  <!-- Modal de Reasignación -->
-  <ion-modal [isOpen]="isReassignModalOpen()" (didDismiss)="cerrarModal()" class="glass-modal">
-    <ng-template>
-      <ion-header class="ion-no-border">
-        <ion-toolbar class="glass-toolbar">
-          <ion-title>Reasignar Ficha</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="cerrarModal()">Cerrar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div class="modal-body">
-          <p>Seleccione el nuevo funcionario que tomará el caso.</p>
-          <ion-item class="glass-input">
-            <ion-select [(ngModel)]="targetFuncionarioId" interface="popover" placeholder="Seleccionar Funcionario">
-              <ion-select-option *ngFor="let af of availableFuncionarios()" [value]="af.id">
-                {{ af.nombre }} {{ af.apellido }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-          <ion-button expand="block" 
-                      class="btn-primary" 
-                      [disabled]="!targetFuncionarioId() || isSubmitting()" 
-                      (click)="confirmarReasignacion()">
-            <ion-spinner *ngIf="isSubmitting()" name="crescent"></ion-spinner>
-            <span *ngIf="!isSubmitting()">Confirmar Transferencia</span>
-          </ion-button>
-        </div>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-</ion-content>
+<!-- Reassign Modal -->
+<ion-modal [isOpen]="isReassignModalOpen()" (didDismiss)="cerrarModal()" class="clinical-modal">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="glass-toolbar">
+        <ion-title>Reasignar Ficha</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="modal-body">
+        <p>Seleccione el nuevo funcionario que tomará el caso.</p>
+        <ion-item class="glass-input">
+          <ion-select [(ngModel)]="targetFuncionarioId" interface="popover" placeholder="Seleccionar Funcionario">
+            <ion-select-option *ngFor="let af of availableFuncionarios()" [value]="af.id">
+              {{ af.nombre }} {{ af.apellido }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button expand="block"
+                    class="btn-primary"
+                    [disabled]="!targetFuncionarioId() || isSubmitting()"
+                    (click)="confirmarReasignacion()">
+          <ion-spinner *ngIf="isSubmitting()" name="crescent"></ion-spinner>
+          <span *ngIf="!isSubmitting()">Confirmar Transferencia</span>
+        </ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<style>
+.page-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.page-title {
+  font-size: 2rem; font-weight: 900; color: #F1F5F9;
+  letter-spacing: -0.04em; margin: 0;
+}
+.page-subtitle {
+  font-size: 0.85rem; color: rgba(148,163,184,0.6); margin: 4px 0 0; font-weight: 500;
+}
+
+/* ─── Director Panels ─ */
+.director-panel {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 26px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+.director-left  { width: 100%; flex-shrink: 0; }
+.director-right { flex: 1; min-w-0: 0; }
+
+@media (min-width: 1280px) {
+  .director-left  { width: 300px; }
+}
+
+.director-panel-header { margin-bottom: 18px; }
+.director-panel-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.95rem; font-weight: 800; color: #F1F5F9; margin: 0;
+}
+.panel-title-icon {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  background: rgba(13,146,136,0.12);
+  border: 1px solid rgba(13,146,136,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: #0D9288;
+}
+
+/* ─── Funcionario Items ─ */
+.func-skeleton {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px; border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.func-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.2s ease;
+  position: relative;
+}
+.func-item:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(13,146,136,0.1);
+}
+.func-item-active {
+  background: rgba(13,146,136,0.08) !important;
+  border-color: rgba(13,146,136,0.2) !important;
+  box-shadow: 0 0 20px rgba(13,146,136,0.08);
+}
+
+.func-avatar {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: rgba(71,85,105,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem; color: rgba(148,163,184,0.8);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.func-avatar-active {
+  background: linear-gradient(135deg, #0D9288, #0A6E6A) !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(13,146,136,0.3);
+}
+.func-name {
+  font-size: 0.88rem; font-weight: 700; color: #CBD5E1;
+  transition: color 0.2s;
+}
+.func-name-active { color: #0D9288 !important; }
+.func-role {
+  font-size: 0.68rem; font-weight: 600; color: rgba(148,163,184,0.4);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.func-selected-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #0D9288;
+  box-shadow: 0 0 8px rgba(13,146,136,0.6);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ─── Director Empty ─ */
+.director-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; min-height: 200px;
+  gap: 12px; color: rgba(148,163,184,0.5); text-align: center; font-size: 0.85rem;
+}
+.director-empty-icon {
+  width: 64px; height: 64px;
+  border-radius: 20px;
+  background: rgba(13,146,136,0.06);
+  border: 1px solid rgba(13,146,136,0.15);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(13,146,136,0.4);
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ─── Loading Spinner ─ */
+.loading-spinner {
+  width: 36px; height: 36px;
+  border: 2px solid rgba(13,146,136,0.15);
+  border-top-color: #0D9288;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ─── Pacientes Grid ─ */
+.pacientes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  padding-bottom: 16px;
+}
+
+/* ─── Paciente Card ─ */
+.paciente-card {
+  display: flex;
+  align-items: stretch;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  min-height: 130px;
+}
+.paciente-card:hover {
+  background: rgba(255,255,255,0.055);
+  border-color: rgba(13,146,136,0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+.paciente-bar {
+  width: 4px;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+.paciente-bar-alert { background: linear-gradient(to bottom, #FF4757, #C62828); }
+.paciente-bar-ok    { background: linear-gradient(to bottom, #00E676, #00C853); }
+
+.paciente-name {
+  font-size: 0.9rem; font-weight: 700; color: #E2E8F0; margin: 0;
+}
+.paciente-rut {
+  font-size: 0.72rem; color: rgba(148,163,184,0.5);
+  font-family: 'Fira Code', monospace; margin: 0;
+}
+.paciente-days {
+  font-size: 0.72rem; font-weight: 600;
+  color: rgba(148,163,184,0.5);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* Alert badge */
+.alert-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,71,87,0.12);
+  color: #FF4757;
+  border: 1px solid rgba(255,71,87,0.2);
+  font-size: 0.65rem; font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.alert-dot {
+  position: relative;
+  border-radius: 50%;
+  background: #FF4757;
+  flex-shrink: 0;
+}
+.alert-dot::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: #FF4757;
+  animation: ping 1.4s ease-out infinite;
+}
+
+/* Paciente action buttons */
+.pac-btn {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none; text-decoration: none;
+}
+.pac-btn-ghost {
+  background: rgba(255,255,255,0.04);
+  color: rgba(148,163,184,0.5);
+}
+.pac-btn-ghost:hover {
+  background: rgba(13,146,136,0.1);
+  border-color: rgba(13,146,136,0.2);
+  color: #0D9288;
+}
+.pac-btn-accent {
+  background: rgba(13,146,136,0.12);
+  border-color: rgba(13,146,136,0.2);
+  color: #0D9288;
+}
+.pac-btn-accent:hover {
+  background: #0D9288;
+  color: #060E10;
+  border-color: transparent;
+}
+
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes ping {
+  0%   { transform: scale(1); opacity: 0.8; }
+  80%  { transform: scale(2.5); opacity: 0; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+</style>

@@ -1,35 +1,14 @@
+/* ============================================================
+   ClinOS — Dark Glass OS  |  Global Styles  |  2026 Edition
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/*
- * Clinical OS — Global Styles
-/* ─── Global Animation Utilities ──────────────────────────── */
-.fade-in { animation: fadeIn 0.5s ease-out forwards; }
-.fade-in-delayed { animation: fadeIn 0.5s ease-out 0.2s forwards; opacity: 0; }
-.slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* ─── Responsive Adjustments ────────────────────────────── */
-@media (max-width: 768px) {
-  /* Ocultar scrollbars en móvil para efecto nativo */
-  ::-webkit-scrollbar { display: none; }
-  * { -ms-overflow-style: none; scrollbar-width: none; }
-}
-/* ─── Ionic Core CSS ───────────────────────────────────── */
+/* ─── Ionic Core CSS ───────────────────────────────────────── */
 @import "@ionic/angular/css/core.css";
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
@@ -41,57 +20,583 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-
-/* ─── CSS Custom Properties (Design Tokens) ────────────── */
+/* ─── Design Tokens — ONG Surcos Clinical Executive ─────────── */
 :root {
-  --teal-gradient: linear-gradient(160deg, #7C3AED 0%, #5B21B6 100%);
-  --emerald-gradient: linear-gradient(135deg, #e11d48 0%, #DB2777 100%);
-  --radius-card: 24px;
-  --radius-sidebar: 40px;
-  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.06);
-  --shadow-sidebar: 0 20px 60px rgba(91, 33, 182, 0.35);
-  --shadow-hover: 0 20px 50px rgba(107, 82, 217, 0.18);
-  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  --transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Backgrounds — deep teal-navy */
+  --clr-bg:             #060E10;
+  --clr-surface:        #0A1518;
+  --clr-surface-2:      #0D1C20;
+  --clr-card:           rgba(255, 255, 255, 0.04);
+  --clr-card-hover:     rgba(255, 255, 255, 0.07);
+
+  /* Primario: Teal Clínico ONG Surcos */
+  --clr-accent:         #0D9288;
+  --clr-accent-bright:  #14B8A6;
+  --clr-accent-dark:    #0A6E6A;
+  --clr-accent-dim:     rgba(13, 146, 136, 0.14);
+  --clr-accent-glow:    rgba(13, 146, 136, 0.32);
+
+  /* Secundario: Azul Médico Ejecutivo */
+  --clr-accent-2:       #0369A1;
+  --clr-accent-2-dim:   rgba(3, 105, 161, 0.14);
+  --clr-accent-2-glow:  rgba(3, 105, 161, 0.35);
+
+  /* Estados */
+  --clr-danger:         #DC2626;
+  --clr-danger-dim:     rgba(220, 38, 38, 0.14);
+  --clr-danger-glow:    rgba(220, 38, 38, 0.3);
+  --clr-success:        #059669;
+  --clr-success-dim:    rgba(5, 150, 105, 0.14);
+  --clr-warning:        #D97706;
+  --clr-warning-dim:    rgba(217, 119, 6, 0.14);
+
+  /* Text */
+  --clr-text:           #EEF4F4;
+  --clr-text-secondary: #7AA8A8;
+  --clr-text-muted:     #2E4A4A;
+
+  /* Borders */
+  --clr-border:         rgba(255, 255, 255, 0.065);
+  --clr-border-accent:  rgba(13, 146, 136, 0.22);
+  --clr-border-glow:    rgba(13, 146, 136, 0.48);
+
+  /* Sidebar */
+  --sidebar-bg:         rgba(4, 10, 12, 0.94);
+  --sidebar-width:      76px;
+
+  /* Radii */
+  --radius-sm:    12px;
+  --radius-md:    18px;
+  --radius-lg:    24px;
+  --radius-xl:    32px;
+  --radius-2xl:   40px;
+
+  /* Shadows */
+  --shadow-card:    0 4px 28px rgba(0, 0, 0, 0.55);
+  --shadow-glow:    0 0 28px var(--clr-accent-glow);
+  --shadow-glow-2:  0 0 28px var(--clr-accent-2-glow);
+  --shadow-danger:  0 0 20px var(--clr-danger-glow);
+
+  /* Transitions */
+  --ease-smooth:  cubic-bezier(0.25, 0.8, 0.25, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast:       all 0.15s var(--ease-smooth);
+  --t-base:       all 0.25s var(--ease-smooth);
+  --t-slow:       all 0.4s var(--ease-out);
+  --t-spring:     all 0.5s var(--ease-spring);
 }
 
-/* ─── Base Typography ───────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+/* ─── Base ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.01em;
   height: 100%;
   overflow: hidden;
+  background: #060E10 !important;
+  color: #F1F5F9;
 }
 
-/* ─── Ionic Resets for Layout Shell ────────────────────── */
-ion-app {
-  position: fixed !important;
-  inset: 0 !important;
+/* ════════════════════════════════════════════════════════════
+   IONIC NUCLEAR OVERRIDE — force all Ionic containers dark
+   Our TailwindCSS + custom classes control ALL visual design.
+   ════════════════════════════════════════════════════════════ */
+
+/* Make Ionic app shell fully transparent so our bg shows */
+ion-app,
+ion-router-outlet,
+ion-nav,
+ion-page {
+  background: #060E10 !important;
+  --background: #060E10 !important;
+  color: #F1F5F9 !important;
+}
+
+/* ion-content: always transparent, no internal scrollbar styling */
+ion-content {
+  --background: transparent !important;
+  --color: #F1F5F9 !important;
+  --padding-start: 0 !important;
+  --padding-end: 0 !important;
+  --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
   background: transparent !important;
 }
 
-/* When inside the shell layout, let Ionic content scroll normally */
-.shell-content ion-content {
-  --background: transparent;
-  --padding-start: 0;
-  --padding-end: 0;
-  --padding-top: 0;
-  --padding-bottom: 0;
+/* ion-header, ion-footer → transparent */
+ion-header,
+ion-footer {
+  background: transparent !important;
+  --background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+ion-header::after { display: none !important; }
+ion-footer::before { display: none !important; }
+
+/* ion-toolbar → fully transparent */
+ion-toolbar {
+  --background: rgba(13, 19, 32, 0.9) !important;
+  --color: #F1F5F9 !important;
+  --border-color: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(20px);
 }
 
-/* Remove ion-header top shadow inside shell */
+/* ion-item → dark surface */
+ion-item {
+  --background: rgba(255,255,255,0.04) !important;
+  --background-hover: rgba(255,255,255,0.07) !important;
+  --border-color: rgba(255,255,255,0.07) !important;
+  --color: #F1F5F9 !important;
+  --inner-border-width: 0 !important;
+  border-radius: 12px;
+}
+
+/* ion-label → light text */
+ion-label {
+  color: #F1F5F9 !important;
+  --color: #F1F5F9 !important;
+}
+
+/* ion-select → dark */
+ion-select {
+  --background: rgba(255,255,255,0.04) !important;
+  --color: #F1F5F9 !important;
+  color: #F1F5F9 !important;
+}
+
+/* ion-modal → dark glass */
+ion-modal {
+  --background: #0D1320 !important;
+  --backdrop-opacity: 0.7 !important;
+}
+
+/* ion-popover → dark glass */
+ion-popover {
+  --background: #111827 !important;
+  --color: #F1F5F9 !important;
+  --border-radius: 16px !important;
+  --box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important;
+}
+
+/* ion-segment → dark */
+ion-segment {
+  --background: rgba(255,255,255,0.05) !important;
+}
+
+/* ion-segment-button → dark states */
+ion-segment-button {
+  --color: rgba(148,163,184,0.6) !important;
+  --color-checked: #0D9288 !important;
+  --indicator-color: rgba(13,146,136,0.12) !important;
+  --indicator-box-shadow: 0 0 12px rgba(13,146,136,0.2) !important;
+  --background: transparent !important;
+  --background-checked: rgba(13,146,136,0.08) !important;
+  font-weight: 600 !important;
+  font-size: 0.82rem !important;
+}
+
+/* ion-list → dark */
+ion-list {
+  background: transparent !important;
+  --background: transparent !important;
+}
+
+/* ion-card → dark glass */
+ion-card {
+  --background: rgba(255,255,255,0.04) !important;
+  --color: #F1F5F9 !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: #F1F5F9 !important;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
+}
+
+/* ion-button → accent style */
+ion-button {
+  --background: rgba(13,146,136,0.12);
+  --color: #0D9288;
+  --border-radius: 12px;
+  font-weight: 700;
+}
+
+/* ion-input → dark */
+ion-input {
+  --background: rgba(255,255,255,0.04) !important;
+  --color: #F1F5F9 !important;
+  --placeholder-color: rgba(148,163,184,0.5) !important;
+  --border-color: rgba(255,255,255,0.07) !important;
+}
+
+/* ion-textarea → dark */
+ion-textarea {
+  --background: rgba(255,255,255,0.04) !important;
+  --color: #F1F5F9 !important;
+  --placeholder-color: rgba(148,163,184,0.5) !important;
+}
+
+/* Scrollbar within ion-content */
+ion-content::part(scroll) {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(13,146,136,0.2) transparent;
+}
+
+/* shell-content shorthand (if still used) */
+.shell-content ion-content {
+  --background: transparent;
+}
 .shell-content ion-header::after { display: none; }
 
-/* ─── Scrollbar ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.3); border-radius: 100px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(13, 146, 136, 0.2);
+  border-radius: 100px;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(13, 146, 136, 0.5); }
+@media (max-width: 768px) {
+  ::-webkit-scrollbar { display: none; }
+  * { -ms-overflow-style: none; scrollbar-width: none; }
+}
 
-/* ─── ion-icon fix ──────────────────────────────────────── */
+/* ─── Keyframes ──────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Pulsing ring around icons */
+@keyframes pulseRing {
+  0%   { transform: scale(0.9);  opacity: 0.8; }
+  50%  { transform: scale(1.15); opacity: 0.3; }
+  100% { transform: scale(0.9);  opacity: 0.8; }
+}
+
+/* Soft floating levitation */
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Glow pulsing shadow */
+@keyframes glowPulse {
+  0%   { box-shadow: 0 0 10px var(--clr-accent-glow), 0 4px 20px rgba(0,0,0,0.4); }
+  50%  { box-shadow: 0 0 30px var(--clr-accent-glow), 0 4px 30px rgba(0,0,0,0.4); }
+  100% { box-shadow: 0 0 10px var(--clr-accent-glow), 0 4px 20px rgba(0,0,0,0.4); }
+}
+
+/* Shimmer sweep for loading */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Ping dot */
+@keyframes ping {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  80%  { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Nebula background drift */
+@keyframes nebulaDrift {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  33%  { transform: translate(20px, -15px) rotate(120deg); }
+  66%  { transform: translate(-10px, 20px) rotate(240deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+/* Number counter fade */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Spin for loaders */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Utility Animation Classes ─────────────────────────────── */
+.fade-in           { animation: fadeIn     0.4s var(--ease-out) both; }
+.fade-in-slow      { animation: fadeIn     0.7s var(--ease-out) both; }
+.fade-in-delayed   { animation: fadeIn     0.4s var(--ease-out) 0.15s both; }
+.slide-up          { animation: slideUp    0.5s var(--ease-out) both; }
+.slide-up-delayed  { animation: slideUp    0.5s var(--ease-out) 0.1s both; }
+.slide-in-left     { animation: slideInLeft  0.4s var(--ease-out) both; }
+.slide-in-right    { animation: slideInRight 0.4s var(--ease-out) both; }
+.scale-in          { animation: scaleIn    0.4s var(--ease-spring) both; }
+.float-anim        { animation: float      4s ease-in-out infinite; }
+.glow-pulse-anim   { animation: glowPulse  2.5s ease-in-out infinite; }
+.count-up          { animation: countUp    0.5s var(--ease-out) both; }
+
+/* Staggered children */
+.stagger-children > *:nth-child(1)  { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2)  { animation-delay: 0.10s; }
+.stagger-children > *:nth-child(3)  { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4)  { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(5)  { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6)  { animation-delay: 0.30s; }
+
+/* ─── Glass Components ───────────────────────────────────────── */
+.glass-card {
+  background: var(--clr-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  transition: var(--t-base);
+}
+.glass-card:hover {
+  background: var(--clr-card-hover);
+  border-color: rgba(13, 146, 136, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glass-surface {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--clr-border);
+}
+
+/* ─── Pulse Ring (for active states & online dots) ──────────── */
+.pulse-ring {
+  position: relative;
+}
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid var(--clr-accent);
+  animation: pulseRing 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Online dot with ping */
+.online-dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--clr-success);
+  flex-shrink: 0;
+}
+.online-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--clr-success);
+  animation: ping 1.8s ease-out infinite;
+}
+
+.offline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--clr-text-muted);
+  flex-shrink: 0;
+}
+
+/* Alert dot ping */
+.alert-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--clr-danger);
+}
+.alert-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--clr-danger);
+  animation: ping 1.4s ease-out infinite;
+}
+
+/* ─── Gradient Buttons ───────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--radius-lg);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--clr-accent) 0%, #0A6E6A 100%);
+  box-shadow: 0 4px 20px var(--clr-accent-glow);
+  transition: var(--t-base);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: rgba(255,255,255,0.2);
+  transform: skewX(-20deg);
+  transition: left 0.4s var(--ease-out);
+}
+.btn-primary:hover::after { left: 125%; }
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--clr-accent-glow);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-danger {
+  @extend .btn-primary;
+  background: linear-gradient(135deg, var(--clr-danger) 0%, #C62828 100%);
+  box-shadow: 0 4px 20px var(--clr-danger-glow);
+}
+.btn-danger:hover { box-shadow: 0 8px 30px var(--clr-danger-glow); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--clr-border);
+  outline: none;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--clr-text-secondary);
+  background: transparent;
+  transition: var(--t-base);
+}
+.btn-ghost:hover {
+  border-color: var(--clr-border-accent);
+  color: var(--clr-accent);
+  background: var(--clr-accent-dim);
+}
+
+/* ─── Shimmer Skeleton ───────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.09) 50%,
+    rgba(255,255,255,0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Role Colors (user avatars) ─────────────────────────────── */
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  color: white;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+.user-avatar.root       { background: linear-gradient(135deg, #FF4757, #C62828); }
+.user-avatar.admin      { background: linear-gradient(135deg, #0369A1, #024F8C); }
+.user-avatar.director   { background: linear-gradient(135deg, #F59E0B, #D97706); }
+.user-avatar.funcionario{ background: linear-gradient(135deg, #0D9288, #0A6E6A); }
+.user-avatar.medium     { background: linear-gradient(135deg, #6366F1, #4338CA); }
+
+/* ─── Badge ──────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.badge-accent  { background: var(--clr-accent-dim);   color: var(--clr-accent);   border: 1px solid rgba(13,146,136,0.2); }
+.badge-purple  { background: var(--clr-accent-2-dim); color: var(--clr-accent-2); border: 1px solid rgba(3,105,161,0.2); }
+.badge-danger  { background: var(--clr-danger-dim);   color: var(--clr-danger);   border: 1px solid rgba(255,71,87,0.2); }
+.badge-success { background: var(--clr-success-dim);  color: var(--clr-success);  border: 1px solid rgba(0,230,118,0.2); }
+.badge-warning { background: var(--clr-warning-dim);  color: var(--clr-warning);  border: 1px solid rgba(255,179,0,0.2); }
+.badge-muted   { background: rgba(71,85,105,0.3);     color: var(--clr-text-secondary); border: 1px solid rgba(71,85,105,0.3); }
+
+/* ─── Segment (Ionic override) ───────────────────────────────── */
+ion-segment {
+  --background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 4px;
+  border: 1px solid var(--clr-border);
+}
+ion-segment-button {
+  --border-radius: 10px;
+  --color: var(--clr-text-secondary);
+  --color-checked: var(--clr-accent);
+  --indicator-color: rgba(13, 146, 136, 0.12);
+  --indicator-box-shadow: 0 2px 12px rgba(13, 146, 136, 0.2);
+  font-weight: 600;
+  font-size: 0.85rem;
+  min-height: 34px;
+  transition: var(--t-base);
+}
+
+/* ─── ion-badge override ─────────────────────────────────────── */
+ion-badge {
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.4px;
+  padding: 3px 10px;
+}
+
+/* ─── ion-icon ───────────────────────────────────────────────── */
 ion-icon {
   pointer-events: none;
   display: inline-flex;
@@ -99,123 +604,87 @@ ion-icon {
   justify-content: center;
 }
 
-/* ─── ion-badge ─────────────────────────────────────────── */
-ion-badge {
-  border-radius: 100px;
-  font-weight: 700;
-  font-size: 0.68rem;
-  letter-spacing: 0.3px;
-  padding: 3px 10px;
-}
-
-/* ─── ion-segment teal style ──────────────────────────── */
-ion-segment {
-  --background: #EDE9FE;
-  border-radius: 14px;
-  padding: 3px;
-}
-ion-segment-button {
-  --border-radius: 12px;
-  --color: #6B7280;
-  --color-checked: #7C3AED;
-  --indicator-color: #FFFFFF;
-  --indicator-box-shadow: 0 4px 12px rgba(109, 40, 217, 0.15);
-  font-weight: 600;
-  font-size: 0.88rem;
-  min-height: 36px;
-  transition: var(--transition-smooth);
-}
-
-/* ─── ion-modal backdrop & radius ──────────────────────── */
-.clinical-modal {
-  --border-radius: 32px;
-  --box-shadow: 0 24px 60px rgba(109, 40, 217, 0.2);
-}
-
-/* ─── Soft white card ───────────────────────────────────── */
-.soft-card {
-  background: #FFFFFF;
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
-  border: 1px solid rgba(109, 40, 217, 0.06);
-  transition: var(--transition-smooth);
-}
-.soft-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-hover);
-}
-
-/* Alias */
-.clinical-glass { @apply bg-white rounded-3xl border border-teal-100/60; box-shadow: var(--shadow-card); }
-
-/* ─── Gradient card ─────────────────────────────────────── */
-.grad-card {
-  border-radius: var(--radius-card);
-  color: #fff;
-  border: none;
-  box-shadow: 0 12px 32px rgba(109, 40, 217, 0.25);
-  transition: var(--transition-smooth);
-  position: relative;
-  overflow: hidden;
-}
-.grad-card::before {
-  content: '';
-  position: absolute;
-  top: -40%;
-  right: -20%;
-  width: 180px;
-  height: 180px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.grad-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(109, 40, 217, 0.30); }
-.grad-teal  { background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%); }
-.grad-emerald    { background: linear-gradient(135deg, #e11d48 0%, #DB2777 100%); }
-.grad-teal    { background: linear-gradient(135deg, #0D9488 0%, #0891B2 100%); }
-.grad-success { background: linear-gradient(135deg, #10B981 0%, #0D9488 100%); }
-.grad-cool    { background: linear-gradient(135deg, #6366F1 0%, #7C3AED 100%); }
-.grad-warm    { background: linear-gradient(135deg, #F59E0B 0%, #e11d48 100%); }
-
-/* ─── Skeleton pulse ────────────────────────────────────── */
-.skeleton-pulse {
-  background: linear-gradient(90deg, #EDE9FE 0%, #DDD6FE 50%, #EDE9FE 100%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
-  border-radius: 12px;
-}
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
+/* ─── ion-skeleton override ──────────────────────────────────── */
 ion-skeleton-text {
   --border-radius: 10px;
-  --background: #EDE9FE;
-  --background-rgb: 237, 233, 254;
+  --background: rgba(255, 255, 255, 0.06);
+  --background-rgb: 255, 255, 255;
 }
 
-/* ─── Animations ─────────────────────────────────────────── */
-.fade-in          { animation: tw-fadeIn  0.5s ease both; }
-.fade-in-delayed  { animation: tw-fadeIn  0.5s ease 0.15s both; }
-.slide-up         { animation: tw-slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.slide-up-delayed { animation: tw-slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
-
-@keyframes tw-fadeIn  { from { opacity: 0; } to { opacity: 1; } }
-@keyframes tw-slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ─── ion-modal override ─────────────────────────────────────── */
+.clinical-modal {
+  --border-radius: 32px;
+  --box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  --background: #111827;
 }
 
-/* ─── Utilities ─────────────────────────────────────────── */
-.text-gradient-teal {
-  background: linear-gradient(135deg, #7C3AED 0%, #e11d48 100%);
+/* ─── Segment bar wrapper ────────────────────────────────────── */
+.segment-bar {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Loading grid (skeleton layout) ────────────────────────── */
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.skeleton-card {
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: fadeIn 0.4s ease both;
+}
+
+/* ─── Empty state ────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--clr-text-secondary);
+  gap: 12px;
+}
+.empty-state h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--clr-text);
+}
+.empty-state p {
+  font-size: 0.875rem;
+  max-width: 300px;
+  line-height: 1.6;
+}
+.empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  background: var(--clr-accent-dim);
+  border: 1px solid var(--clr-border-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ─── Text gradient ──────────────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-2) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.card-inactive { opacity: 0.60; filter: grayscale(30%); }
-
-.mobile-only { display: none; }
-@media (max-width: 640px) { .mobile-only { display: block; } .btn-add { display: none; } }
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .mobile-only { display: block; }
+  .btn-add { display: none; }
+}

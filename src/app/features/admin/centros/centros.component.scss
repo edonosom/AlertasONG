@@ -1,214 +1,244 @@
-// Centros CRUD — Pure CSS Grid
-
-:host { display: block; }
-
-.page-bg { --background: #F3F6FD; }
-
-.shell-toolbar {
-  --background: rgba(243, 246, 253, 0.88);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  --border-color: rgba(124, 58, 237, 0.08);
-  ion-title { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.4px; color: #1E1B4B; }
-}
-
-.page-scroll {
-  padding: 32px 28px;
-  max-width: 1200px;
-  margin: 0 auto;
-  @media (max-width: 640px) { padding: 16px; }
-}
-
+/* ─── Page Header ──────────────────────────────────────────── */
 .page-header {
-  margin-bottom: 28px;
-  h2 {
-    font-size: clamp(1.4rem, 3vw, 1.9rem);
-    font-weight: 800;
-    letter-spacing: -0.6px;
-    margin: 0 0 4px;
-    background: linear-gradient(135deg, #7C3AED 0%, #e11d48 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  p { font-size: 0.88rem; color: #9CA3AF; margin: 0; }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.segment-bar {
-  margin-bottom: 24px;
-  ion-segment {
-    max-width: 440px;
-    --background: #EDE9FE;
-    border-radius: 14px;
-    padding: 3px;
-  }
-  ion-segment-button {
-    --border-radius: 11px;
-    --color: #6B7280;
-    --color-checked: #7C3AED;
-    --indicator-color: #FFFFFF;
-    --indicator-box-shadow: 0 4px 12px rgba(124, 58, 237, 0.18);
-    font-weight: 600;
-    font-size: 0.85rem;
-    min-height: 36px;
-  }
+.page-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #F1F5F9;
+  letter-spacing: -0.04em;
+  margin: 0;
 }
 
-.loading-grid {
+.page-subtitle {
+  font-size: 0.85rem;
+  color: rgba(148, 163, 184, 0.6);
+  margin: 4px 0 0;
+  font-weight: 500;
+}
+
+/* ─── Add Button ───────────────────────────────────────────── */
+.btn-add-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #060E10;
+  background: linear-gradient(135deg, #0D9288 0%, #0A6E6A 100%);
+  box-shadow: 0 4px 20px rgba(13, 146, 136, 0.3);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-add-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: skewX(-20deg);
+  transition: left 0.4s ease;
+}
+.btn-add-primary:hover::after { left: 125%; }
+.btn-add-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(13, 146, 136, 0.45);
+}
+
+/* ─── Centros Grid ─────────────────────────────────────────── */
+.centros-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
 }
 
-.skeleton-card {
-  background: #FFFFFF;
-  border-radius: 22px;
+/* ─── Skeleton ─────────────────────────────────────────────── */
+.centro-skeleton {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
   padding: 20px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  border: 1px solid rgba(124, 58, 237, 0.06);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-}
-
-.empty-state {
-  text-align: center;
-  padding: 64px 24px;
-  background: #FFFFFF;
-  border-radius: 28px;
-  border: 2px dashed rgba(124, 58, 237, 0.18);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
-
-  .empty-icon {
-    width: 76px;
-    height: 76px;
-    border-radius: 24px;
-    background: rgba(124, 58, 237, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-  }
-  h3 { font-size: 1.1rem; color: #1E1B4B; font-weight: 700; margin: 0 0 8px; }
-  p { color: #9CA3AF; margin: 0 auto 24px; max-width: 280px; font-size: 0.88rem; line-height: 1.6; }
-  ion-button {
-    --background: linear-gradient(135deg, #7C3AED, #e11d48);
-    --border-radius: 13px;
-    font-weight: 700;
-    height: 46px;
-  }
-}
-
-/* ══════════════════════════════════════════
-   CENTROS GRID
-══════════════════════════════════════════ */
-.centros-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 14px;
-  width: 100%;
 }
 
+/* ─── Centro Card ──────────────────────────────────────────── */
 .centro-card {
-  background: #FFFFFF;
-  border-radius: 22px;
-  border: 1px solid rgba(124, 58, 237, 0.07);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.055);
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-              box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  margin: 0;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 48px rgba(107, 82, 217, 0.16);
-  }
-
-  ion-card-content {
-    display: flex;
-    align-items: center;
-    padding: 18px 20px;
-    gap: 14px;
-  }
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+.centro-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(13, 146, 136, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+.centro-card:hover .centro-card-glow {
+  opacity: 1;
+}
+.centro-card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(13, 146, 136, 0.06), transparent 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
+/* Centro Icon */
 .centro-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(13, 146, 136, 0.12);
+  border: 1px solid rgba(13, 146, 136, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(99,102,241,0.16));
+  color: var(--clr-accent, #0D9288);
   flex-shrink: 0;
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.18);
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-              background 0.3s ease;
-
-  svg { color: #7C3AED; transition: color 0.3s ease; }
+  transition: all 0.2s ease;
 }
-
 .centro-card:hover .centro-icon {
-  transform: scale(1.1) rotate(-4deg);
-  background: linear-gradient(135deg, #7C3AED, #6366F1);
-  svg { color: #fff; }
+  background: rgba(13, 146, 136, 0.18);
+  box-shadow: 0 0 20px rgba(13, 146, 136, 0.2);
 }
 
-.centro-info {
-  flex: 1;
-  min-width: 0;
-
-  h3 {
-    margin: 0 0 5px;
-    font-size: 0.95rem;
-    color: #1E1B4B;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    letter-spacing: -0.3px;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.8rem;
-    color: #9CA3AF;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    &.text-muted { color: #C4B5FD; font-style: italic; }
-  }
+/* Centro Info */
+.centro-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.centro-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: rgba(13, 146, 136, 0.6);
+  font-weight: 600;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  margin-top: 3px;
 }
 
-.centro-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   flex-shrink: 0;
 }
-
-.card-inactive {
-  opacity: 0.55;
-  filter: grayscale(25%);
-  border-style: dashed !important;
+.status-active {
+  background: rgba(0, 230, 118, 0.1);
+  color: #00E676;
+  border: 1px solid rgba(0, 230, 118, 0.2);
+}
+.status-inactive {
+  background: rgba(71, 85, 105, 0.2);
+  color: rgba(148, 163, 184, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.3);
 }
 
-.mobile-only {
-  display: none;
-  @media (max-width: 640px) { display: block; }
+/* Action Buttons */
+.action-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.action-btn-edit {
+  color: rgba(148, 163, 184, 0.6);
+}
+.action-btn-edit:hover {
+  background: rgba(13, 146, 136, 0.12);
+  border-color: rgba(13, 146, 136, 0.25);
+  color: var(--clr-accent, #0D9288);
+  transform: scale(1.1);
+}
+.action-btn-danger {
+  color: rgba(148, 163, 184, 0.5);
+}
+.action-btn-danger:hover {
+  background: rgba(255, 71, 87, 0.12);
+  border-color: rgba(255, 71, 87, 0.25);
+  color: #FF4757;
+  transform: scale(1.1);
+}
+.action-btn-success {
+  color: rgba(148, 163, 184, 0.5);
+}
+.action-btn-success:hover {
+  background: rgba(0, 230, 118, 0.12);
+  border-color: rgba(0, 230, 118, 0.25);
+  color: #00E676;
+  transform: scale(1.1);
 }
 
-.btn-add {
-  font-weight: 700;
-  @media (max-width: 640px) { display: none; }
+/* ─── Online dot ────────────────────────────────────────────── */
+.online-dot {
+  position: relative;
+  border-radius: 50%;
+  background: #00E676;
+  flex-shrink: 0;
+}
+.online-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #00E676;
+  animation: ping 1.8s ease-out infinite;
 }
 
-.fade-in          { animation: fadeIn  0.5s ease both; }
-.fade-in-delayed  { animation: fadeIn  0.5s ease 0.15s both; }
-.slide-up         { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-@keyframes fadeIn  { from { opacity: 0; }              to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ping {
+  0%   { transform: scale(1); opacity: 0.8; }
+  80%  { transform: scale(2.5); opacity: 0; }
+  100% { transform: scale(2.5); opacity: 0; }
+}

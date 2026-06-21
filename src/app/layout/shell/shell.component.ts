@@ -15,104 +15,465 @@ interface NavItem {
   standalone: true,
   imports: [CommonModule, RouterModule, RouterOutlet],
   template: `
-<div class="h-screen w-screen bg-[#E2E8F0] p-0 md:p-4 lg:p-6 flex items-center justify-center font-sans overflow-hidden">
-  
-  <div class="bg-[#F8F9FD] w-full h-full rounded-none md:rounded-[40px] shadow-2xl overflow-hidden flex flex-col-reverse lg:flex-row p-2 md:p-4 gap-2 md:gap-4 lg:gap-6 relative">
-    
-    <!-- Sidebar / Bottom Tab Bar -->
-    <aside class="w-full lg:w-24 h-16 lg:h-auto bg-gradient-to-b lg:from-[#008880] lg:to-[#136962] from-[#136962] to-[#008880] rounded-t-[28px] md:rounded-[24px] lg:rounded-[30px] flex flex-row lg:flex-col items-center justify-around lg:justify-between px-2 lg:px-0 py-0 lg:py-8 shadow-[0_-10px_30px_rgba(19,105,98,0.2)] lg:shadow-[0_10px_40px_rgba(0,136,128,0.3)] z-20 flex-shrink-0">
-      
-      <!-- Top Actions (Hidden on mobile) -->
-      <div class="hidden lg:flex flex-col gap-8 w-full items-center">
-        <!-- Logo / Top Icon -->
-        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-white font-bold shadow-inner relative group cursor-pointer overflow-hidden border-2 border-white/20">
-          <img src="assets/icon/favicon.png" alt="Logo" class="w-full h-full object-cover">
-          <div class="absolute left-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 invisible lg:group-hover:opacity-100 lg:group-hover:visible transition-all whitespace-nowrap z-50">Proyecto Alerta</div>
-        </div>
+<div class="shell-root">
+
+  <!-- Nebula orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ─── SIDEBAR desktop ─── -->
+  <aside class="sidebar">
+
+    <!-- Logo -->
+    <div class="logo-group">
+      <div class="logo-btn" title="ClinOS">
+        <img src="assets/icon/favicon.png" alt="ClinOS" style="width:28px;height:28px;object-fit:contain;" />
       </div>
-
-      <!-- Navigation -->
-      <nav class="flex flex-row lg:flex-col gap-2 lg:gap-4 w-full px-2 lg:px-4 justify-around lg:justify-start">
-        @for (item of visibleNav(); track item.route) {
-          <div class="relative group flex justify-center">
-            <a [routerLink]="[item.route]" 
-               routerLinkActive="bg-white text-[#008880] shadow-[0_8px_20px_rgba(0,0,0,0.12)]" 
-               [routerLinkActiveOptions]="{exact: false}"
-               class="w-12 h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all cursor-pointer no-underline relative">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" class="flex-shrink-0">
-                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" [attr.d]="item.svgPath"/>
-              </svg>
-            </a>
-            <!-- Tooltip (Only visible on desktop) -->
-            <div class="hidden lg:block absolute left-20 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50">
-              {{ item.label }}
-            </div>
-          </div>
-        }
-      </nav>
-
-      <!-- Bottom Actions (Logout icon only on mobile, with tooltip on desktop) -->
-      <div class="flex flex-row lg:flex-col gap-4 w-auto lg:w-full px-2 lg:px-4 items-center lg:mt-auto relative group">
-         <button (click)="logout()" class="w-12 h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl flex items-center justify-center text-white/70 hover:text-white hover:bg-red-500/20 transition-all cursor-pointer outline-none border-none bg-transparent">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-         </button>
-         <div class="hidden lg:block absolute left-20 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50">
-           Cerrar sesión
-         </div>
-      </div>
-    </aside>
-
-    <!-- Main Content wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10 bg-transparent mb-0 lg:mb-0 w-full fade-in">
-      
-      <!-- Top Header (Search & Profile) -->
-      <header class="h-20 lg:h-24 w-full flex items-center justify-between px-4 lg:px-6 flex-shrink-0 mt-2 lg:mt-0">
-        <div>
-           <span class="text-[10px] lg:text-sm font-bold text-gray-400 uppercase tracking-widest">Plataforma</span>
-           <h1 class="text-2xl lg:text-3xl font-extrabold text-gray-800 m-0 leading-tight">ClinOS</h1>
-        </div>
-        
-        <div class="flex items-center gap-4 lg:gap-6">
-          <!-- Search Bar (Hidden on mobile) -->
-          <div class="hidden md:flex items-center bg-white rounded-full px-5 py-3 shadow-sm border border-gray-100/50 w-64 lg:w-72">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-gray-400"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <input type="text" placeholder="Search" class="bg-transparent border-none outline-none text-sm font-medium ml-3 w-full text-gray-700 placeholder-gray-400">
-          </div>
-          
-          <!-- Profile Avatar -->
-          <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-gradient-to-tr from-teal-500 to-emerald-500 flex items-center justify-center text-white font-bold shadow-md cursor-pointer hover:shadow-lg transition-all border-2 border-white ring-2 ring-teal-100 text-sm lg:text-base">
-            {{ userInitials() }}
-          </div>
-        </div>
-      </header>
-
-      <!-- Router Outlet Wrapper -->
-      <main class="flex-1 overflow-y-auto px-4 lg:px-6 pb-6 custom-scrollbar">
-        <router-outlet></router-outlet>
-      </main>
-
     </div>
 
+    <!-- Nav -->
+    <nav class="nav-list">
+      @for (item of visibleNav(); track item.route) {
+        <div class="nav-wrap" [title]="item.label">
+          <a [routerLink]="[item.route]"
+             routerLinkActive="nav-link-active"
+             [routerLinkActiveOptions]="{exact: false}"
+             class="nav-link">
+            <span class="nav-ring"></span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    [attr.d]="item.svgPath"/>
+            </svg>
+          </a>
+          <span class="nav-tip">{{ item.label }}</span>
+        </div>
+      }
+    </nav>
+
+    <!-- Bottom -->
+    <div class="nav-bottom">
+      <div class="nav-wrap" [title]="userRole()">
+        <div class="user-chip">{{ userInitials() }}</div>
+        <span class="nav-tip">{{ userRole() }}</span>
+      </div>
+      <div class="nav-wrap" title="Cerrar sesión">
+        <button (click)="logout()" class="logout-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span class="nav-tip">Salir</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN COLUMN ─── -->
+  <div class="main-col">
+
+    <!-- Header -->
+    <header class="top-bar">
+      <div>
+        <span class="top-label">Sistema Clínico</span>
+        <h1 class="top-title">ClinOS <span class="top-badge">2026</span></h1>
+      </div>
+      <div class="top-right">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:rgba(148,163,184,0.5);flex-shrink:0;">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input type="text" placeholder="Buscar..." class="search-input" />
+          <span class="search-kbd">⌘K</span>
+        </div>
+        <button class="bell-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="bell-dot"></span>
+        </button>
+        <div class="avatar-chip">{{ userInitials() }}</div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+
   </div>
+
+  <!-- ─── BOTTOM NAV mobile ─── -->
+  <nav class="bottom-nav">
+    @for (item of visibleNav(); track item.route) {
+      <a [routerLink]="[item.route]"
+         routerLinkActive="tab-active"
+         [routerLinkActiveOptions]="{exact: false}"
+         class="tab-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                [attr.d]="item.svgPath"/>
+        </svg>
+        <span class="tab-lbl">{{ item.label }}</span>
+      </a>
+    }
+    <button (click)="logout()" class="tab-btn tab-logout">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="tab-lbl">Salir</span>
+    </button>
+  </nav>
 
 </div>
   `,
   styles: [`
-    :host {
-      display: block;
-      height: 100%;
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
-      border-radius: 10px;
+    :host { display: block; height: 100%; }
+
+    /* ── Root wrapper ── */
+    .shell-root {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      background: #060E10;
+      color: #F1F5F9;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Outfit', 'Inter', sans-serif;
     }
 
+    /* ── Nebula orbs ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 480px; height: 480px;
+      top: -160px; left: -80px;
+      background: radial-gradient(circle, rgba(13,146,136,0.18), transparent 70%);
+      animation: orbDrift 22s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 360px; height: 360px;
+      bottom: -120px; right: 80px;
+      background: radial-gradient(circle, rgba(3,105,161,0.15), transparent 70%);
+      animation: orbDrift 28s ease-in-out infinite reverse;
+    }
+    .orb-3 {
+      width: 280px; height: 280px;
+      top: 45%; right: -60px;
+      background: radial-gradient(circle, rgba(10,110,106,0.12), transparent 70%);
+      animation: orbDrift 19s ease-in-out infinite 4s;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 76px;
+      height: 100%;
+      background: rgba(5, 8, 18, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 0;
+      z-index: 30;
+      flex-shrink: 0;
+      position: relative;
+    }
+    @media (min-width: 1024px) {
+      .sidebar { display: flex; }
+    }
+
+    /* Logo */
+    .logo-group { width: 100%; display: flex; justify-content: center; margin-bottom: 28px; }
+    .logo-btn {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(13,146,136,0.14), rgba(10,110,106,0.09));
+      border: 1px solid rgba(13,146,136,0.22);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 18px rgba(13,146,136,0.1);
+    }
+    .logo-btn:hover {
+      box-shadow: 0 0 28px rgba(13,146,136,0.28);
+      border-color: rgba(13,146,136,0.45);
+      transform: translateY(-1px);
+    }
+
+    /* Nav list */
+    .nav-list {
+      display: flex; flex-direction: column; gap: 10px;
+      flex: 1; width: 100%; padding: 0 14px;
+    }
+
+    /* Nav item wrapper (for tooltip) */
+    .nav-wrap { position: relative; display: flex; justify-content: center; width: 100%; }
+
+    /* Nav link */
+    .nav-link {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(148,163,184,0.55);
+      text-decoration: none;
+      border: 1px solid transparent;
+      background: transparent;
+      transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .nav-link:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.07);
+      transform: scale(1.07);
+    }
+    .nav-link.nav-link-active {
+      color: #0D9288;
+      background: rgba(13,146,136,0.11);
+      border-color: rgba(13,146,136,0.22);
+      box-shadow: 0 0 18px rgba(13,146,136,0.14);
+    }
+    .nav-link.nav-link-active .nav-ring {
+      display: block;
+      position: absolute;
+      inset: -3px;
+      border-radius: 16px;
+      border: 1.5px solid rgba(13,146,136,0.48);
+      animation: ringPulse 2.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .nav-ring { display: none; }
+
+    /* Tooltip */
+    .nav-tip {
+      position: absolute;
+      left: calc(100% + 14px);
+      top: 50%;
+      transform: translateY(-50%) translateX(-8px);
+      background: rgba(10,15,30,0.96);
+      border: 1px solid rgba(255,255,255,0.09);
+      color: #E2E8F0;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 9px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.18s ease;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+      z-index: 100;
+    }
+    .nav-wrap:hover .nav-tip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    /* Bottom section */
+    .nav-bottom {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 10px; width: 100%; padding: 0 14px;
+    }
+    .user-chip {
+      width: 42px; height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #0369A1, #024F8C);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.8rem; color: white;
+      letter-spacing: -0.02em;
+      border: 1px solid rgba(3,105,161,0.28);
+      box-shadow: 0 0 14px rgba(3,105,161,0.18);
+    }
+    .logout-btn {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(148,163,184,0.5);
+      border: 1px solid transparent; background: transparent; cursor: pointer;
+      transition: all 0.2s ease; outline: none;
+    }
+    .logout-btn:hover {
+      color: #FF4757;
+      background: rgba(255,71,87,0.1);
+      border-color: rgba(255,71,87,0.18);
+      transform: scale(1.07);
+    }
+
+    /* ── Main column ── */
+    .main-col {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+      background: rgba(5,8,18,0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.055);
+    }
+    .top-label {
+      display: block;
+      font-size: 0.6rem; font-weight: 700;
+      color: #0D9288;
+      text-transform: uppercase; letter-spacing: 0.14em;
+    }
+    .top-title {
+      font-size: 1.45rem; font-weight: 900; color: #F1F5F9;
+      letter-spacing: -0.035em; line-height: 1.1; margin: 0;
+    }
+    .top-badge {
+      font-size: 0.62rem; font-weight: 700; color: #0D9288;
+      background: rgba(13,146,136,0.1);
+      border: 1px solid rgba(13,146,136,0.2);
+      padding: 2px 7px; border-radius: 6px;
+      vertical-align: middle; margin-left: 6px;
+    }
+    .top-right {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .search-wrap {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 11px;
+      padding: 7px 12px;
+      width: 210px;
+      transition: all 0.2s ease;
+    }
+    .search-wrap:focus-within {
+      border-color: rgba(13,146,136,0.28);
+      background: rgba(13,146,136,0.04);
+      box-shadow: 0 0 0 3px rgba(13,146,136,0.07);
+    }
+    .search-input {
+      background: transparent; border: none; outline: none;
+      font-size: 0.82rem; font-weight: 500; color: #F1F5F9; flex: 1;
+      font-family: 'Outfit', sans-serif;
+    }
+    .search-input::placeholder { color: rgba(148,163,184,0.42); }
+    .search-kbd {
+      font-size: 0.62rem; font-weight: 600;
+      color: rgba(148,163,184,0.35);
+      border: 1px solid rgba(148,163,184,0.13);
+      border-radius: 4px; padding: 1px 5px; font-family: monospace;
+    }
+    @media (max-width: 768px) { .search-wrap { display: none; } }
+
+    .bell-btn {
+      position: relative; width: 38px; height: 38px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.04);
+      color: rgba(148,163,184,0.65);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .bell-btn:hover {
+      border-color: rgba(13,146,136,0.24);
+      color: #0D9288;
+      background: rgba(13,146,136,0.07);
+    }
+    .bell-dot {
+      position: absolute; top: 7px; right: 7px;
+      width: 6px; height: 6px;
+      border-radius: 50%; background: #FF4757;
+      border: 1.5px solid #060E10;
+    }
+    .avatar-chip {
+      width: 38px; height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #0D9288, #0A6E6A);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.78rem; color: #060E10;
+      letter-spacing: -0.02em; cursor: pointer;
+      border: 2px solid rgba(13,146,136,0.28);
+      box-shadow: 0 0 16px rgba(13,146,136,0.14);
+      transition: all 0.2s ease;
+    }
+    .avatar-chip:hover {
+      box-shadow: 0 0 28px rgba(13,146,136,0.32);
+      transform: scale(1.05);
+    }
+
+    /* ── Content area ── */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(13,146,136,0.18) transparent;
+    }
+    .content-area::-webkit-scrollbar { width: 4px; }
+    .content-area::-webkit-scrollbar-track { background: transparent; }
+    .content-area::-webkit-scrollbar-thumb {
+      background: rgba(13,146,136,0.18); border-radius: 10px;
+    }
+    @media (max-width: 1024px) {
+      .content-area { padding: 16px 16px 90px; }
+    }
+
+    /* ── Bottom Nav (mobile) ── */
+    .bottom-nav {
+      display: flex;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 68px;
+      background: rgba(5,8,18,0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,255,255,0.065);
+      align-items: center; justify-content: space-around;
+      padding: 0 8px; z-index: 50;
+    }
+    @media (min-width: 1024px) { .bottom-nav { display: none; } }
+
+    .tab-btn {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 3px;
+      padding: 8px 12px; border-radius: 12px;
+      text-decoration: none; color: rgba(148,163,184,0.45);
+      border: none; background: transparent; cursor: pointer;
+      transition: all 0.2s ease; flex: 1;
+    }
+    .tab-btn:hover { color: rgba(148,163,184,0.85); }
+    .tab-btn.tab-active { color: #0D9288; }
+    .tab-logout:hover { color: #FF4757; }
+    .tab-lbl { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* ── Keyframes ── */
+    @keyframes orbDrift {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      33%  { transform: translate(18px,-12px) rotate(120deg); }
+      66%  { transform: translate(-9px,16px) rotate(240deg); }
+      100% { transform: translate(0,0) rotate(360deg); }
+    }
+    @keyframes ringPulse {
+      0%   { transform: scale(0.95); opacity: 0.7; }
+      50%  { transform: scale(1.12); opacity: 0.18; }
+      100% { transform: scale(0.95); opacity: 0.7; }
+    }
   `]
 })
 export class ShellComponent {
@@ -150,7 +511,7 @@ export class ShellComponent {
       svgPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z'
     },
     {
-      label: 'Panel Clínico',
+      label: 'Panel',
       route: '/dashboard/funcionario',
       roles: ['funcionario'],
       svgPath: 'M22 12h-4l-3 9L9 3l-3 9H2'

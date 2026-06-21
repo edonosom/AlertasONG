@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000/api/v1'
+  apiUrl: 'https://alertasongbackend-production-3be8.up.railway.app/api/v1'
 };
 
 /*
