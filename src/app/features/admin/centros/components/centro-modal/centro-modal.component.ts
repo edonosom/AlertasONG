@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
@@ -235,7 +235,7 @@ export class CentroModalComponent {
   private readonly centroService = inject(CentroService);
   private readonly modalCtrl = inject(ModalController);
   
-  centroData: any = null; // Passed via componentProps
+  @Input() centroData: any = null; // Passed via componentProps
   isEditMode = false;
 
   centroForm: FormGroup = this.fb.group({

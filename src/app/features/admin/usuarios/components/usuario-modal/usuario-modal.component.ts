@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
@@ -357,7 +357,7 @@ export class UsuarioModalComponent implements OnInit {
   private readonly modalCtrl = inject(ModalController);
   private readonly authService = inject(AuthService);
 
-  usuarioData: any = null; // Passed via componentProps
+  @Input() usuarioData: any = null; // Passed via componentProps
   isEditMode = false;
 
   centros = signal<Centro[]>([]);
