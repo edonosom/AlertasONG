@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { CentroService, Centro, CentrosResponse } from '../../../core/services/centro.service';
 import { CentroModalComponent } from './components/centro-modal/centro-modal.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { UsuarioService } from '../../../core/services/usuario.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-centros',
@@ -46,11 +48,40 @@ export class CentrosComponent implements OnInit {
     this.loadCentros();
   }
 
+  usuarioService = inject(UsuarioService);
+
   loadCentros() {
     this.isLoading.set(true);
-    this.centroService.getCentros().subscribe({
-      next: (res: CentrosResponse) => {
-        this.allCentros.set(res.data as any[]);
+    
+    forkJoin({
+      centrosRes: this.centroService.getCentros(),
+      usuariosRes: this.usuarioService.getUsuarios()
+    }).subscribe({
+      next: ({ centrosRes, usuariosRes }) => {
+        // Encontrar usuarios que son directores
+        const directores = (usuariosRes.data as any[]).filter(u => {
+          const rolVal = u.rol?.value || u.rol;
+          return rolVal === 'director';
+        });
+
+        // Mapear cada centro y asignarle su director si existe
+        const centrosConDirector = (centrosRes.data as any[]).map(centro => {
+          const directorInfo = directores.find(d => 
+            d.centro_id === centro.id || 
+            d.centro?.id === centro.id || 
+            (d.centros && Array.isArray(d.centros) && d.centros.some((c: any) => c.id === centro.id)) ||
+            (centro.directores && Array.isArray(centro.directores) && centro.directores.some((dir: any) => dir.id === d.id))
+          );
+          if (directorInfo) {
+            centro.director_nombre = `${directorInfo.nombre} ${directorInfo.apellido}`;
+          } else if (centro.directores && Array.isArray(centro.directores) && centro.directores.length > 0) {
+            const fallbackDir = centro.directores[0];
+            centro.director_nombre = `${fallbackDir.nombre} ${fallbackDir.apellido}`;
+          }
+          return centro;
+        });
+
+        this.allCentros.set(centrosConDirector);
         this.isLoading.set(false);
       },
       error: () => {

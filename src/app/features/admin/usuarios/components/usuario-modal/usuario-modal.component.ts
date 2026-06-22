@@ -5,6 +5,8 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { UsuarioService } from '../../../../../core/services/usuario.service';
 import { CentroService, Centro } from '../../../../../core/services/centro.service';
 import { AuthService } from '../../../../../core/services/auth.service';
+import { AdminApiService } from '../../../../../core/services/admin-api.service';
+import { switchMap, of, forkJoin, catchError } from 'rxjs';
 
 @Component({
   selector: 'app-usuario-modal',
@@ -362,6 +364,7 @@ export class UsuarioModalComponent implements OnInit {
   private readonly centroService = inject(CentroService);
   private readonly modalCtrl = inject(ModalController);
   private readonly authService = inject(AuthService);
+  private readonly adminApiService = inject(AdminApiService);
 
   @Input() usuarioData: any = null; // Passed via componentProps
   isEditMode = false;
@@ -411,12 +414,17 @@ export class UsuarioModalComponent implements OnInit {
 
     if (this.usuarioData) {
       this.isEditMode = true;
+      let assignedCentroId = this.usuarioData.centro_id || this.usuarioData.centro?.id;
+      if (!assignedCentroId && this.usuarioData.centros && Array.isArray(this.usuarioData.centros) && this.usuarioData.centros.length > 0) {
+        assignedCentroId = this.usuarioData.centros[0].id;
+      }
       this.userForm.patchValue({
         nombre: this.usuarioData.nombre,
         apellido: this.usuarioData.apellido,
         rut: this.usuarioData.rut,
         email: this.usuarioData.email,
-        rol: this.usuarioData.rol?.value || this.usuarioData.rol
+        rol: this.usuarioData.rol?.value || this.usuarioData.rol,
+        centro_id: assignedCentroId || null
       });
       this.userForm.get('rut')?.disable(); // Prevent changing rut
     }
@@ -424,7 +432,7 @@ export class UsuarioModalComponent implements OnInit {
 
   needsCentro(): boolean {
     const rol = this.userForm.get('rol')?.value;
-    return (rol === 'director' || rol === 'funcionario') && !this.isEditMode; // Simplified for edit mode (don't re-assign easily here)
+    return (rol === 'director' || rol === 'funcionario');
   }
 
   closeModal(data?: any) {
@@ -444,14 +452,29 @@ export class UsuarioModalComponent implements OnInit {
         ? this.usuarioService.updateUsuario(this.usuarioData.id, payload)
         : this.usuarioService.createUsuario(payload);
 
-      request$.subscribe({
+      request$.pipe(
+        switchMap((res: any) => {
+          const userId = this.isEditMode ? this.usuarioData.id : res.data.id;
+          const rol = payload.rol;
+          const centroId = payload.centro_id;
+
+          // Si el usuario es director y tiene un centro asignado, usamos el endpoint de admin
+          if (rol === 'director' && centroId) {
+            return this.adminApiService.asignarDirectorCentro(centroId, userId).pipe(
+              catchError(() => of(res)), // Ignorar error de clave duplicada si ya está asignado
+              switchMap(() => of(res))
+            );
+          }
+          return of(res);
+        })
+      ).subscribe({
         next: (res) => {
           this.isSubmitting = false;
           this.closeModal(res.data);
         },
         error: (err) => {
           this.isSubmitting = false;
-          this.closeModal({ error: err.error?.message || 'Error al guardar' });
+          this.closeModal({ error: err.error?.message || 'Error al guardar (Relación de Centro)' });
         }
       });
     }

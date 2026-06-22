@@ -80,8 +80,6 @@
 /* ─── Centro Card ──────────────────────────────────────────── */
 .centro-card {
   display: flex;
-  align-items: center;
-  gap: 14px;
   padding: 18px 20px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -134,9 +132,6 @@
   font-weight: 700;
   color: #E2E8F0;
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .centro-code {
   display: inline-flex;

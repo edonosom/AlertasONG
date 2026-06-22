@@ -65,39 +65,22 @@
   @if (!isLoading() && centros().length > 0) {
     <div class="centros-grid stagger-children slide-up pb-20 lg:pb-6">
       @for (centro of centros(); track centro.id) {
-        <div class="centro-card"
+        <div class="centro-card flex-col items-start"
              [style.opacity]="centro.deleted_at ? '0.45' : '1'"
              [style.filter]="centro.deleted_at ? 'grayscale(60%)' : 'none'">
 
           <!-- Glow orb on hover -->
           <div class="centro-card-glow"></div>
 
-          <!-- Left: icon + info -->
-          <div class="flex items-center gap-4 flex-1 min-w-0">
-            <div class="centro-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <!-- Top: Icon & Status -->
+          <div class="flex items-center justify-between w-full relative z-10">
+            <div class="centro-icon" style="width:42px; height:42px; border-radius:12px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <div class="flex flex-col min-w-0">
-              <h3 class="centro-name">{{ centro.nombre }}</h3>
-              @if (centro.codigo) {
-                <span class="centro-code">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-                    <path d="M7 8l-4 4 4 4m10-8l4 4-4 4M14 4l-4 16"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  {{ centro.codigo }}
-                </span>
-              } @else {
-                <span class="centro-code" style="opacity:0.4;font-style:italic;">Sin código</span>
-              }
-            </div>
-          </div>
-
-          <!-- Status badge -->
-          <div class="flex items-center gap-2">
+            
             @if (!centro.deleted_at) {
               <span class="status-badge status-active">
                 <span class="online-dot" style="width:5px;height:5px;"></span>
@@ -108,8 +91,35 @@
             }
           </div>
 
-          <!-- Action buttons -->
-          <div class="action-btns">
+          <!-- Middle: Info -->
+          <div class="flex flex-col w-full relative z-10 mt-1 mb-2">
+            <h3 class="centro-name" style="white-space: normal; overflow: visible; font-size: 1.05rem; line-height: 1.3;">{{ centro.nombre }}</h3>
+            
+            <div class="flex flex-col gap-1.5 mt-3">
+              @if (centro.codigo) {
+                <span class="centro-code" style="opacity: 0.8;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 8l-4 4 4 4m10-8l4 4-4 4M14 4l-4 16"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  CÓDIGO: {{ centro.codigo }}
+                </span>
+              } @else {
+                <span class="centro-code" style="opacity:0.4;font-style:italic;">Sin código</span>
+              }
+
+              <!-- Director Asignado -->
+              <span class="centro-code" style="opacity: 0.8;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                DIRECTOR: {{ centro.director?.nombres || centro.director_nombre || centro.director || 'No asignado' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Bottom: Actions -->
+          <div class="flex items-center justify-end gap-2 w-full pt-3 mt-auto border-t border-white/5 relative z-10">
             @if (!centro.deleted_at) {
               <button (click)="editCentro(centro)" title="Editar" class="action-btn action-btn-edit">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
