@@ -620,8 +620,8 @@ ion-skeleton-text {
   
   /* Desktop sizing (default full screen on mobile) */
   @media (min-width: 768px) {
-    --width: 600px;
-    --height: auto;
+    --width: 640px;
+    --height: 580px;
     --max-width: 90vw;
     --max-height: 90vh;
   }

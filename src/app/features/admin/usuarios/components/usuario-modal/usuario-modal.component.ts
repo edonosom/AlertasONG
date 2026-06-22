@@ -186,11 +186,17 @@ import { AuthService } from '../../../../../core/services/auth.service';
     .tw-row {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
-    @media (min-width: 768px) {
+    
+    @media (min-width: 600px) {
       .tw-row {
         flex-direction: row;
+        gap: 20px;
+      }
+      .tw-col {
+        flex: 1;
+        min-width: 0;
       }
     }
 
