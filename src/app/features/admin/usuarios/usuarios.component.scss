@@ -76,8 +76,9 @@
 /* ─── User Card ────────────────────────────────────────────── */
 .user-card {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
   padding: 18px 20px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -86,6 +87,7 @@
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(20px);
+  min-height: 180px;
 }
 .user-card:hover {
   background: rgba(255, 255, 255, 0.055);

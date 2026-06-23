@@ -64,20 +64,32 @@ export class CentrosComponent implements OnInit {
           return rolVal === 'director';
         });
 
+        // Encontrar usuarios que son funcionarios
+        const funcionarios = (usuariosRes.data as any[]).filter(u => {
+          const rolVal = u.rol?.value || u.rol;
+          return rolVal === 'funcionario';
+        });
+
         // Mapear cada centro y asignarle su director si existe
         const centrosConDirector = (centrosRes.data as any[]).map(centro => {
-          const directorInfo = directores.find(d => 
-            d.centro_id === centro.id || 
-            d.centro?.id === centro.id || 
-            (d.centros && Array.isArray(d.centros) && d.centros.some((c: any) => c.id === centro.id)) ||
-            (centro.directores && Array.isArray(centro.directores) && centro.directores.some((dir: any) => dir.id === d.id))
-          );
+          const directorInfo = directores.find(d => {
+            const relCentros = d.centros_dirigidos || d.centrosDirigidos || d.centros;
+            return d.centro_id === centro.id || 
+                   d.centro?.id === centro.id || 
+                   (relCentros && Array.isArray(relCentros) && relCentros.some((c: any) => c.id === centro.id)) ||
+                   (centro.directores && Array.isArray(centro.directores) && centro.directores.some((dir: any) => dir.id === d.id));
+          });
           if (directorInfo) {
             centro.director_nombre = `${directorInfo.nombre} ${directorInfo.apellido}`;
           } else if (centro.directores && Array.isArray(centro.directores) && centro.directores.length > 0) {
             const fallbackDir = centro.directores[0];
             centro.director_nombre = `${fallbackDir.nombre} ${fallbackDir.apellido}`;
           }
+
+          // Asignar funcionarios
+          const centroFuncionarios = funcionarios.filter(f => f.centro_id === centro.id || f.centro?.id === centro.id);
+          centro.funcionarios_asignados = centroFuncionarios;
+
           return centro;
         });
 

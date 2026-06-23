@@ -68,48 +68,68 @@
   @if (!isLoading() && usuarios().length > 0) {
     <div class="usuarios-grid stagger-children slide-up pb-20 lg:pb-6">
       @for (user of usuarios(); track user.id) {
-        <div class="user-card"
-             [style.opacity]="user.deleted_at ? '0.4' : '1'"
+        <div class="user-card flex-col items-start"
+             [style.opacity]="user.deleted_at ? '0.45' : '1'"
              [style.filter]="user.deleted_at ? 'grayscale(60%)' : 'none'">
 
-          <!-- Glow on hover -->
+          <!-- Glow orb on hover -->
           <div class="user-card-glow"></div>
 
-          <!-- Avatar + Info -->
-          <div class="flex items-center gap-4 flex-1 min-w-0">
-
+          <!-- Top: Avatar & Status/Role -->
+          <div class="flex items-center justify-between w-full relative z-10">
             <!-- Avatar with role color -->
-            <div class="user-avatar" [ngClass]="user.rol?.value || user.rol || 'medium'">
+            <div class="user-avatar" [ngClass]="user.rol?.value || user.rol || 'medium'" style="width:42px; height:42px; border-radius:12px;">
               {{ user.nombre?.charAt(0)?.toUpperCase() }}{{ user.apellido?.charAt(0)?.toUpperCase() }}
             </div>
+            
+            <span class="role-badge" [ngClass]="'role-' + (user.rol?.value || user.rol)">
+              {{ getRoleLabel(user.rol) }}
+            </span>
+          </div>
 
-            <!-- Info -->
-            <div class="flex flex-col min-w-0 gap-1">
-              <div class="flex items-center gap-2 flex-wrap">
-                <h3 class="user-name">{{ user.nombre }} {{ user.apellido }}</h3>
-                <span class="role-badge" [ngClass]="'role-' + (user.rol?.value || user.rol)">
-                  {{ getRoleLabel(user.rol) }}
-                </span>
-              </div>
-              <div class="user-meta">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+          <!-- Middle: Info -->
+          <div class="flex flex-col w-full relative z-10 mt-1 mb-2">
+            <h3 class="user-name" style="white-space: normal; overflow: visible; font-size: 1.05rem; line-height: 1.3;">{{ user.nombre }} {{ user.apellido }}</h3>
+            
+            <div class="flex flex-col gap-1.5 mt-3">
+              <span class="user-code" style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                   <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
                   <path d="M2 10h20" stroke="currentColor" stroke-width="2"/>
                 </svg>
-                <span>{{ user.rut }}</span>
-                <span class="user-meta-sep">·</span>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                RUT: {{ user.rut }}
+              </span>
+
+              <span class="user-code" style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
                 <span class="truncate">{{ user.email }}</span>
-              </div>
+              </span>
+
+              <!-- Centro -->
+              @if (user.centro_nombre || user.centro?.nombre) {
+                <span class="user-code" style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6"/>
+                  </svg>
+                  CENTRO: {{ user.centro_nombre || user.centro?.nombre }}
+                </span>
+              } @else {
+                <span class="user-code" style="opacity: 0.5; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8); font-style: italic;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6"/>
+                  </svg>
+                  Sin centro asignado
+                </span>
+              }
             </div>
           </div>
 
-          <!-- Action Buttons -->
-          <div class="action-btns">
+          <!-- Bottom: Actions -->
+          <div class="flex items-center justify-end gap-2 w-full pt-3 mt-auto border-t border-white/5 relative z-10">
             @if (!user.deleted_at) {
               <button (click)="editUsuario(user)" title="Editar" class="action-btn action-btn-edit">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

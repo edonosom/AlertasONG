@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController, ToastController, AlertController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { UsuarioService, Usuario, UsuariosResponse } from '../../../core/services/usuario.service';
+import { CentroService } from '../../../core/services/centro.service';
+import { forkJoin } from 'rxjs';
 import { UsuarioModalComponent } from './components/usuario-modal/usuario-modal.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class UsuariosComponent implements OnInit {
   usuarioService = inject(UsuarioService);
+  centroService = inject(CentroService);
   modalCtrl = inject(ModalController);
   toastCtrl = inject(ToastController);
   alertCtrl = inject(AlertController);
@@ -49,9 +52,23 @@ export class UsuariosComponent implements OnInit {
 
   loadUsuarios() {
     this.isLoading.set(true);
-    this.usuarioService.getUsuarios().subscribe({
-      next: (res: UsuariosResponse) => {
-        this.allUsuarios.set(res.data as any[]);
+    forkJoin({
+      usuariosRes: this.usuarioService.getUsuarios(),
+      centrosRes: this.centroService.getCentros()
+    }).subscribe({
+      next: ({ usuariosRes, centrosRes }) => {
+        const centros = centrosRes.data as any[];
+        const usuarios = (usuariosRes.data as any[]).map(u => {
+          if (u.centro_id || u.centro?.id) {
+            const cId = u.centro_id || u.centro?.id;
+            const c = centros.find(c => c.id === cId);
+            if (c) {
+              u.centro_nombre = c.nombre;
+            }
+          }
+          return u;
+        });
+        this.allUsuarios.set(usuarios);
         this.isLoading.set(false);
       },
       error: () => {

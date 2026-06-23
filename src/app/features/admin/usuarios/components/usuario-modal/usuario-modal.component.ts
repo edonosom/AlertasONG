@@ -415,8 +415,10 @@ export class UsuarioModalComponent implements OnInit {
     if (this.usuarioData) {
       this.isEditMode = true;
       let assignedCentroId = this.usuarioData.centro_id || this.usuarioData.centro?.id;
-      if (!assignedCentroId && this.usuarioData.centros && Array.isArray(this.usuarioData.centros) && this.usuarioData.centros.length > 0) {
-        assignedCentroId = this.usuarioData.centros[0].id;
+      
+      const centrosRelation = this.usuarioData.centros_dirigidos || this.usuarioData.centrosDirigidos || this.usuarioData.centros;
+      if (!assignedCentroId && centrosRelation && Array.isArray(centrosRelation) && centrosRelation.length > 0) {
+        assignedCentroId = centrosRelation[0].id;
       }
       this.userForm.patchValue({
         nombre: this.usuarioData.nombre,
