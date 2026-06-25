@@ -31,9 +31,28 @@ export class UsuariosComponent implements OnInit {
   // Active tab: 'activos' | 'inactivos'
   activeTab = signal<string>('activos');
 
+  // Selected roles for filtering
+  selectedRoles = signal<string[]>([]);
+
+  matchesRoleFilter(u: any): boolean {
+    const roles = this.selectedRoles();
+    if (roles.length === 0) return true;
+    const r = typeof u.rol === 'object' ? u.rol?.value : u.rol;
+    return roles.includes(r);
+  }
+
+  toggleRoleFilter(role: string) {
+    const current = this.selectedRoles();
+    if (current.includes(role)) {
+      this.selectedRoles.set(current.filter(r => r !== role));
+    } else {
+      this.selectedRoles.set([...current, role]);
+    }
+  }
+
   // Derived computed signals — no extra API calls
-  usuariosActivos = computed(() => this.allUsuarios().filter(u => !u.deleted_at));
-  usuariosInactivos = computed(() => this.allUsuarios().filter(u => !!u.deleted_at));
+  usuariosActivos = computed(() => this.allUsuarios().filter(u => !u.deleted_at && this.matchesRoleFilter(u)));
+  usuariosInactivos = computed(() => this.allUsuarios().filter(u => !!u.deleted_at && this.matchesRoleFilter(u)));
 
   // Convenience: what to show in current tab
   usuarios = computed(() =>

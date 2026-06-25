@@ -29,6 +29,16 @@
     </ion-segment>
   </div>
 
+  <!-- Filters -->
+  <div class="filters-bar fade-in">
+    <button class="filter-chip" [class.active]="selectedRoles().includes('admin')" (click)="toggleRoleFilter('admin')">Administradores</button>
+    <button class="filter-chip" [class.active]="selectedRoles().includes('director')" (click)="toggleRoleFilter('director')">Directores</button>
+    <button class="filter-chip" [class.active]="selectedRoles().includes('funcionario')" (click)="toggleRoleFilter('funcionario')">Funcionarios</button>
+    @if (isRoot()) {
+      <button class="filter-chip" [class.active]="selectedRoles().includes('root')" (click)="toggleRoleFilter('root')">Super Admin</button>
+    }
+  </div>
+
   <!-- Skeletons -->
   @if (isLoading()) {
     <div class="usuarios-grid stagger-children">
