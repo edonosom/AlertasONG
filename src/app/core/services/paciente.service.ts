@@ -10,6 +10,7 @@ export interface Paciente {
   apellido: string;
   fecha_nacimiento: string;
   complejidad?: string;
+  asignaciones?: any[];
 }
 
 export interface PacientesResponse {

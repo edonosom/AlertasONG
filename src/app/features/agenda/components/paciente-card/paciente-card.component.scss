@@ -1,21 +1,20 @@
-@use 'sass:color';
-
-$border-radius: 16px;
-$color-safe: #2ecc71;
-$color-warning: #f1c40f;
-$color-warning-high: #e67e22;
-$color-critical: #e74c3c;
-$color-custom: #3498db;
+$border-radius: var(--radius-md);
 
 .paciente-card {
-  padding: 16px;
+  padding: 18px;
   border-radius: $border-radius;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--clr-card);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-  margin-bottom: 12px;
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--clr-border);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 14px;
+  transition: var(--t-base);
+
+  &:hover {
+    border-color: var(--clr-border-accent);
+    box-shadow: var(--shadow-glow);
+  }
 
   &:active {
     transform: scale(0.98);
@@ -33,44 +32,51 @@ $color-custom: #3498db;
   .patient-name {
     margin: 0 0 4px 0;
     font-size: 1.15rem;
-    font-weight: 600;
-    color: #2c3e50;
-    letter-spacing: -0.2px;
+    font-weight: 800;
+    color: var(--clr-text);
+    letter-spacing: -0.02em;
   }
   .patient-rut {
     font-size: 0.85rem;
-    color: #95a5a6;
+    color: var(--clr-text-secondary);
     font-variant-numeric: tabular-nums;
-    font-weight: 500;
+    font-weight: 600;
+    font-family: monospace;
   }
 }
 
 .alert-badge {
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  display: flex;
+  font-size: 0.72rem;
+  font-weight: 750;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
 
   &.safe {
-    background: rgba($color-safe, 0.1);
-    color: color.adjust($color-safe, $lightness: -10%);
+    background: var(--clr-success-dim);
+    color: var(--clr-success);
+    border-color: rgba(5, 150, 105, 0.2);
   }
   &.warning {
-    background: rgba($color-warning, 0.15);
-    color: color.adjust($color-warning, $lightness: -20%);
+    background: var(--clr-warning-dim);
+    color: var(--clr-warning);
+    border-color: rgba(217, 119, 6, 0.2);
   }
   &.critical {
-    background: rgba($color-critical, 0.1);
-    color: $color-critical;
+    background: var(--clr-danger-dim);
+    color: var(--clr-danger);
+    border-color: rgba(220, 38, 38, 0.2);
     animation: pulseAlert 2s infinite;
   }
   &.custom {
-    background: rgba($color-custom, 0.1);
-    color: $color-custom;
+    background: var(--clr-accent-2-dim);
+    color: var(--clr-accent-2);
+    border-color: rgba(3, 105, 161, 0.2);
   }
 }
 
@@ -82,19 +88,20 @@ $color-custom: #3498db;
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: #aeb6bf;
+  color: var(--clr-text-secondary);
+  opacity: 0.85;
   margin-bottom: 8px;
   
   .label-current {
-    font-weight: 700;
-    color: #34495e;
+    font-weight: 800;
+    color: var(--clr-text);
   }
 }
 
 .progress-track {
   width: 100%;
   height: 8px;
-  background: #ecf0f1;
+  background: var(--clr-input-bd);
   border-radius: 10px;
   overflow: hidden;
 }
@@ -104,14 +111,14 @@ $color-custom: #3498db;
   border-radius: 10px;
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   
-  &.safe { background-color: $color-safe; }
-  &.warning { background-color: $color-warning; }
-  &.critical { background-color: $color-critical; }
-  &.custom { background-color: $color-custom; }
+  &.safe { background-color: var(--clr-success); }
+  &.warning { background-color: var(--clr-warning); }
+  &.critical { background-color: var(--clr-danger); }
+  &.custom { background-color: var(--clr-accent-2); }
 }
 
 @keyframes pulseAlert {
-  0% { box-shadow: 0 0 0 0 rgba($color-critical, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba($color-critical, 0); }
-  100% { box-shadow: 0 0 0 0 rgba($color-critical, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
 }

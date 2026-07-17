@@ -276,7 +276,7 @@
 /* ─── Hero Card ─────────────────────────────────────────────── */
 .hero-card {
   background: linear-gradient(135deg, rgba(13,146,136,0.12) 0%, rgba(10,110,106,0.08) 50%, rgba(3,105,161,0.08) 100%);
-  border: 1px solid rgba(13, 146, 136, 0.18);
+  border: 1px solid var(--clr-border-accent, rgba(13, 146, 136, 0.18));
   border-radius: 28px;
   padding: 28px;
   display: flex;
@@ -285,11 +285,11 @@
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(20px);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(13, 146, 136, 0.06);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1), 0 0 40px rgba(13, 146, 136, 0.06);
   transition: all 0.3s ease;
 }
 .hero-card:hover {
-  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.35), 0 0 60px rgba(13, 146, 136, 0.1);
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.15), 0 0 60px rgba(13, 146, 136, 0.1);
 }
 .hero-orb {
   position: absolute;
@@ -321,7 +321,7 @@
 .hero-title {
   font-size: 1.9rem;
   font-weight: 900;
-  color: #F1F5F9;
+  color: var(--clr-text);
   letter-spacing: -0.03em;
   line-height: 1.1;
   margin: 0;
@@ -365,7 +365,7 @@
 .hero-metric-value {
   font-size: 2.2rem;
   font-weight: 900;
-  color: #F1F5F9;
+  color: var(--clr-text);
   letter-spacing: -0.04em;
   line-height: 1;
 }
@@ -377,14 +377,14 @@
   gap: 14px;
   padding: 18px 20px;
   border-radius: 22px;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid var(--clr-border);
   backdrop-filter: blur(20px);
   transition: all 0.25s ease;
   flex: 1;
 }
 .metric-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(255,255,255,0.12);
+  border-color: var(--clr-border-accent);
 }
 .metric-purple {
   background: linear-gradient(135deg, rgba(3,105,161,0.15), rgba(2,79,140,0.08));
@@ -425,17 +425,17 @@
 .metric-label {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #F1F5F9;
+  color: var(--clr-text);
 }
 .metric-sub {
   font-size: 0.72rem;
-  color: rgba(148, 163, 184, 0.6);
+  color: var(--clr-text-secondary);
   font-weight: 500;
 }
 .metric-value {
   font-size: 2rem;
   font-weight: 900;
-  color: #F1F5F9;
+  color: var(--clr-text);
   letter-spacing: -0.04em;
   margin-left: auto;
 }
@@ -460,8 +460,8 @@
   flex-direction: column;
   gap: 14px;
   padding: 22px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
   border-radius: 24px;
   text-decoration: none;
   cursor: pointer;
@@ -471,10 +471,10 @@
   backdrop-filter: blur(20px);
 }
 .quick-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(13, 146, 136, 0.2);
+  background: var(--clr-card-hover);
+  border-color: var(--clr-border-accent);
   transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-card);
 }
 .quick-card-inactive {
   opacity: 0.5;
@@ -490,11 +490,11 @@
 .quick-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #F1F5F9;
+  color: var(--clr-text);
 }
 .quick-sub {
   font-size: 0.75rem;
-  color: rgba(148, 163, 184, 0.6);
+  color: var(--clr-text-secondary);
   font-weight: 500;
 }
 .quick-bar-wrap { display: flex; flex-direction: column; gap: 6px; }
@@ -503,12 +503,12 @@
   justify-content: space-between;
   font-size: 0.72rem;
   font-weight: 600;
-  color: rgba(148, 163, 184, 0.6);
+  color: var(--clr-text-secondary);
 }
 .quick-bar-track {
   width: 100%;
   height: 5px;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--clr-border);
   border-radius: 100px;
   overflow: hidden;
 }
@@ -522,10 +522,10 @@
   top: 20px; right: 20px;
   width: 28px; height: 28px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--clr-input-bg);
+  border: 1px solid var(--clr-input-bd);
   display: flex; align-items: center; justify-content: center;
-  color: rgba(148, 163, 184, 0.5);
+  color: var(--clr-text-secondary);
   transition: all 0.2s ease;
 }
 .quick-card:hover .quick-arrow {
@@ -548,8 +548,8 @@
 
 /* ─── Staff Panel ────────────────────────────────────────────── */
 .staff-panel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
   border-radius: 28px;
   padding: 24px;
   display: flex;
@@ -566,7 +566,7 @@
   gap: 8px;
   font-size: 1rem;
   font-weight: 800;
-  color: #F1F5F9;
+  color: var(--clr-text);
   margin: 0;
 }
 .staff-title-icon {
@@ -588,8 +588,8 @@
 
 .staff-toggle {
   display: flex;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--clr-input-bg);
+  border: 1px solid var(--clr-input-bd);
   border-radius: 12px;
   padding: 4px;
   gap: 4px;
@@ -602,7 +602,7 @@
   font-size: 0.78rem;
   font-weight: 700;
   font-family: 'Outfit', sans-serif;
-  color: rgba(148, 163, 184, 0.6);
+  color: var(--clr-text-secondary);
   background: transparent;
   transition: all 0.2s ease;
 }
@@ -619,13 +619,13 @@
   gap: 12px;
   padding: 10px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
 }
 .staff-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(13, 146, 136, 0.1);
+  background: var(--clr-card-hover);
+  border-color: var(--clr-border-accent);
 }
 
 .staff-avatar-wrap { position: relative; flex-shrink: 0; }
@@ -643,7 +643,7 @@
   bottom: -1px; right: -1px;
   width: 10px; height: 10px;
   border-radius: 50%;
-  border: 2px solid rgba(8, 12, 24, 0.9);
+  border: 2px solid var(--clr-bg);
 }
 .staff-online  {
   background: #00E676;
@@ -654,7 +654,7 @@
 .staff-name {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #E2E8F0;
+  color: var(--clr-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -662,7 +662,7 @@
 .staff-role {
   font-size: 0.68rem;
   font-weight: 600;
-  color: rgba(148, 163, 184, 0.5);
+  color: var(--clr-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }

@@ -1,31 +1,116 @@
 // Variables de la estética Clínica 2026
-$border-radius-lg: 16px;
-$border-radius-sm: 8px;
-$shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
-$shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.06);
+$border-radius-lg: var(--radius-lg);
+$border-radius-sm: var(--radius-sm);
 
-// Colores Semánticos
-$color-sla-75: #f1c40f; // Amarillo advertencia
+// Colores Semánticos (vinculados al tema global)
+$color-sla-75: var(--clr-warning);
 $color-sla-80: #e67e22; // Naranja precaución
-$color-sla-89: #e74c3c; // Rojo coral (Crítico)
-$color-custom: #3498db; // Azul profesional
-$color-text-main: #2c3e50;
-$color-text-muted: #95a5a6;
+$color-sla-89: var(--clr-danger);
+$color-custom: var(--clr-accent-2);
 
 :host {
   display: block;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  width: 100%;
+  font-family: inherit;
 }
 
-// Contenedor principal con efecto Glassmorphism muy sutil
-.glass-panel {
-  padding: 20px;
+/* --- Layout Split (Responsive) --- */
+.agenda-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .agenda-layout {
+    display: grid;
+    grid-template-columns: 65% calc(35% - 20px);
+    align-items: start;
+  }
+}
+
+.agenda-main {
+  width: 100%;
+}
+
+/* --- Contenedor Principal (Glassmorphism) --- */
+.agenda-container {
+  padding: 22px;
   border-radius: $border-radius-lg;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: $shadow-soft;
+  background: var(--clr-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--clr-border);
+  box-shadow: var(--shadow-card);
+  margin-top: 10px;
+}
+
+/* --- Barra Lateral de Actividades --- */
+.agenda-sidebar {
+  padding: 22px;
+  border-radius: $border-radius-lg;
+  background: var(--clr-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--clr-border);
+  box-shadow: var(--shadow-card);
+  margin-top: 10px;
+  
+  .sidebar-header {
+    margin-bottom: 24px;
+    
+    .sidebar-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      
+      h2 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--clr-text);
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .add-activity-btn {
+        --color: var(--clr-accent);
+        font-weight: 700;
+        margin: 0;
+        --padding-start: 4px;
+        --padding-end: 4px;
+        font-size: 0.85rem;
+        
+        ion-icon {
+          font-size: 1.15rem;
+        }
+      }
+    }
+    
+    .sidebar-date {
+      color: var(--clr-text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 6px 0 0 0;
+      text-transform: capitalize;
+    }
+  }
+
+  .sidebar-content {
+    min-height: 200px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding-right: 4px;
+    
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--clr-border-accent);
+      border-radius: 4px;
+    }
+  }
 }
 
 .agenda-header {
@@ -35,15 +120,21 @@ $color-text-muted: #95a5a6;
   margin-bottom: 24px;
   
   .month-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: $color-text-main;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--clr-text);
     margin: 0;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.02em;
+    text-transform: capitalize;
+  }
+
+  ion-button {
+    --color: var(--clr-text);
+    font-weight: 600;
   }
 }
 
-// Uso estricto de CSS Grid para alto rendimiento (60fps) sin librerías
+/* --- Grilla del Calendario --- */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -53,62 +144,155 @@ $color-text-muted: #95a5a6;
 
 .weekday-header {
   text-align: center;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: $color-text-muted;
+  letter-spacing: 0.08em;
+  color: var(--clr-text-secondary);
   padding-bottom: 12px;
+  border-bottom: 1px solid var(--clr-border);
+  margin-bottom: 6px;
 }
 
-// Estilos de la celda individual
+/* --- Celda del Calendario --- */
 .calendar-cell {
-  aspect-ratio: 1; // Para mantenerlo cuadrado en cualquier móvil
-  background: #ffffff;
+  aspect-ratio: 1;
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
   border-radius: $border-radius-lg;
   padding: 8px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.015); // Sombra extra sutil
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+  transition: var(--t-base);
   position: relative;
+  overflow: hidden;
 
   &.empty {
     background: transparent;
+    border-color: transparent;
     box-shadow: none;
     pointer-events: none;
   }
 
-  &.interactive:active {
-    transform: scale(0.96);
-  }
-
-  &.interactive:hover {
-    transform: translateY(-2px);
-    box-shadow: $shadow-hover;
+  &:not(.empty) {
     cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      background: var(--clr-card-hover);
+      border-color: var(--clr-border-accent);
+      box-shadow: var(--shadow-glow);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+    
+    &.selected {
+      border-color: var(--clr-accent);
+      box-shadow: 0 0 12px var(--clr-accent-glow);
+      background: var(--clr-card-hover);
+    }
   }
 
   .day-number {
-    font-size: 1rem;
-    font-weight: 500;
-    color: $color-text-main;
-    margin-top: 2px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: var(--t-fast);
+
+    &.today {
+      background: var(--clr-accent);
+      color: #ffffff !important;
+      box-shadow: 0 0 10px var(--clr-accent-glow);
+      font-weight: 800;
+    }
   }
 
-  // Clase dinámica cuando hay nivel 89 (Riesgo alto)
+  /* Indicadores y Eventos internos */
+  .events-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 1px;
+    margin-top: 2px;
+    
+    &::-webkit-scrollbar { 
+      width: 2px; 
+    }
+    &::-webkit-scrollbar-thumb { 
+      background: var(--clr-border-accent); 
+      border-radius: 2px; 
+    }
+  }
+
+  .calendar-event {
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--clr-text);
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid var(--clr-text-secondary);
+
+    &.event-sla-75 { 
+      background: var(--clr-warning-dim); 
+      color: var(--clr-text); 
+      border-left-color: $color-sla-75; 
+    }
+    &.event-sla-80 { 
+      background: rgba(230, 126, 34, 0.12); 
+      color: var(--clr-text); 
+      border-left-color: $color-sla-80; 
+    }
+    &.event-sla-89 { 
+      background: var(--clr-danger-dim); 
+      color: var(--clr-text); 
+      border-left-color: $color-sla-89; 
+    }
+    &.event-personalizada {
+      background: var(--clr-accent-2-dim);
+      color: var(--clr-text);
+      border-left-color: $color-custom;
+    }
+    
+    .event-time { 
+      font-weight: 800; 
+      opacity: 0.85;
+      margin-right: 2px;
+    }
+  }
+
+  /* Estado crítico glow */
   &.critical-glow {
-    border: 1px solid rgba($color-sla-89, 0.3);
-    box-shadow: 0 4px 12px rgba($color-sla-89, 0.1);
+    border-color: rgba(220, 38, 38, 0.4);
+    box-shadow: 0 4px 14px var(--clr-danger-glow);
   }
 }
 
-// Estado de carga integrado en la grilla nativamente
+/* --- Skeleton de carga integrado --- */
 .skeleton-wrapper {
   padding: 0;
   background: transparent;
+  border-color: transparent;
   box-shadow: none;
   
   .skeleton-blob {
@@ -116,62 +300,39 @@ $color-text-muted: #95a5a6;
     height: 100%;
     margin: 0;
     border-radius: $border-radius-lg;
+    --background: var(--clr-card);
     opacity: 0.5;
   }
 }
 
-// Indicadores semánticos en el fondo de la celda
-.indicators {
-    .day-number {
-      font-weight: 600;
-      color: #34495e;
-      margin-bottom: 2px;
-      font-size: 0.85rem;
-      &.today {
-        background: #9b59b6;
-        color: white;
-        width: 20px;
-        height: 20px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-      }
-    }
+/* --- Modal Detalle Diario (Ionic override) --- */
+.clinical-toolbar {
+  --background: var(--clr-surface-2);
+  --color: var(--clr-text);
+  border-bottom: 1px solid var(--clr-border);
+  padding-top: 8px;
+}
 
-    .events-container {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      margin-top: 2px;
-      overflow-y: auto;
-      max-height: 80px;
-      padding-right: 2px;
-      &::-webkit-scrollbar { width: 3px; }
-      &::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
-    }
+.clinical-modal-bg {
+  --background: var(--clr-bg);
+  --color: var(--clr-text);
+}
 
-    .calendar-event {
-      font-size: 0.6rem;
-      padding: 2px 4px;
-      border-radius: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      background: rgba(155, 89, 182, 0.1);
-      color: #9b59b6;
-      border-left: 2px solid #9b59b6;
-      text-align: left;
-      
-      &.event-sla-75 { background: rgba(241, 196, 15, 0.1); color: #d4ac0d; border-left-color: #f1c40f; }
-      &.event-sla-80 { background: rgba(230, 126, 34, 0.1); color: #d35400; border-left-color: #e67e22; }
-      &.event-sla-89 { background: rgba(231, 76, 60, 0.1); color: #c0392b; border-left-color: #e74c3c; }
-      
-      .event-time { font-weight: bold; margin-right: 3px; }
-    }
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
 
-    &.critical {
-      border: 1px solid rgba(231, 76, 60, 0.5);
-      background: rgba(231, 76, 60, 0.05);
-    }
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--clr-text-secondary);
+  font-weight: 600;
+  font-size: 0.9rem;
 }

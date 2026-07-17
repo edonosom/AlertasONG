@@ -2,6 +2,7 @@ import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 interface NavItem {
   label: string;
@@ -27,8 +28,8 @@ interface NavItem {
 
     <!-- Logo -->
     <div class="logo-group">
-      <div class="logo-btn" title="ClinOS">
-        <img src="assets/icon/favicon.png" alt="ClinOS" style="width:28px;height:28px;object-fit:contain;" />
+      <div class="logo-btn" title="Alertas ONG Surco">
+        <img src="assets/icon/favicon.png" alt="Alertas ONG Surco" style="width:28px;height:28px;object-fit:contain;" />
       </div>
     </div>
 
@@ -53,6 +54,27 @@ interface NavItem {
 
     <!-- Bottom -->
     <div class="nav-bottom">
+      <!-- Theme toggle -->
+      <div class="nav-wrap" title="Cambiar tema">
+        <button (click)="toggleTheme()" class="theme-btn" [class.theme-light]="!isDark()">
+          @if (isDark()) {
+            <!-- Moon icon for dark mode -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          } @else {
+            <!-- Sun icon for light mode -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          }
+        </button>
+        <span class="nav-tip">{{ isDark() ? 'Tema oscuro' : 'Tema claro' }}</span>
+      </div>
+
       <div class="nav-wrap" [title]="userRole()">
         <div class="user-chip">{{ userInitials() }}</div>
         <span class="nav-tip">{{ userRole() }}</span>
@@ -72,20 +94,43 @@ interface NavItem {
   <!-- ─── MAIN COLUMN ─── -->
   <div class="main-col">
 
-    <!-- Header -->
+    <!-- Header / Top-bar -->
     <header class="top-bar">
-      <div>
-        <span class="top-label">Sistema Clínico</span>
-        <h1 class="top-title">ClinOS <span class="top-badge">2026</span></h1>
+      <!-- Mobile hamburger / logo area -->
+      <div class="top-left">
+        <div class="mobile-logo-btn">
+          <img src="assets/icon/favicon.png" alt="Alertas ONG Surco" style="width:24px;height:24px;object-fit:contain;" />
+        </div>
+        <div>
+          <span class="top-label">ONG Surco</span>
+          <h1 class="top-title">Alertas <span class="top-badge">2026</span></h1>
+        </div>
       </div>
       <div class="top-right">
         <div class="search-wrap">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:rgba(148,163,184,0.5);flex-shrink:0;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;">
             <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
           <input type="text" placeholder="Buscar..." class="search-input" />
           <span class="search-kbd">⌘K</span>
         </div>
+
+        <!-- Theme toggle in top bar (mobile & tablet) -->
+        <button class="topbar-theme-btn" (click)="toggleTheme()" [title]="isDark() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
+          @if (isDark()) {
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          } @else {
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          }
+        </button>
+
         <button class="bell-btn">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
             <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
@@ -137,11 +182,121 @@ interface NavItem {
       display: flex;
       width: 100vw;
       height: 100vh;
-      background: #060E10;
-      color: #F1F5F9;
+      background: var(--sh-bg);
+      color: var(--sh-text);
       overflow: hidden;
       position: relative;
       font-family: 'Outfit', 'Inter', sans-serif;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* ═══════════════════════════════════════
+       DARK THEME (default)
+       ═══════════════════════════════════════ */
+    :host-context([data-theme='dark']) .shell-root,
+    :host-context(:not([data-theme='light'])) .shell-root {
+      --sh-bg:               #060E10;
+      --sh-surface:          rgba(5, 8, 18, 0.88);
+      --sh-surface-top:      rgba(5, 8, 18, 0.55);
+      --sh-bottom-bg:        rgba(5, 8, 18, 0.92);
+      --sh-text:             #F1F5F9;
+      --sh-text-muted:       rgba(148,163,184,0.55);
+      --sh-border:           rgba(255,255,255,0.065);
+      --sh-border-top:       rgba(255,255,255,0.055);
+      --sh-border-bottom:    rgba(255,255,255,0.065);
+      --sh-nav-hover-bg:     rgba(255,255,255,0.07);
+      --sh-nav-active-color: #0D9288;
+      --sh-nav-active-bg:    rgba(13,146,136,0.11);
+      --sh-nav-active-bd:    rgba(13,146,136,0.22);
+      --sh-nav-active-sh:    0 0 18px rgba(13,146,136,0.14);
+      --sh-ring-bd:          rgba(13,146,136,0.48);
+      --sh-tip-bg:           rgba(10,15,30,0.96);
+      --sh-tip-bd:           rgba(255,255,255,0.09);
+      --sh-tip-text:         #E2E8F0;
+      --sh-search-bg:        rgba(255,255,255,0.04);
+      --sh-search-bd:        rgba(255,255,255,0.08);
+      --sh-search-text:      #F1F5F9;
+      --sh-search-ph:        rgba(148,163,184,0.42);
+      --sh-kbd-color:        rgba(148,163,184,0.35);
+      --sh-kbd-bd:           rgba(148,163,184,0.13);
+      --sh-bell-bg:          rgba(255,255,255,0.04);
+      --sh-bell-bd:          rgba(255,255,255,0.07);
+      --sh-bell-color:       rgba(148,163,184,0.65);
+      --sh-avatar-bg:        linear-gradient(135deg, #0D9288, #0A6E6A);
+      --sh-avatar-color:     #060E10;
+      --sh-tab-color:        rgba(148,163,184,0.45);
+      --sh-tab-active:       #0D9288;
+      --sh-logo-bg:          linear-gradient(135deg, rgba(13,146,136,0.14), rgba(10,110,106,0.09));
+      --sh-logo-bd:          rgba(13,146,136,0.22);
+      --sh-logo-sh:          0 0 18px rgba(13,146,136,0.1);
+      --sh-user-bg:          linear-gradient(135deg, #0369A1, #024F8C);
+      --sh-user-bd:          rgba(3,105,161,0.28);
+      --sh-theme-color:      rgba(148,163,184,0.5);
+      --sh-theme-hover-color: #14B8A6;
+      --sh-theme-hover-bg:   rgba(13,146,136,0.1);
+      --sh-top-label:        #0D9288;
+      --sh-top-title:        #F1F5F9;
+      --sh-badge-color:      #0D9288;
+      --sh-badge-bg:         rgba(13,146,136,0.1);
+      --sh-badge-bd:         rgba(13,146,136,0.2);
+      --sh-orb1:             radial-gradient(circle, rgba(13,146,136,0.18), transparent 70%);
+      --sh-orb2:             radial-gradient(circle, rgba(3,105,161,0.15), transparent 70%);
+      --sh-orb3:             radial-gradient(circle, rgba(10,110,106,0.12), transparent 70%);
+      --sh-scrollbar:        rgba(13,146,136,0.18);
+    }
+
+    /* ═══════════════════════════════════════
+       LIGHT THEME
+       ═══════════════════════════════════════ */
+    :host-context([data-theme='light']) .shell-root {
+      --sh-bg:               #F0F9FF;
+      --sh-surface:          rgba(255,255,255,0.92);
+      --sh-surface-top:      rgba(255,255,255,0.82);
+      --sh-bottom-bg:        rgba(255,255,255,0.95);
+      --sh-text:             #0F172A;
+      --sh-text-muted:       rgba(71,85,105,0.75);
+      --sh-border:           rgba(0,0,0,0.08);
+      --sh-border-top:       rgba(0,0,0,0.07);
+      --sh-border-bottom:    rgba(0,0,0,0.09);
+      --sh-nav-hover-bg:     rgba(0,0,0,0.05);
+      --sh-nav-active-color: #0A6E6A;
+      --sh-nav-active-bg:    rgba(13,146,136,0.12);
+      --sh-nav-active-bd:    rgba(13,146,136,0.30);
+      --sh-nav-active-sh:    0 0 18px rgba(13,146,136,0.18);
+      --sh-ring-bd:          rgba(13,146,136,0.55);
+      --sh-tip-bg:           rgba(15,23,42,0.94);
+      --sh-tip-bd:           rgba(0,0,0,0.12);
+      --sh-tip-text:         #F1F5F9;
+      --sh-search-bg:        rgba(0,0,0,0.04);
+      --sh-search-bd:        rgba(0,0,0,0.1);
+      --sh-search-text:      #0F172A;
+      --sh-search-ph:        rgba(71,85,105,0.5);
+      --sh-kbd-color:        rgba(71,85,105,0.5);
+      --sh-kbd-bd:           rgba(71,85,105,0.2);
+      --sh-bell-bg:          rgba(0,0,0,0.04);
+      --sh-bell-bd:          rgba(0,0,0,0.08);
+      --sh-bell-color:       rgba(71,85,105,0.8);
+      --sh-avatar-bg:        linear-gradient(135deg, #0D9288, #0A6E6A);
+      --sh-avatar-color:     #ffffff;
+      --sh-tab-color:        rgba(71,85,105,0.55);
+      --sh-tab-active:       #0A6E6A;
+      --sh-logo-bg:          linear-gradient(135deg, rgba(13,146,136,0.12), rgba(10,110,106,0.07));
+      --sh-logo-bd:          rgba(13,146,136,0.28);
+      --sh-logo-sh:          0 0 18px rgba(13,146,136,0.12);
+      --sh-user-bg:          linear-gradient(135deg, #0369A1, #024F8C);
+      --sh-user-bd:          rgba(3,105,161,0.3);
+      --sh-theme-color:      rgba(71,85,105,0.65);
+      --sh-theme-hover-color: #0A6E6A;
+      --sh-theme-hover-bg:   rgba(13,146,136,0.1);
+      --sh-top-label:        #0A6E6A;
+      --sh-top-title:        #0F172A;
+      --sh-badge-color:      #0A6E6A;
+      --sh-badge-bg:         rgba(13,146,136,0.1);
+      --sh-badge-bd:         rgba(13,146,136,0.22);
+      --sh-orb1:             radial-gradient(circle, rgba(13,146,136,0.10), transparent 70%);
+      --sh-orb2:             radial-gradient(circle, rgba(3,105,161,0.08), transparent 70%);
+      --sh-orb3:             radial-gradient(circle, rgba(10,110,106,0.07), transparent 70%);
+      --sh-scrollbar:        rgba(13,146,136,0.22);
     }
 
     /* ── Nebula orbs ── */
@@ -155,19 +310,19 @@ interface NavItem {
     .orb-1 {
       width: 480px; height: 480px;
       top: -160px; left: -80px;
-      background: radial-gradient(circle, rgba(13,146,136,0.18), transparent 70%);
+      background: var(--sh-orb1);
       animation: orbDrift 22s ease-in-out infinite;
     }
     .orb-2 {
       width: 360px; height: 360px;
       bottom: -120px; right: 80px;
-      background: radial-gradient(circle, rgba(3,105,161,0.15), transparent 70%);
+      background: var(--sh-orb2);
       animation: orbDrift 28s ease-in-out infinite reverse;
     }
     .orb-3 {
       width: 280px; height: 280px;
       top: 45%; right: -60px;
-      background: radial-gradient(circle, rgba(10,110,106,0.12), transparent 70%);
+      background: var(--sh-orb3);
       animation: orbDrift 19s ease-in-out infinite 4s;
     }
 
@@ -175,11 +330,11 @@ interface NavItem {
     .sidebar {
       width: 76px;
       height: 100%;
-      background: rgba(5, 8, 18, 0.88);
+      background: var(--sh-surface);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border-right: 1px solid rgba(255,255,255,0.06);
-      box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+      border-right: 1px solid var(--sh-border);
+      box-shadow: 4px 0 32px rgba(0,0,0,0.15);
       display: none;
       flex-direction: column;
       align-items: center;
@@ -187,6 +342,7 @@ interface NavItem {
       z-index: 30;
       flex-shrink: 0;
       position: relative;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
     @media (min-width: 1024px) {
       .sidebar { display: flex; }
@@ -197,12 +353,12 @@ interface NavItem {
     .logo-btn {
       width: 46px; height: 46px;
       border-radius: 14px;
-      background: linear-gradient(135deg, rgba(13,146,136,0.14), rgba(10,110,106,0.09));
-      border: 1px solid rgba(13,146,136,0.22);
+      background: var(--sh-logo-bg);
+      border: 1px solid var(--sh-logo-bd);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 0 18px rgba(13,146,136,0.1);
+      box-shadow: var(--sh-logo-sh);
     }
     .logo-btn:hover {
       box-shadow: 0 0 28px rgba(13,146,136,0.28);
@@ -224,7 +380,7 @@ interface NavItem {
       width: 46px; height: 46px;
       border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      color: rgba(148,163,184,0.55);
+      color: var(--sh-text-muted);
       text-decoration: none;
       border: 1px solid transparent;
       background: transparent;
@@ -233,22 +389,22 @@ interface NavItem {
       overflow: hidden;
     }
     .nav-link:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.07);
+      color: var(--sh-text);
+      background: var(--sh-nav-hover-bg);
       transform: scale(1.07);
     }
     .nav-link.nav-link-active {
-      color: #0D9288;
-      background: rgba(13,146,136,0.11);
-      border-color: rgba(13,146,136,0.22);
-      box-shadow: 0 0 18px rgba(13,146,136,0.14);
+      color: var(--sh-nav-active-color);
+      background: var(--sh-nav-active-bg);
+      border-color: var(--sh-nav-active-bd);
+      box-shadow: var(--sh-nav-active-sh);
     }
     .nav-link.nav-link-active .nav-ring {
       display: block;
       position: absolute;
       inset: -3px;
       border-radius: 16px;
-      border: 1.5px solid rgba(13,146,136,0.48);
+      border: 1.5px solid var(--sh-ring-bd);
       animation: ringPulse 2.6s ease-in-out infinite;
       pointer-events: none;
     }
@@ -260,9 +416,9 @@ interface NavItem {
       left: calc(100% + 14px);
       top: 50%;
       transform: translateY(-50%) translateX(-8px);
-      background: rgba(10,15,30,0.96);
-      border: 1px solid rgba(255,255,255,0.09);
-      color: #E2E8F0;
+      background: var(--sh-tip-bg);
+      border: 1px solid var(--sh-tip-bd);
+      color: var(--sh-tip-text);
       font-size: 0.76rem;
       font-weight: 600;
       padding: 5px 12px;
@@ -288,18 +444,43 @@ interface NavItem {
     .user-chip {
       width: 42px; height: 42px;
       border-radius: 13px;
-      background: linear-gradient(135deg, #0369A1, #024F8C);
+      background: var(--sh-user-bg);
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; font-size: 0.8rem; color: white;
       letter-spacing: -0.02em;
-      border: 1px solid rgba(3,105,161,0.28);
+      border: 1px solid var(--sh-user-bd);
       box-shadow: 0 0 14px rgba(3,105,161,0.18);
     }
+
+    /* Theme toggle button (sidebar) */
+    .theme-btn {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sh-theme-color);
+      border: 1px solid transparent; background: transparent; cursor: pointer;
+      transition: all 0.2s ease; outline: none;
+    }
+    .theme-btn:hover {
+      color: var(--sh-theme-hover-color);
+      background: var(--sh-theme-hover-bg);
+      border-color: rgba(13,146,136,0.18);
+      transform: scale(1.07);
+    }
+    .theme-btn.theme-light {
+      color: #D97706;
+    }
+    .theme-btn.theme-light:hover {
+      color: #F59E0B;
+      background: rgba(217,119,6,0.1);
+      border-color: rgba(217,119,6,0.18);
+    }
+
     .logout-btn {
       width: 46px; height: 46px;
       border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      color: rgba(148,163,184,0.5);
+      color: var(--sh-text-muted);
       border: 1px solid transparent; background: transparent; cursor: pointer;
       transition: all 0.2s ease; outline: none;
     }
@@ -327,42 +508,79 @@ interface NavItem {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 0 20px;
       flex-shrink: 0;
-      background: rgba(5,8,18,0.55);
+      background: var(--sh-surface-top);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(255,255,255,0.055);
+      border-bottom: 1px solid var(--sh-border-top);
+      transition: background 0.3s ease, border-color 0.3s ease;
+      gap: 12px;
     }
+    @media (max-width: 480px) {
+      .top-bar { padding: 0 12px; gap: 8px; }
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mobile-logo-btn {
+      width: 36px; height: 36px;
+      border-radius: 11px;
+      background: var(--sh-logo-bg);
+      border: 1px solid var(--sh-logo-bd);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    @media (min-width: 1024px) {
+      .mobile-logo-btn { display: none; }
+    }
+
     .top-label {
       display: block;
       font-size: 0.6rem; font-weight: 700;
-      color: #0D9288;
+      color: var(--sh-top-label);
       text-transform: uppercase; letter-spacing: 0.14em;
+      white-space: nowrap;
     }
     .top-title {
-      font-size: 1.45rem; font-weight: 900; color: #F1F5F9;
+      font-size: 1.35rem; font-weight: 900; color: var(--sh-top-title);
       letter-spacing: -0.035em; line-height: 1.1; margin: 0;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+    }
+    @media (max-width: 480px) {
+      .top-title { font-size: 1.1rem; }
     }
     .top-badge {
-      font-size: 0.62rem; font-weight: 700; color: #0D9288;
-      background: rgba(13,146,136,0.1);
-      border: 1px solid rgba(13,146,136,0.2);
+      font-size: 0.58rem; font-weight: 700; color: var(--sh-badge-color);
+      background: var(--sh-badge-bg);
+      border: 1px solid var(--sh-badge-bd);
       padding: 2px 7px; border-radius: 6px;
       vertical-align: middle; margin-left: 6px;
     }
     .top-right {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
     }
+    @media (max-width: 480px) {
+      .top-right { gap: 6px; }
+    }
+
     .search-wrap {
       display: flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--sh-search-bg);
+      border: 1px solid var(--sh-search-bd);
       border-radius: 11px;
       padding: 7px 12px;
-      width: 210px;
+      width: 200px;
       transition: all 0.2s ease;
     }
+    .search-wrap svg { color: var(--sh-search-ph); }
     .search-wrap:focus-within {
       border-color: rgba(13,146,136,0.28);
       background: rgba(13,146,136,0.04);
@@ -370,26 +588,46 @@ interface NavItem {
     }
     .search-input {
       background: transparent; border: none; outline: none;
-      font-size: 0.82rem; font-weight: 500; color: #F1F5F9; flex: 1;
+      font-size: 0.82rem; font-weight: 500; color: var(--sh-search-text); flex: 1;
       font-family: 'Outfit', sans-serif;
     }
-    .search-input::placeholder { color: rgba(148,163,184,0.42); }
+    .search-input::placeholder { color: var(--sh-search-ph); }
     .search-kbd {
       font-size: 0.62rem; font-weight: 600;
-      color: rgba(148,163,184,0.35);
-      border: 1px solid rgba(148,163,184,0.13);
+      color: var(--sh-kbd-color);
+      border: 1px solid var(--sh-kbd-bd);
       border-radius: 4px; padding: 1px 5px; font-family: monospace;
     }
     @media (max-width: 768px) { .search-wrap { display: none; } }
 
+    /* Theme toggle in top bar */
+    .topbar-theme-btn {
+      position: relative; width: 38px; height: 38px;
+      border-radius: 11px;
+      border: 1px solid var(--sh-bell-bd);
+      background: var(--sh-bell-bg);
+      color: var(--sh-bell-color);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s ease; outline: none;
+    }
+    .topbar-theme-btn:hover {
+      border-color: rgba(13,146,136,0.24);
+      color: #0D9288;
+      background: rgba(13,146,136,0.07);
+    }
+    /* Hide on desktop (sidebar has it) */
+    @media (min-width: 1024px) {
+      .topbar-theme-btn { display: none; }
+    }
+
     .bell-btn {
       position: relative; width: 38px; height: 38px;
       border-radius: 11px;
-      border: 1px solid rgba(255,255,255,0.07);
-      background: rgba(255,255,255,0.04);
-      color: rgba(148,163,184,0.65);
+      border: 1px solid var(--sh-bell-bd);
+      background: var(--sh-bell-bg);
+      color: var(--sh-bell-color);
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.2s ease;
+      cursor: pointer; transition: all 0.2s ease; outline: none;
     }
     .bell-btn:hover {
       border-color: rgba(13,146,136,0.24);
@@ -400,22 +638,26 @@ interface NavItem {
       position: absolute; top: 7px; right: 7px;
       width: 6px; height: 6px;
       border-radius: 50%; background: #FF4757;
-      border: 1.5px solid #060E10;
+      border: 1.5px solid transparent;
     }
     .avatar-chip {
       width: 38px; height: 38px;
       border-radius: 11px;
-      background: linear-gradient(135deg, #0D9288, #0A6E6A);
+      background: var(--sh-avatar-bg);
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 0.78rem; color: #060E10;
+      font-weight: 800; font-size: 0.78rem; color: var(--sh-avatar-color);
       letter-spacing: -0.02em; cursor: pointer;
       border: 2px solid rgba(13,146,136,0.28);
       box-shadow: 0 0 16px rgba(13,146,136,0.14);
       transition: all 0.2s ease;
+      flex-shrink: 0;
     }
     .avatar-chip:hover {
       box-shadow: 0 0 28px rgba(13,146,136,0.32);
       transform: scale(1.05);
+    }
+    @media (max-width: 360px) {
+      .avatar-chip { display: none; }
     }
 
     /* ── Content area ── */
@@ -424,15 +666,18 @@ interface NavItem {
       overflow-y: auto;
       padding: 22px;
       scrollbar-width: thin;
-      scrollbar-color: rgba(13,146,136,0.18) transparent;
+      scrollbar-color: var(--sh-scrollbar) transparent;
     }
     .content-area::-webkit-scrollbar { width: 4px; }
     .content-area::-webkit-scrollbar-track { background: transparent; }
     .content-area::-webkit-scrollbar-thumb {
-      background: rgba(13,146,136,0.18); border-radius: 10px;
+      background: var(--sh-scrollbar); border-radius: 10px;
     }
     @media (max-width: 1024px) {
       .content-area { padding: 16px 16px 90px; }
+    }
+    @media (max-width: 480px) {
+      .content-area { padding: 12px 12px 84px; }
     }
 
     /* ── Bottom Nav (mobile) ── */
@@ -440,27 +685,33 @@ interface NavItem {
       display: flex;
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 68px;
-      background: rgba(5,8,18,0.92);
+      background: var(--sh-bottom-bg);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border-top: 1px solid rgba(255,255,255,0.065);
+      border-top: 1px solid var(--sh-border-bottom);
       align-items: center; justify-content: space-around;
       padding: 0 8px; z-index: 50;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
     @media (min-width: 1024px) { .bottom-nav { display: none; } }
 
     .tab-btn {
       display: flex; flex-direction: column; align-items: center;
       justify-content: center; gap: 3px;
-      padding: 8px 12px; border-radius: 12px;
-      text-decoration: none; color: rgba(148,163,184,0.45);
+      padding: 8px 10px; border-radius: 12px;
+      text-decoration: none; color: var(--sh-tab-color);
       border: none; background: transparent; cursor: pointer;
-      transition: all 0.2s ease; flex: 1;
+      transition: all 0.2s ease; flex: 1; min-width: 0;
     }
-    .tab-btn:hover { color: rgba(148,163,184,0.85); }
-    .tab-btn.tab-active { color: #0D9288; }
+    .tab-btn:hover { color: var(--sh-text); }
+    .tab-btn.tab-active { color: var(--sh-tab-active); }
     .tab-logout:hover { color: #FF4757; }
-    .tab-lbl { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tab-lbl {
+      font-size: 0.55rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100%;
+    }
 
     /* ── Keyframes ── */
     @keyframes orbDrift {
@@ -478,6 +729,13 @@ interface NavItem {
 })
 export class ShellComponent {
   authService = inject(AuthService);
+  themeService = inject(ThemeService);
+
+  isDark = this.themeService.isDark.bind(this.themeService);
+
+  toggleTheme() {
+    this.themeService.toggle();
+  }
 
   private readonly allNav: NavItem[] = [
     {

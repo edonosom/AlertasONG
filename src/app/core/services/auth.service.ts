@@ -36,14 +36,16 @@ export class AuthService {
   // Señal reactiva central que almacena el estado de autenticación
   currentUser = signal<User | null>(null);
 
-  constructor() {
-    this.loadStateFromPreferences();
-  }
+  constructor() {}
 
-  private async loadStateFromPreferences() {
+  async init(): Promise<void> {
     const { value: userStr } = await Preferences.get({ key: USER_KEY });
     if (userStr) {
-      this.currentUser.set(JSON.parse(userStr));
+      try {
+        this.currentUser.set(JSON.parse(userStr));
+      } catch (e) {
+        console.error('Error parsing stored user data', e);
+      }
     }
   }
 

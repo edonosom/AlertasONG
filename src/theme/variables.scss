@@ -1,7 +1,7 @@
 /**
- * ONG Surcos — ClinOS | Ionic Theme Variables
- * Clinical Executive palette: Teal primario (logo) + Azul médico ejecutivo
- * Forces Ionic into dark/transparent mode — TailwindCSS + custom CSS controls all visuals.
+ * Alertas ONG Surco | Ionic Theme Variables
+ * Palette: Teal primario + Azul ejecutivo
+ * Forces Ionic into theme-aware mode — TailwindCSS + custom CSS controls all visuals.
  */
 
 :root {
@@ -114,8 +114,9 @@
   --ion-tab-bar-color-selected:   #0D9288;
 }
 
-/* Enforce on body to override system media queries */
-body {
+/* ── Dark theme Ionic vars (default) ── */
+:root,
+[data-theme='dark'] {
   --ion-background-color:         #060E10;
   --ion-background-color-rgb:     6, 14, 16;
   --ion-text-color:               #EEF4F4;
@@ -123,4 +124,20 @@ body {
   --ion-toolbar-background:       transparent;
   --ion-card-background:          rgba(255,255,255,0.04);
   --ion-item-background:          transparent;
+}
+
+/* ── Light theme Ionic vars ── */
+[data-theme='light'] {
+  --ion-background-color:         #F0F9FF;
+  --ion-background-color-rgb:     240, 249, 255;
+  --ion-text-color:               #0F172A;
+  --ion-text-color-rgb:           15, 23, 42;
+  --ion-toolbar-background:       transparent;
+  --ion-card-background:          rgba(255,255,255,0.85);
+  --ion-item-background:          transparent;
+  --ion-border-color:             rgba(0,0,0,0.08);
+  --ion-tab-bar-background:       rgba(240,249,255,0.95);
+  --ion-tab-bar-border-color:     rgba(0,0,0,0.09);
+  --ion-tab-bar-color:            rgba(71,85,105,0.55);
+  --ion-tab-bar-color-selected:   #0A6E6A;
 }

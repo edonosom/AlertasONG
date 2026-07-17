@@ -24,15 +24,21 @@ import { PacienteService } from '../../../../core/services/paciente.service';
       <div class="fade-in">
         <form [formGroup]="alertaForm" (ngSubmit)="onAlertaSubmit()">
           
-          <ion-item class="clinical-input">
+          <ion-item class="clinical-input" [class.ion-invalid]="alertaForm.get('fecha_programada')?.invalid && alertaForm.get('fecha_programada')?.touched">
             <ion-label position="stacked">Fecha y Hora Programada *</ion-label>
             <ion-input type="datetime-local" formControlName="fecha_programada"></ion-input>
           </ion-item>
+          <span class="validation-error" *ngIf="alertaForm.get('fecha_programada')?.invalid && alertaForm.get('fecha_programada')?.touched">
+            La fecha y hora son requeridas.
+          </span>
 
-          <ion-item class="clinical-input">
+          <ion-item class="clinical-input" [class.ion-invalid]="alertaForm.get('titulo')?.invalid && alertaForm.get('titulo')?.touched">
             <ion-label position="stacked">Título de Sesión / Alerta *</ion-label>
             <ion-input type="text" formControlName="titulo" placeholder="Ej. Segunda Sesión - Terapia"></ion-input>
           </ion-item>
+          <span class="validation-error" *ngIf="alertaForm.get('titulo')?.invalid && alertaForm.get('titulo')?.touched">
+            El título es requerido.
+          </span>
 
           <ion-item class="clinical-input">
             <ion-label position="stacked">Notas Privadas (Opcional)</ion-label>
@@ -40,13 +46,13 @@ import { PacienteService } from '../../../../core/services/paciente.service';
           </ion-item>
 
           <ion-item class="clinical-input" lines="none" style="margin-bottom: 24px;">
-            <ion-label style="font-weight: 600;">Notificar por Correo</ion-label>
-            <ion-toggle formControlName="notificar_email" slot="end"></ion-toggle>
+            <ion-label style="font-weight: 700; color: var(--clr-text-secondary); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em;">Notificar por Correo</ion-label>
+            <ion-toggle formControlName="notificar_email" slot="end" class="clinical-toggle"></ion-toggle>
           </ion-item>
 
           <ion-button expand="block" type="submit" [disabled]="alertaForm.invalid || isSubmitting" class="clinical-btn-tertiary">
-            <ion-spinner *ngIf="isSubmitting" name="crescent"></ion-spinner>
-            <span *ngIf="!isSubmitting">Programar Alerta</span>
+            <ion-spinner *ngIf="isSubmitting" name="crescent" color="light" style="margin-right: 8px;"></ion-spinner>
+            <span>Programar Alerta</span>
           </ion-button>
         </form>
       </div>
@@ -54,35 +60,76 @@ import { PacienteService } from '../../../../core/services/paciente.service';
   `,
   styles: [`
     .clinical-toolbar {
-      --background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(10px);
-      color: #2c3e50;
+      --background: var(--clr-surface-2);
+      --color: var(--clr-text);
+      border-bottom: 1px solid var(--clr-border);
       padding-top: 8px;
     }
     .clinical-modal-bg {
-      --background: #f8f9fa;
+      --background: var(--clr-bg);
+      --color: var(--clr-text);
     }
     .clinical-input {
-      --background: #ffffff;
+      --background: var(--clr-card) !important;
       --border-radius: 12px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      --border-color: var(--clr-border) !important;
+      --border-style: solid;
+      --border-width: 1px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-card);
       --padding-start: 16px;
-      --color: #2c3e50;
-      color: #2c3e50;
-      ion-label { color: #7f8c8d; font-weight: 600; margin-bottom: 8px;}
-      ion-input, ion-textarea { --color: #2c3e50; color: #2c3e50; }
+      --padding-bottom: 8px;
+      --padding-top: 8px;
+      --color: var(--clr-text);
+      color: var(--clr-text);
+
+      ion-label { 
+        color: var(--clr-text-secondary) !important; 
+        font-weight: 700; 
+        margin-bottom: 6px;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      ion-input, ion-textarea { 
+        --color: var(--clr-text) !important; 
+        color: var(--clr-text) !important; 
+        font-weight: 500;
+      }
+    }
+    .clinical-toggle {
+      --handle-background: var(--clr-surface);
+      --handle-background-checked: #ffffff;
+      --background: var(--clr-input-bd);
+      --background-checked: var(--clr-accent);
+    }
+    .validation-error {
+      color: var(--clr-danger);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: -12px;
+      margin-bottom: 14px;
+      padding-left: 6px;
+      display: block;
+      animation: fadeIn 0.2s ease both;
     }
     .clinical-btn-tertiary {
-      --background: #9b59b6;
-      --border-radius: 12px;
+      --background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+      --border-radius: var(--radius-md);
+      --color: #ffffff;
       margin-top: 24px;
-      font-weight: 700;
-      height: 48px;
+      font-weight: 800;
+      height: 50px;
+      box-shadow: 0 4px 15px rgba(155, 89, 182, 0.35);
+      
+      &[disabled] {
+        opacity: 0.5;
+      }
     }
     .fade-in { animation: fadeIn 0.4s ease both; }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
   `]

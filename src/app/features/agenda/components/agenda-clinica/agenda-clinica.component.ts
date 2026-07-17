@@ -28,19 +28,31 @@ export class AgendaClinicaComponent implements OnInit {
 
   pacienteId = signal<string | null>(null);
 
+  nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
   // Signals reactivos
   currentYear = signal(2026);
   currentMonth = signal(6);
+  nombreMesActual = computed(() => this.nombresMeses[this.currentMonth() - 1]);
   loading = signal(true);
   
   // Estado que guarda la respuesta del backend
   calendarioData = signal<CalendarioMensualResponse | null>(null);
 
-  // Estado del Modal
-  isModalOpen = signal(false);
+  // Estado del Detalle Diario
   selectedDate = signal<string | null>(null);
   loadingDetalle = signal(false);
   detalleData = signal<DetalleAlertaDia[]>([]);
+
+  formatSelectedDate(fechaStr: string | null): string {
+    if (!fechaStr) return '';
+    const parts = fechaStr.split('-');
+    if (parts.length === 3) {
+      const mesIndex = parseInt(parts[1], 10) - 1;
+      return `${parts[2]} de ${this.nombresMeses[mesIndex]} de ${parts[0]}`;
+    }
+    return fechaStr;
+  }
 
   // Computed que recalcula la grilla automáticamente cuando cambian los inputs
   diasGrilla = computed<CeldaCalendario[]>(() => {
@@ -86,6 +98,10 @@ export class AgendaClinicaComponent implements OnInit {
         this.pacienteId.set(id);
       }
       this.cargarMes();
+      
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+      this.seleccionarFecha(todayStr);
     });
   }
 
@@ -150,15 +166,12 @@ export class AgendaClinicaComponent implements OnInit {
     return 'event-personalizada';
   }
 
-  abrirDetalleDia(celda: CeldaCalendario) {
-    if (celda.alertas.length === 0 || !celda.fecha) return;
-    
-    this.selectedDate.set(celda.fecha);
-    this.isModalOpen.set(true);
+  seleccionarFecha(fecha: string) {
+    this.selectedDate.set(fecha);
     this.loadingDetalle.set(true);
     this.detalleData.set([]);
 
-    this.alertaApi.getDetalleDiario(celda.fecha, this.pacienteId()).subscribe({
+    this.alertaApi.getDetalleDiario(fecha, this.pacienteId()).subscribe({
       next: (res) => {
         this.detalleData.set(res.data);
         this.loadingDetalle.set(false);
@@ -170,32 +183,42 @@ export class AgendaClinicaComponent implements OnInit {
     });
   }
 
-  cerrarModal() {
-    this.isModalOpen.set(false);
+  cerrarDetalle() {
     this.selectedDate.set(null);
   }
 
   async clickCelda(celda: CeldaCalendario) {
     if (!celda.fecha) return;
 
-    if (celda.alertas.length > 0) {
-      this.abrirDetalleDia(celda);
-    } else {
-      const modal = await this.modalCtrl.create({
-        component: AgendaModalComponent,
-        cssClass: 'clinical-modal',
-        componentProps: { 
-          selectedDate: celda.fecha,
-          pacienteId: this.pacienteId() 
-        }
-      });
-      
-      await modal.present();
-      
-      const { data } = await modal.onWillDismiss();
-      if (data && data.type) {
-        this.cargarMes(); // Reload grid
+    this.seleccionarFecha(celda.fecha);
+
+    if (celda.alertas.length === 0) {
+      await this.agregarActividadPorFecha(celda.fecha);
+    }
+  }
+
+  async agregarActividad() {
+    const fecha = this.selectedDate();
+    if (!fecha) return;
+    await this.agregarActividadPorFecha(fecha);
+  }
+
+  private async agregarActividadPorFecha(fecha: string) {
+    const modal = await this.modalCtrl.create({
+      component: AgendaModalComponent,
+      cssClass: 'clinical-modal',
+      componentProps: { 
+        selectedDate: fecha,
+        pacienteId: this.pacienteId() 
       }
+    });
+    
+    await modal.present();
+    
+    const { data } = await modal.onWillDismiss();
+    if (data && data.type) {
+      this.cargarMes(); // Reload grid
+      this.seleccionarFecha(fecha); // Reload detail
     }
   }
 
@@ -203,8 +226,10 @@ export class AgendaClinicaComponent implements OnInit {
     // alertaId corresponde al faseId en el contexto del SLA para este endpoint
     this.alertaApi.cerrarFase(alertaId).subscribe({
       next: () => {
-        this.cerrarModal();
-        // Opcional: Recargar calendarioMensual para actualizar la grilla
+        this.cargarMes();
+        if (this.selectedDate()) {
+          this.seleccionarFecha(this.selectedDate()!);
+        }
       },
       error: (err) => {
         console.error('Error al confirmar gestión', err);
