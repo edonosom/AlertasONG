@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { NotificacionService, Notificacion } from '../../../core/services/notificacion.service';
+import { NotificacionService, Notificacion } from '../../core/services/notificacion.service';
 
 @Component({
   selector: 'app-notificaciones',
