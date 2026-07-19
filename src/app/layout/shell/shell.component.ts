@@ -1,8 +1,9 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { NotificacionService, Notificacion } from '../../core/services/notificacion.service';
 
 interface NavItem {
   label: string;
@@ -131,13 +132,61 @@ interface NavItem {
           }
         </button>
 
-        <button class="bell-btn">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span class="bell-dot"></span>
-        </button>
+        <!-- Bell with dropdown -->
+        <div class="bell-wrap" style="position:relative;">
+          <button class="bell-btn" id="bell-toggle" (click)="toggleDropdown($event)" [class.bell-active]="dropdownOpen()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            @if (notifService.unreadCount() > 0) {
+              <span class="bell-count">{{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}</span>
+            }
+          </button>
+
+          <!-- Dropdown panel -->
+          @if (dropdownOpen()) {
+            <div class="notif-dropdown" id="notif-dropdown">
+              <div class="notif-dd-header">
+                <span class="notif-dd-title">Notificaciones</span>
+                @if (notifService.unreadCount() > 0) {
+                  <button class="notif-dd-mark-all" (click)="marcarTodasLeidas()">Marcar leídas</button>
+                }
+              </div>
+
+              @if (notifService.recientes().length === 0) {
+                <div class="notif-dd-empty">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.4;">
+                    <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  <p>No hay notificaciones nuevas</p>
+                </div>
+              } @else {
+                <div class="notif-dd-list">
+                  @for (n of notifService.recientes(); track n.id) {
+                    <div class="notif-dd-item" (click)="onNotifClick(n)">
+                      <div class="notif-dd-dot" [class.dot-ciclo]="n.tipo==='ciclo'" [class.dot-alerta]="n.tipo!=='ciclo'"></div>
+                      <div class="notif-dd-body">
+                        <div class="notif-dd-item-title">{{ n.titulo }}</div>
+                        <div class="notif-dd-item-time">{{ formatRelative(n.created_at) }}</div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+
+              <div class="notif-dd-footer">
+                <a routerLink="/notificaciones" (click)="dropdownOpen.set(false)" class="notif-dd-ver-todas">
+                  Ver todas las notificaciones
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          }
+        </div>
         <div class="avatar-chip">{{ userInitials() }}</div>
       </div>
     </header>
@@ -629,17 +678,97 @@ interface NavItem {
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; transition: all 0.2s ease; outline: none;
     }
-    .bell-btn:hover {
-      border-color: rgba(13,146,136,0.24);
+    .bell-btn:hover, .bell-btn.bell-active {
+      border-color: rgba(13,146,136,0.3);
       color: #0D9288;
-      background: rgba(13,146,136,0.07);
+      background: rgba(13,146,136,0.09);
     }
-    .bell-dot {
-      position: absolute; top: 7px; right: 7px;
-      width: 6px; height: 6px;
-      border-radius: 50%; background: #FF4757;
-      border: 1.5px solid transparent;
+    .bell-count {
+      position: absolute; top: -5px; right: -5px;
+      min-width: 18px; height: 18px; padding: 0 4px;
+      border-radius: 9px; background: #EF4444;
+      color: #fff; font-size: 0.62rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--sh-surface-top);
+      animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
     }
+    @keyframes popIn {
+      from { transform: scale(0); } to { transform: scale(1); }
+    }
+
+    /* Dropdown */
+    .notif-dropdown {
+      position: absolute; top: calc(100% + 12px); right: 0;
+      width: 320px;
+      background: var(--sh-surface);
+      border: 1px solid var(--sh-border);
+      border-radius: 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 200;
+      overflow: hidden;
+      animation: ddSlideIn 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @media (max-width: 400px) { .notif-dropdown { right: -60px; width: 290px; } }
+    @keyframes ddSlideIn {
+      from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .notif-dd-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--sh-border);
+    }
+    .notif-dd-title {
+      font-size: 0.85rem; font-weight: 800; color: var(--sh-text);
+      letter-spacing: -0.01em;
+    }
+    .notif-dd-mark-all {
+      font-size: 0.72rem; font-weight: 700; color: #0D9288;
+      background: none; border: none; cursor: pointer; padding: 0;
+      font-family: inherit; transition: opacity 0.2s;
+    }
+    .notif-dd-mark-all:hover { opacity: 0.7; }
+    .notif-dd-empty {
+      padding: 28px 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--sh-text-muted);
+    }
+    .notif-dd-empty p { font-size: 0.8rem; margin: 0; font-weight: 600; }
+    .notif-dd-list { display: flex; flex-direction: column; }
+    .notif-dd-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 16px;
+      cursor: pointer; transition: background 0.15s;
+      border-bottom: 1px solid var(--sh-border);
+    }
+    .notif-dd-item:last-child { border-bottom: none; }
+    .notif-dd-item:hover { background: var(--sh-nav-hover-bg); }
+    .notif-dd-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+    }
+    .dot-ciclo { background: #EF4444; }
+    .dot-alerta { background: #0D9288; }
+    .notif-dd-body { flex: 1; min-width: 0; }
+    .notif-dd-item-title {
+      font-size: 0.8rem; font-weight: 700; color: var(--sh-text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .notif-dd-item-time {
+      font-size: 0.7rem; color: var(--sh-text-muted); margin-top: 2px;
+    }
+    .notif-dd-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--sh-border);
+      background: rgba(13,146,136,0.03);
+    }
+    .notif-dd-ver-todas {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 700; color: #0D9288;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .notif-dd-ver-todas:hover { opacity: 0.75; }
     .avatar-chip {
       width: 38px; height: 38px;
       border-radius: 11px;
@@ -727,11 +856,60 @@ interface NavItem {
     }
   `]
 })
-export class ShellComponent {
+export class ShellComponent implements OnInit {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
+  notifService = inject(NotificacionService);
+  private router = inject(Router);
 
   isDark = this.themeService.isDark.bind(this.themeService);
+  dropdownOpen = signal(false);
+
+  ngOnInit() {
+    this.notifService.cargarRecientes().subscribe();
+    // Re-check every 60 seconds
+    setInterval(() => this.notifService.cargarRecientes().subscribe(), 60000);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('#bell-toggle') && !target.closest('#notif-dropdown')) {
+      this.dropdownOpen.set(false);
+    }
+  }
+
+  toggleDropdown(event: MouseEvent) {
+    event.stopPropagation();
+    this.dropdownOpen.update(v => !v);
+  }
+
+  onNotifClick(n: Notificacion) {
+    this.dropdownOpen.set(false);
+    if (!n.leida) {
+      this.notifService.marcarLeida(n.id).subscribe();
+    }
+    if (n.url_accion) {
+      this.router.navigateByUrl(n.url_accion);
+    }
+  }
+
+  marcarTodasLeidas() {
+    this.notifService.marcarTodas().subscribe();
+  }
+
+  formatRelative(dateStr: string): string {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMins = Math.floor((now.getTime() - date.getTime()) / 60000);
+    if (diffMins < 2) return 'Ahora mismo';
+    if (diffMins < 60) return `Hace ${diffMins} min`;
+    const diffHrs = Math.floor(diffMins / 60);
+    if (diffHrs < 24) return `Hace ${diffHrs} h`;
+    const diffDays = Math.floor(diffHrs / 24);
+    if (diffDays === 1) return 'Ayer';
+    return `Hace ${diffDays} días`;
+  }
 
   toggleTheme() {
     this.themeService.toggle();

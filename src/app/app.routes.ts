@@ -85,6 +85,12 @@ export const routes: Routes = [
         data: { roles: ['root', 'admin', 'director', 'funcionario'] },
         loadComponent: () => import('./features/agenda/components/agenda-clinica/agenda-clinica.component').then(m => m.AgendaClinicaComponent)
       },
+      {
+        path: 'notificaciones',
+        canActivate: [roleGuard],
+        data: { roles: ['root', 'admin', 'director', 'funcionario'] },
+        loadComponent: () => import('./features/notificaciones/notificaciones.component').then(m => m.NotificacionesComponent)
+      },
     ]
   },
 
