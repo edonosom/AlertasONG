@@ -336,3 +336,28 @@ $color-custom: var(--clr-accent-2);
   font-weight: 600;
   font-size: 0.9rem;
 }
+
+.sidebar-hint {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.empty-add-btn {
+  margin-top: 16px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  background: rgba(13, 146, 136, 0.1);
+  color: var(--clr-accent);
+  border: 1px dashed var(--clr-accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+
+  &:hover {
+    background: rgba(13, 146, 136, 0.2);
+    transform: translateY(-1px);
+  }
+}
+

@@ -30,9 +30,9 @@ export class AgendaClinicaComponent implements OnInit {
 
   nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-  // Signals reactivos
-  currentYear = signal(2026);
-  currentMonth = signal(6);
+  // Signals reactivos — inicializar con la fecha real de hoy
+  currentYear = signal(new Date().getFullYear());
+  currentMonth = signal(new Date().getMonth() + 1); // getMonth() es 0-indexed
   nombreMesActual = computed(() => this.nombresMeses[this.currentMonth() - 1]);
   loading = signal(true);
   
@@ -43,6 +43,7 @@ export class AgendaClinicaComponent implements OnInit {
   selectedDate = signal<string | null>(null);
   loadingDetalle = signal(false);
   detalleData = signal<DetalleAlertaDia[]>([]);
+  hasEventosEnFechaSeleccionada = signal(false);
 
   formatSelectedDate(fechaStr: string | null): string {
     if (!fechaStr) return '';
@@ -190,8 +191,11 @@ export class AgendaClinicaComponent implements OnInit {
   async clickCelda(celda: CeldaCalendario) {
     if (!celda.fecha) return;
 
+    // Siempre seleccionamos la fecha para mostrar el detalle en la columna derecha
     this.seleccionarFecha(celda.fecha);
+    this.hasEventosEnFechaSeleccionada.set(celda.alertas.length > 0);
 
+    // Solo abrir el modal de creación si NO hay eventos en ese día
     if (celda.alertas.length === 0) {
       await this.agregarActividadPorFecha(celda.fecha);
     }

@@ -132,8 +132,8 @@ interface NavItem {
           }
         </button>
 
-        <!-- Bell with dropdown -->
-        <div class="bell-wrap" style="position:relative;">
+        <!-- Bell -->
+        <div class="bell-wrap">
           <button class="bell-btn" id="bell-toggle" (click)="toggleDropdown($event)" [class.bell-active]="dropdownOpen()">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
               <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
@@ -143,49 +143,6 @@ interface NavItem {
               <span class="bell-count">{{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}</span>
             }
           </button>
-
-          <!-- Dropdown panel -->
-          @if (dropdownOpen()) {
-            <div class="notif-dropdown" id="notif-dropdown">
-              <div class="notif-dd-header">
-                <span class="notif-dd-title">Notificaciones</span>
-                @if (notifService.unreadCount() > 0) {
-                  <button class="notif-dd-mark-all" (click)="marcarTodasLeidas()">Marcar leídas</button>
-                }
-              </div>
-
-              @if (notifService.recientes().length === 0) {
-                <div class="notif-dd-empty">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.4;">
-                    <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                  </svg>
-                  <p>No hay notificaciones nuevas</p>
-                </div>
-              } @else {
-                <div class="notif-dd-list">
-                  @for (n of notifService.recientes(); track n.id) {
-                    <div class="notif-dd-item" (click)="onNotifClick(n)">
-                      <div class="notif-dd-dot" [class.dot-ciclo]="n.tipo==='ciclo'" [class.dot-alerta]="n.tipo!=='ciclo'"></div>
-                      <div class="notif-dd-body">
-                        <div class="notif-dd-item-title">{{ n.titulo }}</div>
-                        <div class="notif-dd-item-time">{{ formatRelative(n.created_at) }}</div>
-                      </div>
-                    </div>
-                  }
-                </div>
-              }
-
-              <div class="notif-dd-footer">
-                <a routerLink="/notificaciones" (click)="dropdownOpen.set(false)" class="notif-dd-ver-todas">
-                  Ver todas las notificaciones
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          }
         </div>
         <div class="avatar-chip">{{ userInitials() }}</div>
       </div>
@@ -220,6 +177,49 @@ interface NavItem {
       <span class="tab-lbl">Salir</span>
     </button>
   </nav>
+
+  <!-- ─── NOTIFICATION DROPDOWN (at root level to avoid stacking context issues) ─── -->
+  @if (dropdownOpen()) {
+    <div class="notif-dropdown" id="notif-dropdown">
+      <div class="notif-dd-header">
+        <span class="notif-dd-title">Notificaciones</span>
+        @if (notifService.unreadCount() > 0) {
+          <button class="notif-dd-mark-all" (click)="marcarTodasLeidas()">Marcar leídas</button>
+        }
+      </div>
+
+      @if (notifService.recientes().length === 0) {
+        <div class="notif-dd-empty">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.4;">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p>No hay notificaciones nuevas</p>
+        </div>
+      } @else {
+        <div class="notif-dd-list">
+          @for (n of notifService.recientes(); track n.id) {
+            <div class="notif-dd-item" (click)="onNotifClick(n)">
+              <div class="notif-dd-dot" [class.dot-ciclo]="n.tipo==='ciclo'" [class.dot-alerta]="n.tipo!=='ciclo'"></div>
+              <div class="notif-dd-body">
+                <div class="notif-dd-item-title">{{ n.titulo }}</div>
+                <div class="notif-dd-item-time">{{ formatRelative(n.created_at) }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <div class="notif-dd-footer">
+        <a routerLink="/notificaciones" (click)="dropdownOpen.set(false)" class="notif-dd-ver-todas">
+          Ver todas las notificaciones
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  }
 
 </div>
   `,
@@ -698,19 +698,21 @@ interface NavItem {
 
     /* Dropdown */
     .notif-dropdown {
-      position: absolute; top: calc(100% + 12px); right: 0;
+      position: fixed;
+      top: 76px;
+      right: 16px;
       width: 320px;
       background: var(--sh-surface);
       border: 1px solid var(--sh-border);
       border-radius: 16px;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.45);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      z-index: 200;
+      z-index: 9999;
       overflow: hidden;
       animation: ddSlideIn 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
     }
-    @media (max-width: 400px) { .notif-dropdown { right: -60px; width: 290px; } }
+    @media (max-width: 480px) { .notif-dropdown { right: 8px; width: calc(100vw - 16px); } }
     @keyframes ddSlideIn {
       from { opacity: 0; transform: translateY(-8px) scale(0.97); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
