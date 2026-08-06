@@ -21,9 +21,12 @@ export interface CalendarioMensualResponse {
 
 export interface DetalleAlertaDia {
   alerta_id: string;
-  paciente_id: string;
-  paciente_nombre_completo: string;
+  nna_id: string;
+  nna_nombre_completo: string;
   rut: string;
+  edad?: number;
+  ciclo?: number;
+  dias_nna?: number;
   nivel_alerta: number | null; // null si es personalizada y no SLA
   dias_transcurridos: number; // 0 a 90
   fecha_inicio_sla: string;
@@ -49,10 +52,10 @@ export class AlertaApiService {
     return this.http.get<CalendarioMensualResponse>(`${this.apiUrl}/mensual`, { params });
   }
 
-  getDetalleDiario(fecha: string, pacienteId?: string | null): Observable<DetalleDiarioResponse> {
+  getDetalleDiario(fecha: string, nnaId?: string | null): Observable<DetalleDiarioResponse> {
     let params = new HttpParams();
-    if (pacienteId) {
-      params = params.set('paciente_id', pacienteId);
+    if (nnaId) {
+      params = params.set('nna_id', nnaId);
     }
     return this.http.get<DetalleDiarioResponse>(`${this.apiUrl}/fecha/${fecha}`, { params });
   }

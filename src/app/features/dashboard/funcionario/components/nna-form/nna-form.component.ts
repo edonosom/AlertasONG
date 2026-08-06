@@ -4,13 +4,13 @@ import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angula
 import { IonInput, IonItem, IonList, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-paciente-form',
+  selector: 'app-nna-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IonInput, IonItem, IonList, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle],
   template: `
     <ion-card class="glass-panel">
       <ion-card-header>
-        <ion-card-title>Registrar Paciente</ion-card-title>
+        <ion-card-title>Registrar Nna</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
@@ -48,7 +48,7 @@ import { IonInput, IonItem, IonList, IonButton, IonCard, IonCardContent, IonCard
           </div>
 
           <ion-button expand="block" type="submit" [disabled]="pacienteForm.invalid" class="ion-margin-top submit-btn">
-            Guardar Paciente
+            Guardar Nna
           </ion-button>
 
         </form>
@@ -78,7 +78,7 @@ import { IonInput, IonItem, IonList, IonButton, IonCard, IonCardContent, IonCard
     }
   `]
 })
-export class PacienteFormComponent {
+export class NnaFormComponent {
   private fb = inject(NonNullableFormBuilder);
 
   pacienteForm = this.fb.group({

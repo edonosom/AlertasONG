@@ -2,7 +2,7 @@ import { Component, inject, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { PacienteService } from '../../../../core/services/paciente.service';
+import { PacienteService } from '../../../../core/services/nna.service';
 
 @Component({
   selector: 'app-agenda-modal',

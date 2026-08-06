@@ -363,3 +363,4 @@
   .form-container { max-width: 100%; }
   .glass-gadget { padding: 16px 20px; }
 }
+.forgot-password-link { text-align: right; margin-bottom: 20px; margin-top: -10px; a { color: var(--clr-accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; &:hover { text-decoration: underline; } } }

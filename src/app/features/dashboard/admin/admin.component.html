@@ -35,7 +35,7 @@
       <ion-col size="12" size-md="3">
         <ion-card class="metric-card">
           <ion-card-header>
-            <ion-card-subtitle>Pacientes Totales</ion-card-subtitle>
+            <ion-card-subtitle>Nnas Totales</ion-card-subtitle>
             <ion-card-title>{{ metrics.pacientes_totales }}</ion-card-title>
           </ion-card-header>
         </ion-card>
@@ -94,11 +94,11 @@
         </ion-card>
       </ion-col>
 
-      <!-- Funcionario -> Paciente -->
+      <!-- Funcionario -> Nna -->
       <ion-col size="12" size-md="4">
         <ion-card>
           <ion-card-header>
-            <ion-card-title style="font-size: 1rem;">3. Funcionario -> Paciente</ion-card-title>
+            <ion-card-title style="font-size: 1rem;">3. Funcionario -> Nna</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-item>
@@ -107,8 +107,8 @@
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-select label="Paciente" labelPlacement="stacked" [(ngModel)]="selectedPacienteId">
-                <ion-select-option *ngFor="let p of pacientes" [value]="p.id">{{ p.nombre }} {{ p.apellido }}</ion-select-option>
+              <ion-select label="Nna" labelPlacement="stacked" [(ngModel)]="selectedPacienteId">
+                <ion-select-option *ngFor="let p of nnas" [value]="p.id">{{ p.nombre }} {{ p.apellido }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
@@ -116,7 +116,7 @@
                 <ion-select-option *ngFor="let c of centros" [value]="c.id">{{ c.nombre }}</ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-button expand="block" class="ion-margin-top" (click)="asignarPacienteAFuncionario()">Vincular Paciente</ion-button>
+            <ion-button expand="block" class="ion-margin-top" (click)="asignarPacienteAFuncionario()">Vincular Nna</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

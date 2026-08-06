@@ -59,7 +59,7 @@
       </div>
     </div>
 
-    <!-- ─── Right: Pacientes panel ───────────────────────── -->
+    <!-- ─── Right: Nnas panel ───────────────────────── -->
     <div class="director-panel director-right">
       <div class="director-panel-header">
         <h3 class="director-panel-title">
@@ -69,7 +69,7 @@
                     stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </span>
-          {{ selectedFuncionarioId() ? 'Pacientes Asignados' : 'Selecciona un funcionario' }}
+          {{ selectedFuncionarioId() ? 'Nnas Asignados' : 'Selecciona un funcionario' }}
         </h3>
       </div>
 
@@ -92,7 +92,7 @@
             <div class="loading-spinner"></div>
           </div>
 
-        } @else if (pacientes().length === 0) {
+        } @else if (nnas().length === 0) {
           <!-- Empty: no patients -->
           <div class="director-empty slide-up">
             <div class="director-empty-icon" style="background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.2);">
@@ -101,23 +101,23 @@
                       stroke="#00E676" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
-            <p>El funcionario no tiene pacientes asignados actualmente.</p>
+            <p>El funcionario no tiene nnas asignados actualmente.</p>
           </div>
 
         } @else {
-          <div class="pacientes-grid slide-up stagger-children">
-            @for (p of pacientes(); track p.id) {
-              <div class="paciente-card" [ngClass]="getSemanticColor(p)">
+          <div class="nnas-grid slide-up stagger-children">
+            @for (p of nnas(); track p.id) {
+              <div class="nna-card" [ngClass]="getSemanticColor(p)">
 
                 <!-- Alert indicator bar -->
-                <div class="paciente-bar"
-                     [ngClass]="p.alertas_pendientes_count ? 'paciente-bar-alert' : 'paciente-bar-ok'">
+                <div class="nna-bar"
+                     [ngClass]="p.alertas_pendientes_count ? 'nna-bar-alert' : 'nna-bar-ok'">
                 </div>
 
                 <!-- Content -->
                 <div class="flex flex-col gap-3 flex-1 pl-4">
                   <div class="flex justify-between items-start">
-                    <h4 class="paciente-name">{{ p.nombre }} {{ p.apellido }}</h4>
+                    <h4 class="nna-name">{{ p.nombre }} {{ p.apellido }}</h4>
                     @if (p.alertas_pendientes_count && p.alertas_pendientes_count > 0) {
                       <span class="alert-badge">
                         <span class="alert-dot" style="width:5px;height:5px;"></span>
@@ -126,10 +126,10 @@
                     }
                   </div>
 
-                  <p class="paciente-rut">{{ p.rut }}</p>
+                  <p class="nna-rut">{{ p.rut }}</p>
 
                   <div class="flex items-center justify-between">
-                    <span class="paciente-days">Día {{ p.dias_transcurridos || 0 }} de tratamiento</span>
+                    <span class="nna-days">Día {{ p.dias_transcurridos || 0 }} de tratamiento</span>
                     <div class="flex gap-2">
                       <button class="pac-btn pac-btn-ghost" title="Reasignar" (click)="abrirReasignacion(p)">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
@@ -137,7 +137,7 @@
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                       </button>
-                      <a [routerLink]="['/pacientes', p.id, 'agenda']" class="pac-btn pac-btn-accent">
+                      <a [routerLink]="['/nnas', p.id, 'agenda']" class="pac-btn pac-btn-accent">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                           <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
@@ -321,16 +321,16 @@
   animation: spin 0.8s linear infinite;
 }
 
-/* ─── Pacientes Grid ─ */
-.pacientes-grid {
+/* ─── Nnas Grid ─ */
+.nnas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
   padding-bottom: 16px;
 }
 
-/* ─── Paciente Card ─ */
-.paciente-card {
+/* ─── Nna Card ─ */
+.nna-card {
   display: flex;
   align-items: stretch;
   background: rgba(255,255,255,0.03);
@@ -340,28 +340,28 @@
   transition: all 0.25s ease;
   min-height: 130px;
 }
-.paciente-card:hover {
+.nna-card:hover {
   background: rgba(255,255,255,0.055);
   border-color: rgba(13,146,136,0.12);
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0,0,0,0.25);
 }
-.paciente-bar {
+.nna-bar {
   width: 4px;
   border-radius: 0;
   flex-shrink: 0;
 }
-.paciente-bar-alert { background: linear-gradient(to bottom, #FF4757, #C62828); }
-.paciente-bar-ok    { background: linear-gradient(to bottom, #00E676, #00C853); }
+.nna-bar-alert { background: linear-gradient(to bottom, #FF4757, #C62828); }
+.nna-bar-ok    { background: linear-gradient(to bottom, #00E676, #00C853); }
 
-.paciente-name {
+.nna-name {
   font-size: 0.9rem; font-weight: 700; color: #E2E8F0; margin: 0;
 }
-.paciente-rut {
+.nna-rut {
   font-size: 0.72rem; color: rgba(148,163,184,0.5);
   font-family: 'Fira Code', monospace; margin: 0;
 }
-.paciente-days {
+.nna-days {
   font-size: 0.72rem; font-weight: 600;
   color: rgba(148,163,184,0.5);
   background: rgba(255,255,255,0.04);
@@ -396,7 +396,7 @@
   animation: ping 1.4s ease-out infinite;
 }
 
-/* Paciente action buttons */
+/* Nna action buttons */
 .pac-btn {
   width: 30px; height: 30px;
   border-radius: 9px;

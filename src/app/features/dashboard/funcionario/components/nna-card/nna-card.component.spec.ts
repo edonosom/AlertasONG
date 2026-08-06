@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PacienteFormComponent } from './paciente-form.component';
+import { NnaCardComponent } from './nna-card.component';
 
-describe('PacienteFormComponent', () => {
-  let component: PacienteFormComponent;
-  let fixture: ComponentFixture<PacienteFormComponent>;
+describe('NnaCardComponent', () => {
+  let component: NnaCardComponent;
+  let fixture: ComponentFixture<NnaCardComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PacienteFormComponent ],
+      declarations: [ NnaCardComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PacienteFormComponent);
+    fixture = TestBed.createComponent(NnaCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

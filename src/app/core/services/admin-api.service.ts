@@ -24,7 +24,7 @@ export class AdminApiService {
   }
 
   getPacientesTotales(): Observable<{ data: any[] }> {
-    return this.http.get<{ data: any[] }>(`${this.apiUrl}/pacientes`);
+    return this.http.get<{ data: any[] }>(`${this.apiUrl}/nnas`);
   }
 
   asignarDirectorCentro(centroId: string, directorId: string): Observable<any> {
@@ -36,7 +36,7 @@ export class AdminApiService {
   }
 
   asignarPacienteFuncionario(funcionarioId: string, pacienteId: string, centroId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/funcionarios/${funcionarioId}/pacientes`, { 
+    return this.http.post(`${this.apiUrl}/funcionarios/${funcionarioId}/nnas`, { 
         paciente_id: pacienteId,
         centro_id: centroId
     });

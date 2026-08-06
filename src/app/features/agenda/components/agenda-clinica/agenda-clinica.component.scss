@@ -44,6 +44,51 @@ $color-custom: var(--clr-accent-2);
   border: 1px solid var(--clr-border);
   box-shadow: var(--shadow-card);
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px); // Fill available height on large screens
+}
+
+.nna-demographics-banner {
+  background: rgba(13, 146, 136, 0.05);
+  border: 1px solid var(--clr-border-accent);
+  border-radius: $border-radius-sm;
+  padding: 16px;
+  margin-bottom: 20px;
+  
+  h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--clr-text);
+  }
+
+  .demographics-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      
+      &.badge-outline {
+        border: 1px solid var(--clr-border);
+        color: var(--clr-text-secondary);
+      }
+      &.badge-primary {
+        background: var(--clr-accent);
+        color: white;
+      }
+      &.badge-secondary {
+        background: var(--clr-accent-2);
+        color: white;
+      }
+    }
+  }
 }
 
 /* --- Barra Lateral de Actividades --- */
@@ -138,8 +183,10 @@ $color-custom: var(--clr-accent-2);
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
   gap: 10px;
   width: 100%;
+  flex: 1; // Permite que la grilla ocupe el alto disponible
 }
 
 .weekday-header {
@@ -156,7 +203,6 @@ $color-custom: var(--clr-accent-2);
 
 /* --- Celda del Calendario --- */
 .calendar-cell {
-  aspect-ratio: 1;
   background: var(--clr-card);
   border: 1px solid var(--clr-border);
   border-radius: $border-radius-lg;
@@ -165,6 +211,7 @@ $color-custom: var(--clr-accent-2);
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
+  min-height: 80px;
   transition: var(--t-base);
   position: relative;
   overflow: hidden;

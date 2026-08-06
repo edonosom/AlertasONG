@@ -9,13 +9,13 @@ export interface PacienteCardData {
 }
 
 @Component({
-  selector: 'app-paciente-card',
+  selector: 'app-nna-card',
   standalone: true,
   imports: [CommonModule, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle],
   template: `
-    <ion-card class="glass-panel paciente-card">
+    <ion-card class="glass-panel nna-card">
       <ion-card-header>
-        <ion-card-title>{{ paciente().nombre }}</ion-card-title>
+        <ion-card-title>{{ nna().nombre }}</ion-card-title>
         <ion-card-subtitle>{{ rutTruncado() }}</ion-card-subtitle>
       </ion-card-header>
 
@@ -24,13 +24,13 @@ export interface PacienteCardData {
           <div class="progress-bar-bg">
             <div class="progress-bar-fill" [style.width.%]="porcentajeAvance()" [style.background-color]="colorSemantico()"></div>
           </div>
-          <span class="days-text" [style.color]="colorSemantico()">{{ paciente().diasFaseActual }} / 90 días</span>
+          <span class="days-text" [style.color]="colorSemantico()">{{ nna().diasFaseActual }} / 90 días</span>
         </div>
       </ion-card-content>
     </ion-card>
   `,
   styles: [`
-    .paciente-card {
+    .nna-card {
       margin: 16px 0;
       border-radius: var(--border-radius-md);
       overflow: hidden;
@@ -63,22 +63,22 @@ export interface PacienteCardData {
     }
   `]
 })
-export class PacienteCardComponent {
-  paciente = input.required<PacienteCardData>();
+export class NnaCardComponent {
+  nna = input.required<PacienteCardData>();
 
   rutTruncado = computed(() => {
-    const rutCompleto = this.paciente().rut;
+    const rutCompleto = this.nna().rut;
     if (!rutCompleto || rutCompleto.length < 5) return '***-X';
     return `${rutCompleto.slice(0, 2)}...${rutCompleto.slice(-2)}`;
   });
 
   porcentajeAvance = computed(() => {
-    const dias = Math.min(Math.max(this.paciente().diasFaseActual, 0), 90);
+    const dias = Math.min(Math.max(this.nna().diasFaseActual, 0), 90);
     return (dias / 90) * 100;
   });
 
   colorSemantico = computed(() => {
-    const dias = this.paciente().diasFaseActual;
+    const dias = this.nna().diasFaseActual;
     if (dias >= 89) return 'var(--ion-color-danger)';
     if (dias >= 75) return 'var(--ion-color-warning)';
     return 'var(--ion-color-success)';

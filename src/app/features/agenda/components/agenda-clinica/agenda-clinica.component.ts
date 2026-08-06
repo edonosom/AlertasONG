@@ -3,7 +3,9 @@ import { CommonModule, Location } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { DetalleAlertaDia, AlertaApiService, CalendarioMensualResponse, AlertaResumen } from '../../../../core/services/alerta-api.service';
-import { PacienteCardComponent } from '../paciente-card/paciente-card.component';
+import { PacienteService, Nna } from '../../../../core/services/nna.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { NnaCardComponent } from '../nna-card/nna-card.component';
 import { AgendaModalComponent } from '../agenda-modal/agenda-modal.component';
 
 interface CeldaCalendario {
@@ -16,17 +18,47 @@ interface CeldaCalendario {
 @Component({
   selector: 'app-agenda-clinica',
   standalone: true,
-  imports: [CommonModule, IonicModule, PacienteCardComponent],
+  imports: [CommonModule, IonicModule, NnaCardComponent],
   templateUrl: './agenda-clinica.component.html',
   styleUrls: ['./agenda-clinica.component.scss']
 })
 export class AgendaClinicaComponent implements OnInit {
   private readonly alertaApi = inject(AlertaApiService);
+  private readonly nnaService = inject(PacienteService);
   private readonly modalCtrl = inject(ModalController);
   private readonly route = inject(ActivatedRoute);
   private readonly location = inject(Location);
+  public readonly authService = inject(AuthService);
 
-  pacienteId = signal<string | null>(null);
+  nnaId = signal<string | null>(null);
+  nnaData = signal<Nna | null>(null);
+
+  edadNna = computed(() => {
+    const data = this.nnaData();
+    if (!data?.fecha_nacimiento) return null;
+    const diff = Date.now() - new Date(data.fecha_nacimiento).getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+  });
+
+  nnaCentro = computed(() => {
+    const data = this.nnaData();
+    return data?.asignaciones?.[0]?.centro?.nombre || null;
+  });
+
+  nnaFuncionario = computed(() => {
+    const data = this.nnaData();
+    const func = data?.asignaciones?.[0]?.funcionario;
+    return func ? `${func.nombre} ${func.apellido}` : null;
+  });
+
+  nnaDirector = computed(() => {
+    const data = this.nnaData();
+    const dirs = data?.asignaciones?.[0]?.centro?.directores;
+    if (dirs && dirs.length > 0) {
+      return `${dirs[0].nombre} ${dirs[0].apellido}`;
+    }
+    return null;
+  });
 
   nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
@@ -96,7 +128,8 @@ export class AgendaClinicaComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.pacienteId.set(id);
+        this.nnaId.set(id);
+        this.cargarNnaInfo(id);
       }
       this.cargarMes();
       
@@ -110,11 +143,19 @@ export class AgendaClinicaComponent implements OnInit {
     this.location.back();
   }
 
+  cargarNnaInfo(id: string) {
+    this.nnaService.getPaciente(id).subscribe({
+      next: (res) => {
+        this.nnaData.set(res.data);
+      },
+      error: (err) => console.error('Error cargando info NNA', err)
+    });
+  }
+
   cargarMes() {
     this.loading.set(true);
     
-    // Si la API soporta paciente_id como parámetro query:
-    const params = this.pacienteId() ? { paciente_id: this.pacienteId()! } : undefined;
+    const params = this.nnaId() ? { nna_id: this.nnaId()! } : undefined;
     
     this.alertaApi.getResumenMensual(this.currentYear(), this.currentMonth(), params).subscribe({
       next: (res) => {
@@ -172,7 +213,7 @@ export class AgendaClinicaComponent implements OnInit {
     this.loadingDetalle.set(true);
     this.detalleData.set([]);
 
-    this.alertaApi.getDetalleDiario(fecha, this.pacienteId()).subscribe({
+    this.alertaApi.getDetalleDiario(fecha, this.nnaId()).subscribe({
       next: (res) => {
         this.detalleData.set(res.data);
         this.loadingDetalle.set(false);
@@ -213,7 +254,7 @@ export class AgendaClinicaComponent implements OnInit {
       cssClass: 'clinical-modal',
       componentProps: { 
         selectedDate: fecha,
-        pacienteId: this.pacienteId() 
+        pacienteId: this.nnaId() 
       }
     });
     

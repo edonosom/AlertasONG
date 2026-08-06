@@ -12,7 +12,7 @@
 
       <div class="welcome-text">
         <h2>Gestión Clínica<br>Avanzada</h2>
-        <p>Sistema integral para la administración de centros médicos, pacientes y personal clínico de ONG Surcos.</p>
+        <p>Sistema integral para la administración de centros médicos, nnas y personal clínico de ONG Surcos.</p>
       </div>
 
       <div class="glass-gadget">
@@ -83,6 +83,10 @@
           @if (loginForm.controls.password.invalid && loginForm.controls.password.touched) {
             <span class="error-text">La contraseña es demasiado corta</span>
           }
+        </div>
+
+        <div class="forgot-password-link">
+          <a routerLink="/auth/forgot-password">¿Olvidaste tu contraseña?</a>
         </div>
 
         @if (errorMessage()) {

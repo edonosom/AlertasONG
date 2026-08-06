@@ -23,7 +23,7 @@ export class AdminComponent implements OnInit {
   centros: any[] = [];
   directores: any[] = [];
   funcionarios: any[] = [];
-  pacientes: any[] = [];
+  nnas: any[] = [];
 
   // Models para el Pegamento Jerárquico
   selectedCentroId: string = '';
@@ -53,7 +53,7 @@ export class AdminComponent implements OnInit {
       this.directores = res.data.filter((u: any) => u.rol === 'director' || u.rol?.value === 'director');
       this.funcionarios = res.data.filter((u: any) => u.rol === 'funcionario' || u.rol?.value === 'funcionario');
     });
-    this.adminApi.getPacientesTotales().subscribe((res: any) => this.pacientes = res.data);
+    this.adminApi.getPacientesTotales().subscribe((res: any) => this.nnas = res.data);
   }
 
   asignarCentroDirector() {
@@ -75,7 +75,7 @@ export class AdminComponent implements OnInit {
   asignarPacienteAFuncionario() {
     if(!this.selectedFuncionarioId || !this.selectedPacienteId || !this.selectedCentroParaPaciente) return;
     this.adminApi.asignarPacienteFuncionario(this.selectedFuncionarioId, this.selectedPacienteId, this.selectedCentroParaPaciente).subscribe({
-      next: () => alert('Paciente asignado exitosamente al Funcionario'),
+      next: () => alert('Nna asignado exitosamente al Funcionario'),
       error: (err: any) => alert('Error: ' + err.error?.message)
     });
   }

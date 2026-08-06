@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DirectorApiService, DirectorFuncionario, DirectorPaciente } from '../../../core/services/director-api.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
-import { PacienteService } from '../../../core/services/paciente.service';
-import { PacienteModalComponent } from '../../pacientes/components/paciente-modal/paciente-modal.component';
+import { PacienteService } from '../../../core/services/nna.service';
+import { NnaModalComponent } from '../../nnas/components/nna-modal/nna-modal.component';
 import { UsuarioModalComponent } from '../../admin/usuarios/components/usuario-modal/usuario-modal.component';
 
 @Component({
@@ -60,7 +60,7 @@ import { UsuarioModalComponent } from '../../admin/usuarios/components/usuario-m
                  <h4 class="text-sm font-bold m-0 truncate" [ngClass]="selectedFuncionarioId() === f.id ? 'text-[#008880]' : 'text-gray-800'">
                    {{ f.nombre }} {{ f.apellido }}
                  </h4>
-                 <span class="text-xs font-semibold text-gray-400">Psicólogo(a) • {{ f.pacientes_count || 0 }} pacientes</span>
+                 <span class="text-xs font-semibold text-gray-400">Psicólogo(a) • {{ f.pacientes_count || 0 }} nnas</span>
                </div>
 
                <div class="ml-auto flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity" [ngClass]="{'opacity-100': selectedFuncionarioId() === f.id}">
@@ -75,7 +75,7 @@ import { UsuarioModalComponent } from '../../admin/usuarios/components/usuario-m
           </div>
         </div>
 
-        <!-- Right Column: Pacientes (2/3) -->
+        <!-- Right Column: Nnas (2/3) -->
         <div class="w-full lg:w-2/3 bg-white rounded-[32px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col border border-transparent hover:border-[#e11d48]/10 transition-all relative min-h-[400px]">
           
           <div *ngIf="!selectedFuncionarioId()" class="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center rounded-[32px] text-center p-8">
@@ -83,17 +83,17 @@ import { UsuarioModalComponent } from '../../admin/usuarios/components/usuario-m
                <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-2">Selecciona un Funcionario</h3>
-            <p class="text-slate-500 max-w-sm">Haz clic en un miembro de tu equipo en la columna izquierda para visualizar y gestionar sus pacientes asignados.</p>
+            <p class="text-slate-500 max-w-sm">Haz clic en un miembro de tu equipo en la columna izquierda para visualizar y gestionar sus nnas asignados.</p>
           </div>
 
           <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-extrabold text-gray-800 flex items-center gap-2 m-0">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-[#e11d48]"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Pacientes Asignados
+              Nnas Asignados
             </h3>
             <button (click)="openCrearPacienteModal()" [disabled]="!selectedFuncionarioId()" class="px-5 py-2.5 rounded-xl bg-emerald-50 text-[#e11d48] font-bold flex items-center gap-2 hover:bg-[#e11d48] hover:text-white transition-all cursor-pointer outline-none border-none disabled:opacity-50 disabled:cursor-not-allowed">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Nuevo Paciente
+              Nuevo Nna
             </button>
           </div>
 
@@ -101,16 +101,16 @@ import { UsuarioModalComponent } from '../../admin/usuarios/components/usuario-m
              <div class="w-full h-32 bg-slate-100 rounded-[20px] animate-pulse" *ngFor="let i of [1,2,3,4]"></div>
           </div>
 
-          <div *ngIf="!loadingPacientes() && pacientes().length === 0 && selectedFuncionarioId()" class="flex-1 flex flex-col items-center justify-center text-center p-8">
+          <div *ngIf="!loadingPacientes() && nnas().length === 0 && selectedFuncionarioId()" class="flex-1 flex flex-col items-center justify-center text-center p-8">
             <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 mb-4 shadow-inner">
                <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <p class="text-slate-500 font-medium">Este funcionario no tiene pacientes asignados actualmente.</p>
+            <p class="text-slate-500 font-medium">Este funcionario no tiene nnas asignados actualmente.</p>
           </div>
 
-          <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar grid grid-cols-1 xl:grid-cols-2 gap-4 content-start" *ngIf="!loadingPacientes() && pacientes().length > 0">
+          <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar grid grid-cols-1 xl:grid-cols-2 gap-4 content-start" *ngIf="!loadingPacientes() && nnas().length > 0">
             
-            <div *ngFor="let p of pacientes()" class="bg-white rounded-[24px] p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col gap-4 hover:shadow-md transition-shadow relative overflow-hidden group">
+            <div *ngFor="let p of nnas()" class="bg-white rounded-[24px] p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col gap-4 hover:shadow-md transition-shadow relative overflow-hidden group">
               <!-- Color Indicator -->
               <div class="absolute top-0 left-0 w-1.5 h-full" [ngClass]="getSemanticBg(p)"></div>
               
@@ -134,17 +134,17 @@ import { UsuarioModalComponent } from '../../admin/usuarios/components/usuario-m
               </div>
 
               <div class="flex justify-end gap-2 mt-auto ml-2">
-                <button (click)="openEditarPacienteModal(p); $event.stopPropagation()" class="px-2 py-1.5 rounded-lg text-slate-400 hover:bg-slate-100 transition-colors border-none outline-none bg-transparent cursor-pointer flex items-center justify-center" title="Editar Paciente">
+                <button (click)="openEditarPacienteModal(p); $event.stopPropagation()" class="px-2 py-1.5 rounded-lg text-slate-400 hover:bg-slate-100 transition-colors border-none outline-none bg-transparent cursor-pointer flex items-center justify-center" title="Editar Nna">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
-                <button (click)="desactivarPaciente(p); $event.stopPropagation()" class="px-2 py-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors border-none outline-none bg-transparent cursor-pointer flex items-center justify-center" title="Desactivar Paciente">
+                <button (click)="desactivarPaciente(p); $event.stopPropagation()" class="px-2 py-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors border-none outline-none bg-transparent cursor-pointer flex items-center justify-center" title="Desactivar Nna">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <button (click)="abrirReasignacion(p)" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-100 transition-colors border-none outline-none bg-transparent cursor-pointer flex items-center gap-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   Reasignar
                 </button>
-                <a [routerLink]="['/pacientes', p.id, 'agenda']" class="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-[#008880] hover:bg-[#136962] transition-colors shadow-sm cursor-pointer no-underline flex items-center gap-1">
+                <a [routerLink]="['/nnas', p.id, 'agenda']" class="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-[#008880] hover:bg-[#136962] transition-colors shadow-sm cursor-pointer no-underline flex items-center gap-1">
                   Ver Planificación
                 </a>
               </div>
@@ -168,7 +168,7 @@ import { UsuarioModalComponent } from '../../admin/usuarios/components/usuario-m
           </div>
           
           <h2 class="text-2xl font-bold text-slate-800 mb-2">Reasignar Ficha</h2>
-          <p class="text-slate-500 text-sm mb-6">Seleccione el nuevo funcionario que tomará el caso clínico de este paciente.</p>
+          <p class="text-slate-500 text-sm mb-6">Seleccione el nuevo funcionario que tomará el caso clínico de este nna.</p>
           
           <div class="flex flex-col gap-2 mb-8">
             <label class="text-xs font-bold text-slate-400 uppercase tracking-wide">Funcionario de destino</label>
@@ -218,7 +218,7 @@ export class DirectorComponent implements OnInit {
 
   funcionarios = signal<DirectorFuncionario[]>([]);
   selectedFuncionarioId = signal<string | null>(null);
-  pacientes = signal<DirectorPaciente[]>([]);
+  nnas = signal<DirectorPaciente[]>([]);
 
   // Reassignment Modal State
   isReassignModalOpen = signal(false);
@@ -260,21 +260,21 @@ export class DirectorComponent implements OnInit {
 
   cargarPacientes(funcionarioId: string) {
     this.loadingPacientes.set(true);
-    this.pacientes.set([]);
+    this.nnas.set([]);
     this.directorApi.getPacientesByFuncionario(funcionarioId).subscribe({
       next: (res: any) => {
-        this.pacientes.set(res.data ? res.data : res);
+        this.nnas.set(res.data ? res.data : res);
         this.loadingPacientes.set(false);
       },
       error: (err: any) => {
-        console.error('Error al cargar pacientes', err);
+        console.error('Error al cargar nnas', err);
         this.loadingPacientes.set(false);
       }
     });
   }
 
-  abrirReasignacion(paciente: DirectorPaciente) {
-    this.selectedPacienteId.set(paciente.id);
+  abrirReasignacion(nna: DirectorPaciente) {
+    this.selectedPacienteId.set(nna.id);
     this.targetFuncionarioId.set(''); // reset selection
     this.isReassignModalOpen.set(true);
   }
@@ -295,8 +295,8 @@ export class DirectorComponent implements OnInit {
       next: (res: any) => {
         this.isSubmitting.set(false);
         this.cerrarModal();
-        this.showToast('Paciente reasignado exitosamente');
-        // Recargar la lista de pacientes del funcionario actual
+        this.showToast('Nna reasignado exitosamente');
+        // Recargar la lista de nnas del funcionario actual
         const currentFuncionario = this.selectedFuncionarioId();
         if (currentFuncionario) {
           this.cargarPacientes(currentFuncionario);
@@ -305,13 +305,13 @@ export class DirectorComponent implements OnInit {
       error: (err: any) => {
         console.error('Error al reasignar', err);
         this.isSubmitting.set(false);
-        this.showToast('Error al reasignar el paciente', 'danger');
+        this.showToast('Error al reasignar el nna', 'danger');
       }
     });
   }
 
-  getSemanticBg(paciente: DirectorPaciente): string {
-    const dias = paciente.dias_transcurridos || 0;
+  getSemanticBg(nna: DirectorPaciente): string {
+    const dias = nna.dias_transcurridos || 0;
     if (dias >= 80) return 'bg-red-500';
     if (dias >= 75) return 'bg-orange-400';
     return 'bg-green-400';
@@ -373,7 +373,7 @@ export class DirectorComponent implements OnInit {
     if (!currentFunc) return;
 
     const modal = await this.modalCtrl.create({
-      component: PacienteModalComponent,
+      component: NnaModalComponent,
       cssClass: 'clinical-modal',
       componentProps: { 
         preassignedFuncionarioId: currentFunc 
@@ -384,18 +384,18 @@ export class DirectorComponent implements OnInit {
 
     const { data } = await modal.onWillDismiss();
     if (data && !data.error) {
-      this.showToast('Paciente enrolado y asignado exitosamente');
+      this.showToast('Nna enrolado y asignado exitosamente');
       this.cargarPacientes(currentFunc);
     }
   }
 
-  async openEditarPacienteModal(paciente: DirectorPaciente) {
+  async openEditarPacienteModal(nna: DirectorPaciente) {
     const currentFunc = this.selectedFuncionarioId();
     const modal = await this.modalCtrl.create({
-      component: PacienteModalComponent,
+      component: NnaModalComponent,
       cssClass: 'clinical-modal',
       componentProps: { 
-        paciente: paciente 
+        nna: nna 
       }
     });
 
@@ -403,24 +403,24 @@ export class DirectorComponent implements OnInit {
 
     const { data } = await modal.onWillDismiss();
     if (data && !data.error) {
-      this.showToast('Paciente actualizado exitosamente');
+      this.showToast('Nna actualizado exitosamente');
       if (currentFunc) {
         this.cargarPacientes(currentFunc);
       }
     }
   }
 
-  desactivarPaciente(paciente: DirectorPaciente) {
-    if (confirm(`¿Estás seguro de desactivar/eliminar al paciente ${paciente.nombre}?`)) {
-      this.pacienteService.deletePaciente(paciente.id).subscribe({
+  desactivarPaciente(nna: DirectorPaciente) {
+    if (confirm(`¿Estás seguro de desactivar/eliminar al nna ${nna.nombre}?`)) {
+      this.pacienteService.deletePaciente(nna.id).subscribe({
         next: () => {
-          this.showToast('Paciente desactivado');
+          this.showToast('Nna desactivado');
           const currentFunc = this.selectedFuncionarioId();
           if (currentFunc) {
             this.cargarPacientes(currentFunc);
           }
         },
-        error: () => this.showToast('Error al desactivar el paciente', 'danger')
+        error: () => this.showToast('Error al desactivar el nna', 'danger')
       });
     }
   }

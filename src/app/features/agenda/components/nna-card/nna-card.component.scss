@@ -1,6 +1,6 @@
 $border-radius: var(--radius-md);
 
-.paciente-card {
+.nna-card {
   padding: 18px;
   border-radius: $border-radius;
   background: var(--clr-card);
@@ -39,9 +39,15 @@ $border-radius: var(--radius-md);
   .patient-rut {
     font-size: 0.85rem;
     color: var(--clr-text-secondary);
-    font-variant-numeric: tabular-nums;
     font-weight: 600;
-    font-family: monospace;
+  }
+  .patient-demographics {
+    font-size: 0.85rem;
+    color: var(--clr-accent);
+    font-weight: 700;
+    margin-left: 6px;
+    border-left: 1px solid var(--clr-border);
+    padding-left: 6px;
   }
 }
 

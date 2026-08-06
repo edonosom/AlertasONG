@@ -2,15 +2,16 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController, ToastController, AlertController } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
-import { PacienteService, Paciente } from '../../core/services/paciente.service';
-import { PacienteModalComponent } from './components/paciente-modal/paciente-modal.component';
+import { PacienteService, Nna } from '../../core/services/nna.service';
+import { AuthService } from '../../core/services/auth.service';
+import { NnaModalComponent } from './components/nna-modal/nna-modal.component';
 
 @Component({
-  selector: 'app-pacientes',
+  selector: 'app-nnas',
   standalone: true,
   imports: [CommonModule, IonicModule, RouterModule],
-  templateUrl: './pacientes.component.html',
-  styleUrls: ['./pacientes.component.scss']
+  templateUrl: './nnas.component.html',
+  styleUrls: ['./nnas.component.scss']
 })
 export class PacientesComponent implements OnInit {
   private readonly pacienteService = inject(PacienteService);
@@ -18,8 +19,9 @@ export class PacientesComponent implements OnInit {
   private readonly toastCtrl = inject(ToastController);
   private readonly alertCtrl = inject(AlertController);
   private readonly router = inject(Router);
+  public readonly authService = inject(AuthService);
 
-  pacientes = signal<Paciente[]>([]);
+  nnas = signal<Nna[]>([]);
   isLoading = signal<boolean>(true);
 
   // Filtros
@@ -27,16 +29,16 @@ export class PacientesComponent implements OnInit {
   selectedComplexity = signal<string>('');
 
   // Señales Reactivas de Métricas
-  totalCount = computed(() => this.pacientes().length);
-  altaCount = computed(() => this.pacientes().filter(p => p.complejidad?.toLowerCase() === 'alta').length);
-  mediaCount = computed(() => this.pacientes().filter(p => p.complejidad?.toLowerCase() === 'media').length);
-  bajaCount = computed(() => this.pacientes().filter(p => p.complejidad?.toLowerCase() === 'baja').length);
+  totalCount = computed(() => this.nnas().length);
+  altaCount = computed(() => this.nnas().filter(p => p.complejidad?.toLowerCase() === 'alta').length);
+  mediaCount = computed(() => this.nnas().filter(p => p.complejidad?.toLowerCase() === 'media').length);
+  bajaCount = computed(() => this.nnas().filter(p => p.complejidad?.toLowerCase() === 'baja').length);
 
   // Lista Filtrada
   filteredPacientes = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
     const comp = this.selectedComplexity().toLowerCase().trim();
-    return this.pacientes().filter(p => {
+    return this.nnas().filter(p => {
       const matchQuery = !query || 
         p.nombre.toLowerCase().includes(query) || 
         p.apellido.toLowerCase().includes(query) || 
@@ -52,6 +54,25 @@ export class PacientesComponent implements OnInit {
     });
   });
 
+  // Nnas grouped by Centro for Admin/Root
+  groupedNnas = computed(() => {
+    const list = this.filteredPacientes();
+    const groups = new Map<string, Nna[]>();
+
+    list.forEach(nna => {
+      const centroNombre = nna.asignaciones && nna.asignaciones.length > 0 && nna.asignaciones[0].centro 
+        ? nna.asignaciones[0].centro.nombre 
+        : 'Sin Centro Asignado';
+        
+      if (!groups.has(centroNombre)) {
+        groups.set(centroNombre, []);
+      }
+      groups.get(centroNombre)!.push(nna);
+    });
+
+    return Array.from(groups.entries()).map(([centroNombre, nnas]) => ({ centroNombre, nnas }));
+  });
+
   ngOnInit() {
     this.loadPacientes();
   }
@@ -60,7 +81,7 @@ export class PacientesComponent implements OnInit {
     this.isLoading.set(true);
     this.pacienteService.getPacientes().subscribe({
       next: (res) => {
-        this.pacientes.set(res.data);
+        this.nnas.set(res.data);
         this.isLoading.set(false);
       },
       error: () => {
@@ -124,10 +145,10 @@ export class PacientesComponent implements OnInit {
     this.selectedComplexity.set('');
   }
 
-  async openModal(paciente?: Paciente) {
+  async openModal(nna?: Nna) {
     const modal = await this.modalCtrl.create({
-      component: PacienteModalComponent,
-      componentProps: { paciente },
+      component: NnaModalComponent,
+      componentProps: { nna },
       cssClass: 'clinical-modal-large'
     });
 
@@ -135,24 +156,24 @@ export class PacientesComponent implements OnInit {
 
     const { data } = await modal.onWillDismiss();
     if (data && !data.error) {
-      this.showToast(paciente ? 'Paciente actualizado exitosamente' : 'Paciente enrolado exitosamente');
+      this.showToast(nna ? 'Nna actualizado exitosamente' : 'Nna enrolado exitosamente');
       this.loadPacientes();
     } else if (data && data.error) {
       this.showToast(data.error, 'danger');
     }
   }
 
-  onEdit(event: Event, paciente: Paciente) {
+  onEdit(event: Event, nna: Nna) {
     event.stopPropagation();
-    this.openModal(paciente);
+    this.openModal(nna);
   }
 
-  async onDelete(event: Event, paciente: Paciente) {
+  async onDelete(event: Event, nna: Nna) {
     event.stopPropagation();
     
     const alert = await this.alertCtrl.create({
       header: 'Confirmar Eliminación',
-      message: `¿Estás seguro de que deseas eliminar permanentemente al paciente <strong>${paciente.nombre} ${paciente.apellido}</strong>? Esta acción no se puede deshacer.`,
+      message: `¿Estás seguro de que deseas eliminar permanentemente al nna <strong>${nna.nombre} ${nna.apellido}</strong>? Esta acción no se puede deshacer.`,
       buttons: [
         {
           text: 'Cancelar',
@@ -164,7 +185,7 @@ export class PacientesComponent implements OnInit {
           role: 'destructive',
           cssClass: 'alert-btn-delete',
           handler: () => {
-            this.deletePaciente(paciente.id);
+            this.deletePaciente(nna.id);
           }
         }
       ]
@@ -176,17 +197,17 @@ export class PacientesComponent implements OnInit {
   deletePaciente(id: string) {
     this.pacienteService.deletePaciente(id).subscribe({
       next: () => {
-        this.showToast('Paciente eliminado exitosamente');
+        this.showToast('Nna eliminado exitosamente');
         this.loadPacientes();
       },
       error: (err) => {
-        this.showToast(err.error?.message || 'Error al eliminar el paciente', 'danger');
+        this.showToast(err.error?.message || 'Error al eliminar el nna', 'danger');
       }
     });
   }
 
   goToAgenda(pacienteId: string) {
-    this.router.navigate(['/pacientes', pacienteId, 'agenda']);
+    this.router.navigate(['/nnas', pacienteId, 'agenda']);
   }
 
   async showToast(message: string, color: string = 'success') {

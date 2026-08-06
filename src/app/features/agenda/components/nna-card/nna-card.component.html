@@ -1,8 +1,9 @@
-<div class="paciente-card glass-panel">
+<div class="nna-card glass-panel">
   <div class="card-header">
     <div class="patient-info">
-      <h3 class="patient-name">{{ data().paciente_nombre_completo }}</h3>
-      <span class="patient-rut">{{ maskedRut() }}</span>
+      <h3 class="patient-name">{{ data().nna_nombre_completo }}</h3>
+      <span class="patient-rut">RUT: {{ data().rut || maskedRut() }} | Edad: {{ data().edad }} años</span>
+      <span class="patient-demographics">Ciclo {{ data().ciclo }} | Día {{ data().dias_nna }}</span>
     </div>
     
     <div class="alert-badge" [ngClass]="semanticColorClass()">

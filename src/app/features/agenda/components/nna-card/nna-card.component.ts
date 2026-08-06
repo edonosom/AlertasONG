@@ -4,13 +4,13 @@ import { IonicModule } from '@ionic/angular';
 import { DetalleAlertaDia } from '../../../../core/services/alerta-api.service';
 
 @Component({
-  selector: 'app-paciente-card',
+  selector: 'app-nna-card',
   standalone: true,
   imports: [CommonModule, IonicModule],
-  templateUrl: './paciente-card.component.html',
-  styleUrls: ['./paciente-card.component.scss']
+  templateUrl: './nna-card.component.html',
+  styleUrls: ['./nna-card.component.scss']
 })
-export class PacienteCardComponent {
+export class NnaCardComponent {
   data = input.required<DetalleAlertaDia>();
   onConfirmarGestion = output<string>();
 

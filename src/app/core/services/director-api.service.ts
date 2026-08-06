@@ -52,10 +52,10 @@ export class DirectorApiService {
   }
 
   getPacientesByFuncionario(funcionarioId: string): Observable<PacientesResponse> {
-    return this.http.get<PacientesResponse>(`${this.apiUrl}/funcionarios/${funcionarioId}/pacientes`);
+    return this.http.get<PacientesResponse>(`${this.apiUrl}/funcionarios/${funcionarioId}/nnas`);
   }
 
   reasignarPaciente(pacienteId: string, nuevoFuncionarioId: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/pacientes/${pacienteId}/reasignar`, { nuevo_funcionario_id: nuevoFuncionarioId });
+    return this.http.put(`${this.apiUrl}/nnas/${pacienteId}/reasignar`, { nuevo_funcionario_id: nuevoFuncionarioId });
   }
 }

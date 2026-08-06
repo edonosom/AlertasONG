@@ -13,6 +13,19 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
   {
+    path: 'auth/login',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'auth/forgot-password',
+    loadComponent: () => import('./features/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./features/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
     path: 'change-password',
     canActivate: [authGuard],
     loadComponent: () => import('./features/auth/change-password/change-password.component').then(m => m.ChangePasswordComponent)
@@ -72,15 +85,15 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/admin/admin.component').then(m => m.AdminComponent)
       },
 
-      // Pacientes & Agenda
+      // Nnas & Agenda
       {
-        path: 'pacientes',
+        path: 'nnas',
         canActivate: [roleGuard],
         data: { roles: ['root', 'admin', 'director', 'funcionario'] },
-        loadComponent: () => import('./features/pacientes/pacientes.component').then(m => m.PacientesComponent)
+        loadComponent: () => import('./features/nnas/nnas.component').then(m => m.PacientesComponent)
       },
       {
-        path: 'pacientes/:id/agenda',
+        path: 'nnas/:id/agenda',
         canActivate: [roleGuard],
         data: { roles: ['root', 'admin', 'director', 'funcionario'] },
         loadComponent: () => import('./features/agenda/components/agenda-clinica/agenda-clinica.component').then(m => m.AgendaClinicaComponent)

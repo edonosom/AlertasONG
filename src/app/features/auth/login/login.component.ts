@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         } else if (userRole === 'director') {
           this.router.navigate(['/dashboard/director'], { replaceUrl: true });
         } else {
-          this.router.navigate(['/pacientes'], { replaceUrl: true });
+          this.router.navigate(['/nnas'], { replaceUrl: true });
         }
       },
       error: (err: HttpErrorResponse) => {
