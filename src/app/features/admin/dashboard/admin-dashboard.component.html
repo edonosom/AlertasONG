@@ -16,7 +16,7 @@
         <div class="flex justify-between items-start relative z-10">
           <div>
             <span class="hero-eyebrow">Panel de Control</span>
-            <h2 class="hero-title">Overview<br>Clínico</h2>
+            <h2 class="hero-title">Bienvenido<br>Gestión de Avisos</h2>
           </div>
           <span class="hero-badge">
             <span class="online-dot" style="width:6px;height:6px;"></span>
@@ -28,34 +28,34 @@
         <div class="flex justify-between items-end relative z-10 mt-auto pt-8">
 
           <!-- Total Centros -->
-          <div class="hero-metric">
+          <a routerLink="/admin/centros" class="hero-metric hover:opacity-80 transition-opacity" style="text-decoration: none; cursor: pointer;">
             <span class="hero-metric-label">Centros</span>
             @if (metrics()) {
-              <span class="hero-metric-value count-up">{{ metrics()!.centros_activos }}</span>
+            <span class="hero-metric-value count-up">{{ metrics()!.centros_activos }}</span>
             } @else {
-              <div class="skeleton" style="width:52px;height:36px;border-radius:10px;"></div>
+            <div class="skeleton" style="width:52px;height:36px;border-radius:10px;"></div>
             }
-          </div>
+          </a>
 
           <!-- Nnas (central highlight) -->
-          <div class="hero-metric-center">
+          <a routerLink="/nnas" class="hero-metric-center hover:opacity-80 transition-opacity" style="text-decoration: none; cursor: pointer;">
             <span class="hero-metric-label" style="color:rgba(13,146,136,0.8);">Nnas Totales</span>
             @if (metrics()) {
-              <span class="hero-metric-value count-up" style="font-size:2.8rem;">{{ metrics()!.pacientes_totales }}</span>
+            <span class="hero-metric-value count-up" style="font-size:2.8rem;">{{ metrics()!.pacientes_totales }}</span>
             } @else {
-              <div class="skeleton" style="width:64px;height:48px;border-radius:12px;"></div>
+            <div class="skeleton" style="width:64px;height:48px;border-radius:12px;"></div>
             }
-          </div>
+          </a>
 
           <!-- Funcionarios -->
-          <div class="hero-metric" style="align-items:flex-end;">
+          <a routerLink="/admin/usuarios" [queryParams]="{ role: 'funcionario' }" class="hero-metric hover:opacity-80 transition-opacity" style="align-items:flex-end; text-decoration: none; cursor: pointer;">
             <span class="hero-metric-label">Funcionarios</span>
             @if (metrics()) {
-              <span class="hero-metric-value count-up">{{ metrics()!.funcionarios_activos }}</span>
+            <span class="hero-metric-value count-up">{{ metrics()!.funcionarios_activos }}</span>
             } @else {
-              <div class="skeleton" style="width:52px;height:36px;border-radius:10px;"></div>
+            <div class="skeleton" style="width:52px;height:36px;border-radius:10px;"></div>
             }
-          </div>
+          </a>
         </div>
       </div>
 
@@ -63,12 +63,12 @@
       <div class="flex flex-col gap-4">
 
         <!-- Directores Card -->
-        <div class="metric-card metric-purple">
+        <a routerLink="/admin/usuarios" [queryParams]="{ role: 'director' }" class="metric-card metric-purple hover:opacity-90" style="text-decoration: none; cursor: pointer;">
           <div class="metric-icon-wrap">
             <div class="metric-icon metric-icon-pulse">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"
-                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="white"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </div>
           </div>
@@ -77,19 +77,20 @@
             <span class="metric-sub">Activos en plataforma</span>
           </div>
           @if (metrics()) {
-            <span class="metric-value count-up">{{ metrics()!.directores_activos }}</span>
+          <span class="metric-value count-up">{{ metrics()!.directores_activos }}</span>
           } @else {
-            <div class="skeleton" style="width:40px;height:32px;border-radius:8px;"></div>
+          <div class="skeleton" style="width:40px;height:32px;border-radius:8px;"></div>
           }
-        </div>
+        </a>
 
         <!-- Alertas Card -->
-        <div class="metric-card metric-danger">
+        <a routerLink="/notificaciones" class="metric-card metric-danger hover:opacity-90" style="text-decoration: none; cursor: pointer;">
           <div class="metric-icon-wrap">
             <div class="metric-icon metric-icon-pulse metric-icon-danger">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </div>
           </div>
@@ -98,11 +99,11 @@
             <span class="metric-sub">Casos urgentes activos</span>
           </div>
           @if (metrics()) {
-            <span class="metric-value count-up">{{ metrics()!.alertas_criticas }}</span>
+          <span class="metric-value count-up">{{ metrics()!.alertas_criticas }}</span>
           } @else {
-            <div class="skeleton" style="width:40px;height:32px;border-radius:8px;"></div>
+          <div class="skeleton" style="width:40px;height:32px;border-radius:8px;"></div>
           }
-        </div>
+        </a>
 
       </div>
     </div>
@@ -111,7 +112,7 @@
     <div *ngIf="metricsError()" class="error-banner">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
         <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" />
       </svg>
       No se pudieron cargar las métricas. Intenta refrescar.
     </div>
@@ -123,8 +124,9 @@
       <a routerLink="/admin/centros" class="quick-card">
         <div class="quick-icon-wrap" style="background: linear-gradient(135deg, #0D9288, #0A6E6A);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
         <div class="flex flex-col gap-1">
@@ -142,7 +144,7 @@
         </div>
         <div class="quick-arrow">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
       </a>
@@ -151,8 +153,9 @@
       <a routerLink="/admin/usuarios" class="quick-card">
         <div class="quick-icon-wrap" style="background: linear-gradient(135deg, #0369A1, #024F8C);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
         <div class="flex flex-col gap-1">
@@ -170,7 +173,7 @@
         </div>
         <div class="quick-arrow">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
       </a>
@@ -179,8 +182,9 @@
       <div class="quick-card quick-card-inactive">
         <div class="quick-icon-wrap" style="background: linear-gradient(135deg, #374151, #1F2937);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  stroke="rgba(148,163,184,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              stroke="rgba(148,163,184,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
         <div class="flex flex-col gap-1">
@@ -211,8 +215,9 @@
         <h3 class="staff-title">
           <span class="staff-title-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </span>
           Staff Activo
@@ -230,39 +235,38 @@
       <div class="flex flex-col gap-4 overflow-y-auto flex-1 min-h-0 pr-1">
 
         @if (metrics()?.recent_users) {
-          @for (usr of metrics()!.recent_users; track usr.id) {
-            <div class="staff-item">
-              <div class="staff-avatar-wrap">
-                <div class="staff-avatar">
-                  {{ usr.nombre.charAt(0) }}{{ usr.apellido.charAt(0) }}
-                </div>
-                <span class="staff-status-dot"
-                      [ngClass]="usr.is_online ? 'staff-online' : 'staff-offline'">
-                </span>
-              </div>
-              <div class="flex flex-col flex-1 min-w-0">
-                <span class="staff-name">{{ usr.nombre }} {{ usr.apellido }}</span>
-                <span class="staff-role">{{ usr.rol }}</span>
-              </div>
-              <div class="staff-check">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
+        @for (usr of metrics()!.recent_users; track usr.id) {
+        <div class="staff-item">
+          <div class="staff-avatar-wrap">
+            <div class="staff-avatar">
+              {{ usr.nombre.charAt(0) }}{{ usr.apellido.charAt(0) }}
             </div>
-          }
+            <span class="staff-status-dot" [ngClass]="usr.is_online ? 'staff-online' : 'staff-offline'">
+            </span>
+          </div>
+          <div class="flex flex-col flex-1 min-w-0">
+            <span class="staff-name">{{ usr.nombre }} {{ usr.apellido }}</span>
+            <span class="staff-role">{{ usr.rol }}</span>
+          </div>
+          <div class="staff-check">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+        }
         } @else {
-          <!-- Skeletons -->
-          @for (i of [1,2,3,4]; track i) {
-            <div class="staff-item" style="opacity: 0.5;">
-              <div class="skeleton" style="width:40px;height:40px;border-radius:12px;flex-shrink:0;"></div>
-              <div class="flex flex-col gap-2 flex-1">
-                <div class="skeleton" style="width:65%;height:12px;"></div>
-                <div class="skeleton" style="width:40%;height:10px;"></div>
-              </div>
-            </div>
-          }
+        <!-- Skeletons -->
+        @for (i of [1,2,3,4]; track i) {
+        <div class="staff-item" style="opacity: 0.5;">
+          <div class="skeleton" style="width:40px;height:40px;border-radius:12px;flex-shrink:0;"></div>
+          <div class="flex flex-col gap-2 flex-1">
+            <div class="skeleton" style="width:65%;height:12px;"></div>
+            <div class="skeleton" style="width:40%;height:10px;"></div>
+          </div>
+        </div>
+        }
         }
 
       </div>
@@ -273,423 +277,548 @@
 </div>
 
 <style>
-/* ─── Hero Card ─────────────────────────────────────────────── */
-.hero-card {
-  background: linear-gradient(135deg, rgba(13,146,136,0.12) 0%, rgba(10,110,106,0.08) 50%, rgba(3,105,161,0.08) 100%);
-  border: 1px solid var(--clr-border-accent, rgba(13, 146, 136, 0.18));
-  border-radius: 28px;
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  min-height: 260px;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1), 0 0 40px rgba(13, 146, 136, 0.06);
-  transition: all 0.3s ease;
-}
-.hero-card:hover {
-  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.15), 0 0 60px rgba(13, 146, 136, 0.1);
-}
-.hero-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(50px);
-  pointer-events: none;
-}
-.hero-orb-1 {
-  width: 200px; height: 200px;
-  top: -60px; right: -40px;
-  background: radial-gradient(circle, rgba(13,146,136,0.25), transparent 70%);
-  animation: nebulaDrift 12s ease-in-out infinite;
-}
-.hero-orb-2 {
-  width: 150px; height: 150px;
-  bottom: -40px; left: -30px;
-  background: radial-gradient(circle, rgba(3,105,161,0.2), transparent 70%);
-  animation: nebulaDrift 15s ease-in-out infinite reverse;
-}
-.hero-eyebrow {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: rgba(13, 146, 136, 0.8);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  display: block;
-  margin-bottom: 6px;
-}
-.hero-title {
-  font-size: 1.9rem;
-  font-weight: 900;
-  color: var(--clr-text);
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin: 0;
-}
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(0, 230, 118, 0.12);
-  border: 1px solid rgba(0, 230, 118, 0.25);
-  color: #00E676;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 100px;
-  letter-spacing: 0.05em;
-}
-.hero-metric {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.hero-metric-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  background: rgba(13, 146, 136, 0.08);
-  border: 1px solid rgba(13, 146, 136, 0.18);
-  padding: 14px 20px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-}
-.hero-metric-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: rgba(148, 163, 184, 0.8);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.hero-metric-value {
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: var(--clr-text);
-  letter-spacing: -0.04em;
-  line-height: 1;
-}
+  /* ─── Hero Card ─────────────────────────────────────────────── */
+  .hero-card {
+    background: linear-gradient(135deg, rgba(13, 146, 136, 0.12) 0%, rgba(10, 110, 106, 0.08) 50%, rgba(3, 105, 161, 0.08) 100%);
+    border: 1px solid var(--clr-border-accent, rgba(13, 146, 136, 0.18));
+    border-radius: 28px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    min-height: 260px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1), 0 0 40px rgba(13, 146, 136, 0.06);
+    transition: all 0.3s ease;
+  }
 
-/* ─── Metric Cards ───────────────────────────────────────────── */
-.metric-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px 20px;
-  border-radius: 22px;
-  border: 1px solid var(--clr-border);
-  backdrop-filter: blur(20px);
-  transition: all 0.25s ease;
-  flex: 1;
-}
-.metric-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--clr-border-accent);
-}
-.metric-purple {
-  background: linear-gradient(135deg, rgba(3,105,161,0.15), rgba(2,79,140,0.08));
-  box-shadow: 0 4px 24px rgba(3,105,161,0.12);
-}
-.metric-purple:hover { box-shadow: 0 8px 30px rgba(3,105,161,0.2); }
-.metric-danger {
-  background: linear-gradient(135deg, rgba(255,71,87,0.15), rgba(198,40,40,0.08));
-  box-shadow: 0 4px 24px rgba(255,71,87,0.1);
-}
-.metric-danger:hover { box-shadow: 0 8px 30px rgba(255,71,87,0.2); }
+  .hero-card:hover {
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.15), 0 0 60px rgba(13, 146, 136, 0.1);
+  }
 
-.metric-icon-wrap { position: relative; flex-shrink: 0; }
-.metric-icon {
-  width: 46px; height: 46px;
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(3, 105, 161, 0.25);
-  border: 1px solid rgba(3, 105, 161, 0.3);
-  position: relative;
-}
-.metric-icon-danger {
-  background: rgba(255, 71, 87, 0.25);
-  border-color: rgba(255, 71, 87, 0.3);
-}
-/* Pulse ring on icon */
-.metric-icon-pulse::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 17px;
-  border: 1.5px solid rgba(3, 105, 161, 0.4);
-  animation: pulseRing 2.5s ease-in-out infinite;
-}
-.metric-icon-danger.metric-icon-pulse::before {
-  border-color: rgba(255, 71, 87, 0.4);
-}
-.metric-label {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--clr-text);
-}
-.metric-sub {
-  font-size: 0.72rem;
-  color: var(--clr-text-secondary);
-  font-weight: 500;
-}
-.metric-value {
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--clr-text);
-  letter-spacing: -0.04em;
-  margin-left: auto;
-}
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(50px);
+    pointer-events: none;
+  }
 
-/* ─── Error Banner ───────────────────────────────────────────── */
-.error-banner {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 18px;
-  background: rgba(255, 71, 87, 0.1);
-  border: 1px solid rgba(255, 71, 87, 0.25);
-  border-radius: 16px;
-  color: #FF6B7A;
-  font-weight: 600;
-  font-size: 0.875rem;
-}
+  .hero-orb-1 {
+    width: 200px;
+    height: 200px;
+    top: -60px;
+    right: -40px;
+    background: radial-gradient(circle, rgba(13, 146, 136, 0.25), transparent 70%);
+    animation: nebulaDrift 12s ease-in-out infinite;
+  }
 
-/* ─── Quick Access Cards ─────────────────────────────────────── */
-.quick-card {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 22px;
-  background: var(--clr-card);
-  border: 1px solid var(--clr-border);
-  border-radius: 24px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-}
-.quick-card:hover {
-  background: var(--clr-card-hover);
-  border-color: var(--clr-border-accent);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-card);
-}
-.quick-card-inactive {
-  opacity: 0.5;
-  pointer-events: none;
-}
-.quick-icon-wrap {
-  width: 48px; height: 48px;
-  border-radius: 16px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-.quick-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--clr-text);
-}
-.quick-sub {
-  font-size: 0.75rem;
-  color: var(--clr-text-secondary);
-  font-weight: 500;
-}
-.quick-bar-wrap { display: flex; flex-direction: column; gap: 6px; }
-.quick-bar-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--clr-text-secondary);
-}
-.quick-bar-track {
-  width: 100%;
-  height: 5px;
-  background: var(--clr-border);
-  border-radius: 100px;
-  overflow: hidden;
-}
-.quick-bar-fill {
-  height: 100%;
-  border-radius: 100px;
-  transition: width 1s ease;
-}
-.quick-arrow {
-  position: absolute;
-  top: 20px; right: 20px;
-  width: 28px; height: 28px;
-  border-radius: 8px;
-  background: var(--clr-input-bg);
-  border: 1px solid var(--clr-input-bd);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--clr-text-secondary);
-  transition: all 0.2s ease;
-}
-.quick-card:hover .quick-arrow {
-  background: rgba(13, 146, 136, 0.12);
-  border-color: rgba(13, 146, 136, 0.25);
-  color: var(--clr-accent);
-}
-.soon-badge {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: rgba(148, 163, 184, 0.5);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 4px 12px;
-  border-radius: 100px;
-  align-self: flex-start;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
+  .hero-orb-2 {
+    width: 150px;
+    height: 150px;
+    bottom: -40px;
+    left: -30px;
+    background: radial-gradient(circle, rgba(3, 105, 161, 0.2), transparent 70%);
+    animation: nebulaDrift 15s ease-in-out infinite reverse;
+  }
 
-/* ─── Staff Panel ────────────────────────────────────────────── */
-.staff-panel {
-  background: var(--clr-card);
-  border: 1px solid var(--clr-border);
-  border-radius: 28px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-h-0: 0;
-  min-height: 0;
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-}
-.staff-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--clr-text);
-  margin: 0;
-}
-.staff-title-icon {
-  width: 28px; height: 28px;
-  border-radius: 9px;
-  background: rgba(13, 146, 136, 0.12);
-  border: 1px solid rgba(13, 146, 136, 0.2);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--clr-accent);
-}
-.staff-see-all {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: rgba(13, 146, 136, 0.7);
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.staff-see-all:hover { color: var(--clr-accent); }
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(13, 146, 136, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 6px;
+  }
 
-.staff-toggle {
-  display: flex;
-  background: var(--clr-input-bg);
-  border: 1px solid var(--clr-input-bd);
-  border-radius: 12px;
-  padding: 4px;
-  gap: 4px;
-}
-.staff-tab {
-  flex: 1;
-  padding: 7px 12px;
-  border-radius: 9px;
-  border: none; outline: none; cursor: pointer;
-  font-size: 0.78rem;
-  font-weight: 700;
-  font-family: 'Outfit', sans-serif;
-  color: var(--clr-text-secondary);
-  background: transparent;
-  transition: all 0.2s ease;
-}
-.staff-tab-active {
-  background: rgba(13, 146, 136, 0.12);
-  color: var(--clr-accent);
-  border: 1px solid rgba(13, 146, 136, 0.2) !important;
-  box-shadow: 0 2px 10px rgba(13, 146, 136, 0.1);
-}
+  .hero-title {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: var(--clr-text);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0;
+  }
 
-.staff-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
-  background: transparent;
-}
-.staff-item:hover {
-  background: var(--clr-card-hover);
-  border-color: var(--clr-border-accent);
-}
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 230, 118, 0.12);
+    border: 1px solid rgba(0, 230, 118, 0.25);
+    color: #00E676;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+  }
 
-.staff-avatar-wrap { position: relative; flex-shrink: 0; }
-.staff-avatar {
-  width: 38px; height: 38px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #0D9288, #0A6E6A);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.8rem; color: white;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-.staff-status-dot {
-  position: absolute;
-  bottom: -1px; right: -1px;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  border: 2px solid var(--clr-bg);
-}
-.staff-online  {
-  background: #00E676;
-  box-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
-}
-.staff-offline { background: #475569; }
+  .hero-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
-.staff-name {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--clr-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.staff-role {
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--clr-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
+  .hero-metric-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: rgba(13, 146, 136, 0.08);
+    border: 1px solid rgba(13, 146, 136, 0.18);
+    padding: 14px 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+  }
 
-.staff-check {
-  width: 26px; height: 26px;
-  border-radius: 8px;
-  background: rgba(0, 230, 118, 0.1);
-  border: 1px solid rgba(0, 230, 118, 0.2);
-  display: flex; align-items: center; justify-content: center;
-  color: #00E676;
-  flex-shrink: 0;
-}
+  .hero-metric-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(148, 163, 184, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
 
-@keyframes pulseRing {
-  0%   { transform: scale(0.95); opacity: 0.7; }
-  50%  { transform: scale(1.12); opacity: 0.2; }
-  100% { transform: scale(0.95); opacity: 0.7; }
-}
-@keyframes nebulaDrift {
-  0%   { transform: translate(0, 0) rotate(0deg); }
-  33%  { transform: translate(15px, -10px) rotate(120deg); }
-  66%  { transform: translate(-8px, 12px) rotate(240deg); }
-  100% { transform: translate(0, 0) rotate(360deg); }
-}
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+  .hero-metric-value {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--clr-text);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* ─── Metric Cards ───────────────────────────────────────────── */
+  .metric-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: 22px;
+    border: 1px solid var(--clr-border);
+    backdrop-filter: blur(20px);
+    transition: all 0.25s ease;
+    flex: 1;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--clr-border-accent);
+  }
+
+  .metric-purple {
+    background: linear-gradient(135deg, rgba(3, 105, 161, 0.15), rgba(2, 79, 140, 0.08));
+    box-shadow: 0 4px 24px rgba(3, 105, 161, 0.12);
+  }
+
+  .metric-purple:hover {
+    box-shadow: 0 8px 30px rgba(3, 105, 161, 0.2);
+  }
+
+  .metric-danger {
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.15), rgba(198, 40, 40, 0.08));
+    box-shadow: 0 4px 24px rgba(255, 71, 87, 0.1);
+  }
+
+  .metric-danger:hover {
+    box-shadow: 0 8px 30px rgba(255, 71, 87, 0.2);
+  }
+
+  .metric-icon-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .metric-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(3, 105, 161, 0.25);
+    border: 1px solid rgba(3, 105, 161, 0.3);
+    position: relative;
+  }
+
+  .metric-icon-danger {
+    background: rgba(255, 71, 87, 0.25);
+    border-color: rgba(255, 71, 87, 0.3);
+  }
+
+  /* Pulse ring on icon */
+  .metric-icon-pulse::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 17px;
+    border: 1.5px solid rgba(3, 105, 161, 0.4);
+    animation: pulseRing 2.5s ease-in-out infinite;
+  }
+
+  .metric-icon-danger.metric-icon-pulse::before {
+    border-color: rgba(255, 71, 87, 0.4);
+  }
+
+  .metric-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--clr-text);
+  }
+
+  .metric-sub {
+    font-size: 0.72rem;
+    color: var(--clr-text-secondary);
+    font-weight: 500;
+  }
+
+  .metric-value {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--clr-text);
+    letter-spacing: -0.04em;
+    margin-left: auto;
+  }
+
+  /* ─── Error Banner ───────────────────────────────────────────── */
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: rgba(255, 71, 87, 0.1);
+    border: 1px solid rgba(255, 71, 87, 0.25);
+    border-radius: 16px;
+    color: #FF6B7A;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  /* ─── Quick Access Cards ─────────────────────────────────────── */
+  .quick-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px;
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    border-radius: 24px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+  }
+
+  .quick-card:hover {
+    background: var(--clr-card-hover);
+    border-color: var(--clr-border-accent);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .quick-card-inactive {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .quick-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .quick-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--clr-text);
+  }
+
+  .quick-sub {
+    font-size: 0.75rem;
+    color: var(--clr-text-secondary);
+    font-weight: 500;
+  }
+
+  .quick-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .quick-bar-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--clr-text-secondary);
+  }
+
+  .quick-bar-track {
+    width: 100%;
+    height: 5px;
+    background: var(--clr-border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .quick-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 1s ease;
+  }
+
+  .quick-arrow {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--clr-input-bg);
+    border: 1px solid var(--clr-input-bd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-text-secondary);
+    transition: all 0.2s ease;
+  }
+
+  .quick-card:hover .quick-arrow {
+    background: rgba(13, 146, 136, 0.12);
+    border-color: rgba(13, 146, 136, 0.25);
+    color: var(--clr-accent);
+  }
+
+  .soon-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: rgba(148, 163, 184, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 4px 12px;
+    border-radius: 100px;
+    align-self: flex-start;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Staff Panel ────────────────────────────────────────────── */
+  .staff-panel {
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    border-radius: 28px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-h-0: 0;
+    min-height: 0;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+  }
+
+  .staff-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--clr-text);
+    margin: 0;
+  }
+
+  .staff-title-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: rgba(13, 146, 136, 0.12);
+    border: 1px solid rgba(13, 146, 136, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-accent);
+  }
+
+  .staff-see-all {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(13, 146, 136, 0.7);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .staff-see-all:hover {
+    color: var(--clr-accent);
+  }
+
+  .staff-toggle {
+    display: flex;
+    background: var(--clr-input-bg);
+    border: 1px solid var(--clr-input-bd);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .staff-tab {
+    flex: 1;
+    padding: 7px 12px;
+    border-radius: 9px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    color: var(--clr-text-secondary);
+    background: transparent;
+    transition: all 0.2s ease;
+  }
+
+  .staff-tab-active {
+    background: rgba(13, 146, 136, 0.12);
+    color: var(--clr-accent);
+    border: 1px solid rgba(13, 146, 136, 0.2) !important;
+    box-shadow: 0 2px 10px rgba(13, 146, 136, 0.1);
+  }
+
+  .staff-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    background: transparent;
+  }
+
+  .staff-item:hover {
+    background: var(--clr-card-hover);
+    border-color: var(--clr-border-accent);
+  }
+
+  .staff-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .staff-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0D9288, #0A6E6A);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: white;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .staff-status-dot {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--clr-bg);
+  }
+
+  .staff-online {
+    background: #00E676;
+    box-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
+  }
+
+  .staff-offline {
+    background: #475569;
+  }
+
+  .staff-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .staff-role {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--clr-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .staff-check {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px solid rgba(0, 230, 118, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00E676;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulseRing {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.7;
+    }
+
+    50% {
+      transform: scale(1.12);
+      opacity: 0.2;
+    }
+
+    100% {
+      transform: scale(0.95);
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes nebulaDrift {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+      transform: translate(15px, -10px) rotate(120deg);
+    }
+
+    66% {
+      transform: translate(-8px, 12px) rotate(240deg);
+    }
+
+    100% {
+      transform: translate(0, 0) rotate(360deg);
+    }
+  }
+
+  @keyframes countUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>

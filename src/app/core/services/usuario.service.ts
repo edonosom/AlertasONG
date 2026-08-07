@@ -11,6 +11,8 @@ export interface Usuario {
   email: string;
   rol: string;
   activo: boolean;
+  fecha_caducidad?: string;
+  deleted_at?: string;
 }
 
 export interface UsuariosResponse {
@@ -33,6 +35,10 @@ export class UsuarioService {
 
   getUsuarios(): Observable<UsuariosResponse> {
     return this.http.get<UsuariosResponse>(`${this.apiUrl}/usuarios`);
+  }
+
+  getUsuario(id: string): Observable<{ success: boolean; data: any }> {
+    return this.http.get<{ success: boolean; data: any }>(`${this.apiUrl}/usuarios/${id}`);
   }
 
   createUsuario(data: any): Observable<CreateUsuarioResponse> {

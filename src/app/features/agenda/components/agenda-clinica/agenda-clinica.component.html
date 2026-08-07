@@ -3,9 +3,17 @@
   <div class="agenda-main">
     <div class="agenda-container">
       @if (nnaData()) {
-        <div class="nna-demographics-banner">
+        <div class="nna-demographics-banner relative">
+          <!-- Back Button -->
+          <a routerLink="/nnas" class="back-btn-nna" style="position: absolute; top: 16px; right: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--clr-surface-2); border: 1px solid var(--clr-border); border-radius: 8px; color: var(--clr-text-secondary); font-weight: 600; font-size: 0.85rem; text-decoration: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; transition: var(--t-fast);" onmouseover="this.style.background='var(--clr-card-hover)'; this.style.color='var(--clr-text)'; this.style.borderColor='var(--clr-border-accent)';" onmouseout="this.style.background='var(--clr-surface-2)'; this.style.color='var(--clr-text-secondary)'; this.style.borderColor='var(--clr-border)';">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Volver a NNAS
+          </a>
+          
           <div class="nna-demographics-info">
-            <h3>{{ nnaData()?.nombre }} {{ nnaData()?.apellido }}</h3>
+            <h3 style="padding-right: 120px;">{{ nnaData()?.nombre }} {{ nnaData()?.apellido }}</h3>
             <div class="demographics-badges">
               <span class="badge badge-outline">RUT: {{ nnaData()?.rut }}</span>
               <span class="badge badge-outline">Edad: {{ edadNna() }} años</span>

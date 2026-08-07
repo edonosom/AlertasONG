@@ -33,6 +33,10 @@ export class CentroService {
     return this.http.get<CentrosResponse>(`${this.apiUrl}/centros`);
   }
 
+  getCentro(id: string): Observable<{ success: boolean; data: any }> {
+    return this.http.get<{ success: boolean; data: any }>(`${this.apiUrl}/centros/${id}`);
+  }
+
   createCentro(data: { nombre: string; codigo: string }): Observable<CreateCentroResponse> {
     return this.http.post<CreateCentroResponse>(`${this.apiUrl}/centros`, data);
   }

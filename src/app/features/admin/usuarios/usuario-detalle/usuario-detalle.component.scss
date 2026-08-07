@@ -1,0 +1,124 @@
+.clinical-bg {
+  --background: var(--clr-bg);
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--clr-surface-2);
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  color: var(--clr-text-secondary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: var(--t-base);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  
+  &:hover {
+    background: var(--clr-card-hover);
+    color: var(--clr-text);
+    border-color: var(--clr-border-accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+.glass-card {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.usuario-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--clr-accent-2), #0284c7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-glow-2);
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-active {
+  background: var(--clr-success-dim);
+  color: var(--clr-success);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.status-inactive {
+  background: var(--clr-danger-dim);
+  color: var(--clr-danger);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.role-badge {
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.role-root, .role-admin { background: rgba(220, 38, 38, 0.1); color: #DC2626; border: 1px solid rgba(220, 38, 38, 0.2); }
+.role-director { background: rgba(3, 105, 161, 0.1); color: #0369A1; border: 1px solid rgba(3, 105, 161, 0.2); }
+.role-funcionario { background: rgba(13, 146, 136, 0.1); color: #0D9288; border: 1px solid rgba(13, 146, 136, 0.2); }
+
+.section-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.person-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--clr-surface-2);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  transition: var(--t-fast);
+  
+  &:hover {
+    background: var(--clr-card-hover);
+    border-color: var(--clr-border-accent);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(-1px);
+  }
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: -0.02em;
+}

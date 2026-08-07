@@ -1,0 +1,109 @@
+<ion-content class="clinical-bg">
+  <div class="h-full w-full max-w-[1200px] mx-auto p-4 md:p-6 lg:p-8 flex flex-col gap-6">
+
+    <!-- Header Section -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-4">
+        <!-- Volver atrás button -->
+        <a routerLink="/admin/centros" class="back-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Volver a Centros
+        </a>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+      <div class="flex items-center justify-center h-40">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+      </div>
+    } @else if (errorMsg()) {
+      <div class="bg-red-50 text-red-500 p-4 rounded-xl text-center">
+        {{ errorMsg() }}
+      </div>
+    } @else if (centro()) {
+      
+      <!-- Center Info Card -->
+      <div class="glass-card flex flex-col md:flex-row gap-6 p-6 items-start">
+        <div class="centro-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="text-3xl font-bold m-0" style="color: var(--clr-text);">{{ centro().nombre }}</h1>
+            <span class="status-badge" [class.status-active]="!centro().deleted_at" [class.status-inactive]="centro().deleted_at">
+              {{ centro().deleted_at ? 'Inactivo' : 'Activo' }}
+            </span>
+          </div>
+          <p class="font-medium" style="color: var(--clr-text-secondary);">Código: {{ centro().codigo }}</p>
+        </div>
+      </div>
+
+      <!-- Two Columns Layout for Personnel -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Directores Column -->
+        <div class="glass-card p-6">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="section-icon" style="background: var(--clr-accent-2-dim); color: var(--clr-accent-2);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h2 class="text-xl font-bold m-0" style="color: var(--clr-text);">Directores</h2>
+          </div>
+
+          @if (directores.length === 0) {
+            <p class="italic text-sm" style="color: var(--clr-text-muted);">No hay directores asignados a este centro.</p>
+          } @else {
+            <div class="flex flex-col gap-3">
+              @for (director of directores; track director.id) {
+                <div class="person-card">
+                  <div class="avatar">{{ director.nombre.charAt(0) }}{{ director.apellido.charAt(0) }}</div>
+                  <div class="flex-1 min-w-0">
+                    <p class="font-bold truncate m-0" style="color: var(--clr-text);">{{ director.nombre }} {{ director.apellido }}</p>
+                    <p class="text-xs truncate m-0" style="color: var(--clr-text-muted);">{{ director.email }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Funcionarios Column -->
+        <div class="glass-card p-6">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="section-icon" style="background: var(--clr-accent-dim); color: var(--clr-accent);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h2 class="text-xl font-bold m-0" style="color: var(--clr-text);">Funcionarios</h2>
+          </div>
+
+          @if (funcionarios.length === 0) {
+            <p class="italic text-sm" style="color: var(--clr-text-muted);">No hay funcionarios vinculados a los directores de este centro.</p>
+          } @else {
+            <div class="flex flex-col gap-3">
+              @for (funcionario of funcionarios; track funcionario.id) {
+                <div class="person-card">
+                  <div class="avatar" style="background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-dark));">{{ funcionario.nombre.charAt(0) }}{{ funcionario.apellido.charAt(0) }}</div>
+                  <div class="flex-1 min-w-0">
+                    <p class="font-bold truncate m-0" style="color: var(--clr-text);">{{ funcionario.nombre }} {{ funcionario.apellido }}</p>
+                    <p class="text-xs truncate m-0" style="color: var(--clr-text-muted);">{{ funcionario.email }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+</ion-content>

@@ -58,8 +58,18 @@ export const routes: Routes = [
         data: { roles: ['root', 'admin'] },
         loadComponent: () => import('./features/admin/usuarios/usuarios.component').then(m => m.UsuariosComponent)
       },
+      {
+        path: 'admin/usuarios/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['root', 'admin'] },
+        loadComponent: () => import('./features/admin/usuarios/usuario-detalle/usuario-detalle.component').then(m => m.UsuarioDetalleComponent)
+      },
 
       // Director / Funcionario dashboards
+      {
+        path: 'admin/centros/:id',
+        loadComponent: () => import('./features/admin/centros/centro-detalle/centro-detalle.component').then(m => m.CentroDetalleComponent)
+      },
       {
         path: 'dashboard/director',
         canActivate: [roleGuard],

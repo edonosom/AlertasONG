@@ -125,6 +125,17 @@ import { switchMap, of, forkJoin, catchError } from 'rxjs';
             }
           </div>
 
+          <div class="tw-row">
+            <div class="tw-col">
+              <div class="tw-input-group">
+                <label>Fecha de Caducidad (Opcional)</label>
+                <div class="tw-input-wrapper" [class.error]="userForm.controls['fecha_caducidad'].invalid && userForm.controls['fecha_caducidad'].touched">
+                  <input type="date" formControlName="fecha_caducidad">
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="tw-form-actions">
             <button type="button" class="tw-btn-secondary" (click)="closeModal()" [disabled]="isSubmitting">
               Cancelar
@@ -393,7 +404,8 @@ export class UsuarioModalComponent implements OnInit {
     rut: ['', [Validators.required, Validators.pattern(/^(\d{1,2}\.?\d{3}\.?\d{3}-[\dkK])$/i)]],
     email: ['', [Validators.required, Validators.email]],
     rol: ['', [Validators.required]],
-    centro_id: [null]
+    centro_id: [null],
+    fecha_caducidad: [null]
   });
 
   ngOnInit() {
@@ -426,7 +438,8 @@ export class UsuarioModalComponent implements OnInit {
         rut: this.usuarioData.rut,
         email: this.usuarioData.email,
         rol: this.usuarioData.rol?.value || this.usuarioData.rol,
-        centro_id: assignedCentroId || null
+        centro_id: assignedCentroId || null,
+        fecha_caducidad: this.usuarioData.fecha_caducidad ? this.usuarioData.fecha_caducidad.split('T')[0] : null
       });
       this.userForm.get('rut')?.disable(); // Prevent changing rut
     }

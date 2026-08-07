@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DetalleAlertaDia, AlertaApiService, CalendarioMensualResponse, AlertaResumen } from '../../../../core/services/alerta-api.service';
 import { PacienteService, Nna } from '../../../../core/services/nna.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -18,7 +18,7 @@ interface CeldaCalendario {
 @Component({
   selector: 'app-agenda-clinica',
   standalone: true,
-  imports: [CommonModule, IonicModule, NnaCardComponent],
+  imports: [CommonModule, IonicModule, NnaCardComponent, RouterModule],
   templateUrl: './agenda-clinica.component.html',
   styleUrls: ['./agenda-clinica.component.scss']
 })

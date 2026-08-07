@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController, ToastController, AlertController } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { UsuarioService, Usuario, UsuariosResponse } from '../../../core/services/usuario.service';
 import { CentroService } from '../../../core/services/centro.service';
 import { forkJoin } from 'rxjs';
@@ -23,6 +23,7 @@ export class UsuariosComponent implements OnInit {
   toastCtrl = inject(ToastController);
   alertCtrl = inject(AlertController);
   authService = inject(AuthService);
+  route = inject(ActivatedRoute);
 
   // Raw data (includes trashed when root)
   allUsuarios = signal<any[]>([]);
@@ -59,13 +60,18 @@ export class UsuariosComponent implements OnInit {
     this.activeTab() === 'activos' ? this.usuariosActivos() : this.usuariosInactivos()
   );
 
-  isRoot(): boolean {
+  isAdminOrRoot(): boolean {
     const user = this.authService.currentUser();
     const rol = (user?.rol as any)?.value ?? user?.rol;
-    return rol === 'root';
+    return rol === 'root' || rol === 'admin';
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['role']) {
+        this.selectedRoles.set([params['role']]);
+      }
+    });
     this.loadUsuarios();
   }
 
