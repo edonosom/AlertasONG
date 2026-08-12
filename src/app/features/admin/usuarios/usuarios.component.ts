@@ -52,8 +52,8 @@ export class UsuariosComponent implements OnInit {
   }
 
   // Derived computed signals — no extra API calls
-  usuariosActivos = computed(() => this.allUsuarios().filter(u => !u.deleted_at && this.matchesRoleFilter(u)));
-  usuariosInactivos = computed(() => this.allUsuarios().filter(u => !!u.deleted_at && this.matchesRoleFilter(u)));
+  usuariosActivos = computed(() => this.allUsuarios().filter(u => u.activo && !u.deleted_at && this.matchesRoleFilter(u)));
+  usuariosInactivos = computed(() => this.allUsuarios().filter(u => (!u.activo || !!u.deleted_at) && this.matchesRoleFilter(u)));
 
   // Convenience: what to show in current tab
   usuarios = computed(() =>

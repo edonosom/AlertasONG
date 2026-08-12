@@ -53,43 +53,7 @@ interface NavItem {
       }
     </nav>
 
-    <!-- Bottom -->
-    <div class="nav-bottom">
-      <!-- Theme toggle -->
-      <div class="nav-wrap" title="Cambiar tema">
-        <button (click)="toggleTheme()" class="theme-btn" [class.theme-light]="!isDark()">
-          @if (isDark()) {
-            <!-- Moon icon for dark mode -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          } @else {
-            <!-- Sun icon for light mode -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          }
-        </button>
-        <span class="nav-tip">{{ isDark() ? 'Tema oscuro' : 'Tema claro' }}</span>
-      </div>
-
-      <div class="nav-wrap" [title]="userRole()">
-        <div class="user-chip">{{ userInitials() }}</div>
-        <span class="nav-tip">{{ userRole() }}</span>
-      </div>
-      <div class="nav-wrap" title="Cerrar sesión">
-        <button (click)="logout()" class="logout-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <span class="nav-tip">Salir</span>
-      </div>
-    </div>
+    <!-- Bottom nav removed per user request -->
   </aside>
 
   <!-- ─── MAIN COLUMN ─── -->
@@ -144,7 +108,14 @@ interface NavItem {
             }
           </button>
         </div>
-        <div class="avatar-chip">{{ userInitials() }}</div>
+        <!-- User Profile Dropdown Toggle -->
+        <div class="user-profile-btn" id="profile-toggle" (click)="toggleProfileDropdown($event)" [class.active]="profileDropdownOpen()">
+          <span class="user-name">{{ userName() }}</span>
+          <div class="avatar-chip" style="pointer-events: none;">{{ userInitials() }}</div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity: 0.6; margin-left: 4px;">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
     </header>
 
@@ -217,6 +188,43 @@ interface NavItem {
             <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
+      </div>
+    </div>
+  }
+
+  <!-- ─── PROFILE DROPDOWN ─── -->
+  @if (profileDropdownOpen()) {
+    <div class="profile-dropdown" id="profile-dropdown">
+      <div class="profile-dd-header">
+        <span class="profile-dd-role">{{ userRole() | titlecase }}</span>
+      </div>
+      <div class="profile-dd-list">
+        <a routerLink="/perfil" class="profile-dd-item" (click)="profileDropdownOpen.set(false)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m8-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Configuración del perfil
+        </a>
+        <button class="profile-dd-item" (click)="toggleTheme(); profileDropdownOpen.set(false)">
+          @if (isDark()) {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Cambiar a tema claro
+          } @else {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Cambiar a tema oscuro
+          }
+        </button>
+        <button class="profile-dd-item logout-dd-item" (click)="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Cerrar sesión
+        </button>
       </div>
     </div>
   }
@@ -777,19 +785,76 @@ interface NavItem {
       background: var(--sh-avatar-bg);
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; font-size: 0.78rem; color: var(--sh-avatar-color);
-      letter-spacing: -0.02em; cursor: pointer;
+      letter-spacing: -0.02em;
       border: 2px solid rgba(13,146,136,0.28);
       box-shadow: 0 0 16px rgba(13,146,136,0.14);
-      transition: all 0.2s ease;
       flex-shrink: 0;
     }
-    .avatar-chip:hover {
-      box-shadow: 0 0 28px rgba(13,146,136,0.32);
-      transform: scale(1.05);
+    .user-profile-btn {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer; padding: 4px; padding-left: 12px;
+      border-radius: 14px;
+      transition: background 0.2s;
+    }
+    .user-profile-btn:hover, .user-profile-btn.active {
+      background: var(--sh-nav-hover-bg);
+    }
+    .user-name {
+      font-weight: 700; font-size: 0.85rem; color: var(--sh-text);
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .user-name { display: block; }
     }
     @media (max-width: 360px) {
-      .avatar-chip { display: none; }
+      .user-profile-btn { display: none; }
     }
+    
+    /* Profile Dropdown */
+    .profile-dropdown {
+      position: fixed;
+      top: 76px;
+      right: 16px;
+      width: 220px;
+      background: var(--sh-surface);
+      border: 1px solid var(--sh-border);
+      border-radius: 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 9999;
+      animation: ddSlideIn 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @media (max-width: 480px) { .profile-dropdown { right: 8px; } }
+    .profile-dd-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--sh-border);
+      background: rgba(13,146,136,0.03);
+    }
+    .profile-dd-role {
+      font-size: 0.75rem; font-weight: 800; color: #0D9288;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .profile-dd-list {
+      display: flex; flex-direction: column; padding: 8px;
+    }
+    .profile-dd-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600; color: var(--sh-text);
+      text-decoration: none; border: none; background: transparent;
+      cursor: pointer; width: 100%; text-align: left;
+      font-family: inherit; transition: background 0.15s, color 0.15s;
+    }
+    .profile-dd-item:hover {
+      background: var(--sh-nav-hover-bg);
+    }
+    .profile-dd-item svg { opacity: 0.7; }
+    .logout-dd-item:hover {
+      background: rgba(255,71,87,0.1);
+      color: #FF4757;
+    }
+    .logout-dd-item:hover svg { color: #FF4757; opacity: 1; }
 
     /* ── Content area ── */
     .content-area {
@@ -866,6 +931,7 @@ export class ShellComponent implements OnInit {
 
   isDark = this.themeService.isDark.bind(this.themeService);
   dropdownOpen = signal(false);
+  profileDropdownOpen = signal(false);
 
   ngOnInit() {
     this.notifService.cargarRecientes().subscribe();
@@ -879,10 +945,20 @@ export class ShellComponent implements OnInit {
     if (!target.closest('#bell-toggle') && !target.closest('#notif-dropdown')) {
       this.dropdownOpen.set(false);
     }
+    if (!target.closest('#profile-toggle') && !target.closest('#profile-dropdown')) {
+      this.profileDropdownOpen.set(false);
+    }
+  }
+
+  toggleProfileDropdown(event: MouseEvent) {
+    event.stopPropagation();
+    this.dropdownOpen.set(false);
+    this.profileDropdownOpen.update(v => !v);
   }
 
   toggleDropdown(event: MouseEvent) {
     event.stopPropagation();
+    this.profileDropdownOpen.set(false);
     this.dropdownOpen.update(v => !v);
   }
 
@@ -959,6 +1035,12 @@ export class ShellComponent implements OnInit {
   userRole = computed(() => {
     const u = this.authService.currentUser();
     return (u?.rol as any)?.value ?? u?.rol ?? '';
+  });
+
+  userName = computed(() => {
+    const u = this.authService.currentUser();
+    if (!u) return 'Usuario';
+    return `${u.nombre ?? ''} ${u.apellido ?? ''}`.trim();
   });
 
   userInitials = computed(() => {

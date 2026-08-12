@@ -337,6 +337,7 @@ export class NnaModalComponent implements OnInit {
   isSubmitting = false;
   centros = signal<Centro[]>([]);
   allFuncionarios = signal<any[]>([]);
+  selectedCentroId = signal<string | null>(null);
 
   currentUser = this.authService.currentUser;
   isFuncionario = computed(() => {
@@ -347,7 +348,7 @@ export class NnaModalComponent implements OnInit {
 
   filteredFuncionarios = computed(() => {
     const list = this.allFuncionarios();
-    const cId = this.nnaForm.get('centro_id')?.value;
+    const cId = this.selectedCentroId();
     if (!cId || cId === 'null') return list;
     return list.filter(u => {
       const uCId = u.centro_id || u.centro?.id;
@@ -387,6 +388,7 @@ export class NnaModalComponent implements OnInit {
 
     if (this.nna) {
       const activeAsg = this.nna.asignaciones?.find((a: any) => a.activo);
+      this.selectedCentroId.set(activeAsg?.centro_id || null);
       this.nnaForm.patchValue({
         rut: this.nna.rut,
         nombre: this.nna.nombre,
@@ -403,6 +405,10 @@ export class NnaModalComponent implements OnInit {
     } else {
       this.nnaForm.patchValue({ fecha_ingreso: new Date().toISOString().substring(0, 10) });
     }
+
+    this.nnaForm.get('centro_id')?.valueChanges.subscribe(val => {
+      this.selectedCentroId.set(val);
+    });
 
     this.nnaForm.get('fecha_ingreso')?.valueChanges.subscribe(val => {
       if (val) {

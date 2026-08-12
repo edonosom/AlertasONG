@@ -61,7 +61,7 @@
           } @else {
             <div class="flex flex-col gap-3">
               @for (director of directores; track director.id) {
-                <div class="person-card">
+                <div class="person-card cursor-pointer hover:bg-gray-50 transition-colors" [routerLink]="['/admin/usuarios', director.id]">
                   <div class="avatar">{{ director.nombre.charAt(0) }}{{ director.apellido.charAt(0) }}</div>
                   <div class="flex-1 min-w-0">
                     <p class="font-bold truncate m-0" style="color: var(--clr-text);">{{ director.nombre }} {{ director.apellido }}</p>
@@ -89,7 +89,7 @@
           } @else {
             <div class="flex flex-col gap-3">
               @for (funcionario of funcionarios; track funcionario.id) {
-                <div class="person-card">
+                <div class="person-card cursor-pointer hover:bg-gray-50 transition-colors" [routerLink]="['/admin/usuarios', funcionario.id]">
                   <div class="avatar" style="background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-dark));">{{ funcionario.nombre.charAt(0) }}{{ funcionario.apellido.charAt(0) }}</div>
                   <div class="flex-1 min-w-0">
                     <p class="font-bold truncate m-0" style="color: var(--clr-text);">{{ funcionario.nombre }} {{ funcionario.apellido }}</p>

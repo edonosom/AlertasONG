@@ -60,6 +60,23 @@ export class AgendaClinicaComponent implements OnInit {
     return null;
   });
 
+  daysRemaining = computed(() => {
+    const n = this.nnaData();
+    if (!n) return 90;
+    
+    if (n.fecha_ingreso) {
+      const parts = n.fecha_ingreso.split('-');
+      if (parts.length === 3) {
+        const baseDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        const today = new Date();
+        const diffTime = today.getTime() - baseDate.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
+        return Math.max(0, 90 - diffDays);
+      }
+    }
+    return Math.max(0, 90 - (n.dias_transcurridos || 0));
+  });
+
   nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
   // Signals reactivos — inicializar con la fecha real de hoy

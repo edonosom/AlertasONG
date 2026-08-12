@@ -128,6 +128,21 @@ import { switchMap, of, forkJoin, catchError } from 'rxjs';
           <div class="tw-row">
             <div class="tw-col">
               <div class="tw-input-group">
+                <label>Estado de Cuenta <span>*</span></label>
+                <div class="tw-input-wrapper" [class.error]="userForm.controls['activo'].invalid && userForm.controls['activo'].touched">
+                  <select formControlName="activo">
+                    <option [ngValue]="true">Activo</option>
+                    <option [ngValue]="false">Inactivo</option>
+                  </select>
+                  <div class="select-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tw-col">
+              <div class="tw-input-group">
                 <label>Fecha de Caducidad (Opcional)</label>
                 <div class="tw-input-wrapper" [class.error]="userForm.controls['fecha_caducidad'].invalid && userForm.controls['fecha_caducidad'].touched">
                   <input type="date" formControlName="fecha_caducidad">
@@ -405,6 +420,7 @@ export class UsuarioModalComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     rol: ['', [Validators.required]],
     centro_id: [null],
+    activo: [true, [Validators.required]],
     fecha_caducidad: [null]
   });
 
@@ -439,6 +455,7 @@ export class UsuarioModalComponent implements OnInit {
         email: this.usuarioData.email,
         rol: this.usuarioData.rol?.value || this.usuarioData.rol,
         centro_id: assignedCentroId || null,
+        activo: this.usuarioData.activo === undefined ? true : !!this.usuarioData.activo,
         fecha_caducidad: this.usuarioData.fecha_caducidad ? this.usuarioData.fecha_caducidad.split('T')[0] : null
       });
       this.userForm.get('rut')?.disable(); // Prevent changing rut

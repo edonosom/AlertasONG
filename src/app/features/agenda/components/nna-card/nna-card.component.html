@@ -10,7 +10,7 @@
       @if (data().tipo === 'PERSONALIZADA') {
         <ion-icon name="notifications-outline"></ion-icon> Personal
       } @else {
-        SLA: Día {{ data().dias_transcurridos }}
+        Envío de Docs: Día {{ data().nivel_alerta || data().dias_transcurridos }}
       }
     </div>
   </div>

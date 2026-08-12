@@ -19,6 +19,7 @@
               <span class="badge badge-outline">Edad: {{ edadNna() }} años</span>
               <span class="badge badge-primary">Ciclo {{ nnaData()?.ciclo || 1 }}</span>
               <span class="badge badge-secondary">Día {{ nnaData()?.dias_transcurridos || 0 }}</span>
+              <span class="badge" style="background: var(--clr-danger, #DC2626); color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; border: none;">Faltan {{ daysRemaining() }} días</span>
             </div>
             @if (authService.currentUser()?.rol === 'admin' || authService.currentUser()?.rol === 'root') {
               <div class="demographics-badges mt-2" style="margin-top: 8px;">

@@ -128,7 +128,7 @@
             } @else {
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 @for (nna of nnas; track nna.id) {
-                  <div class="person-card">
+                  <div class="person-card cursor-pointer hover:bg-gray-50 transition-colors" [routerLink]="['/nnas', nna.id]">
                     <div class="avatar" style="background: linear-gradient(135deg, var(--clr-accent-2), #0284c7);">{{ nna.nombre.charAt(0) }}{{ nna.apellido.charAt(0) }}</div>
                     <div class="flex-1 min-w-0">
                       <p class="font-bold truncate m-0" style="color: var(--clr-text);">{{ nna.nombre }} {{ nna.apellido }}</p>

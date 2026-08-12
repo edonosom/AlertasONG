@@ -61,7 +61,7 @@ export const routes: Routes = [
       {
         path: 'admin/usuarios/:id',
         canActivate: [roleGuard],
-        data: { roles: ['root', 'admin'] },
+        data: { roles: ['root', 'admin', 'director'] },
         loadComponent: () => import('./features/admin/usuarios/usuario-detalle/usuario-detalle.component').then(m => m.UsuarioDetalleComponent)
       },
 
@@ -101,6 +101,12 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['root', 'admin', 'director', 'funcionario'] },
         loadComponent: () => import('./features/nnas/nnas.component').then(m => m.PacientesComponent)
+      },
+      {
+        path: 'nnas/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['root', 'admin', 'director', 'funcionario'] },
+        loadComponent: () => import('./features/nnas/nna-detalle/nna-detalle.component').then(m => m.NnaDetalleComponent)
       },
       {
         path: 'nnas/:id/agenda',
