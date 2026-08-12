@@ -56,13 +56,14 @@ export class AuthService {
 
   login(credentials: any): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(async (response) => {
+      switchMap(response => from((async () => {
         if (response.success) {
           await Preferences.set({ key: TOKEN_KEY, value: response.token });
           await Preferences.set({ key: USER_KEY, value: JSON.stringify(response.user) });
           this.currentUser.set(response.user);
         }
-      })
+        return response;
+      })()))
     );
   }
 

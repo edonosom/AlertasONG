@@ -23,7 +23,7 @@
         <ion-spinner name="crescent" color="primary"></ion-spinner>
       </div>
     } @else if (errorMsg()) {
-      <div class="bg-red-50 text-red-500 p-4 rounded-xl text-center">
+      <div class="p-4 rounded-xl text-center" style="background: rgba(220, 38, 38, 0.1); color: var(--clr-danger);">
         {{ errorMsg() }}
       </div>
     } @else if (nna()) {
@@ -75,12 +75,12 @@
             <h2 class="text-xl font-bold mb-4" style="color: var(--clr-text);">Asignación Actual</h2>
             @if (activeAsignacion) {
               <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex-1 bg-white/50 p-4 rounded-xl border border-white/20">
-                  <p class="text-sm text-gray-500 mb-1 font-semibold">Funcionario a Cargo</p>
+                <div class="flex-1 p-4 rounded-xl" style="background: var(--clr-surface-2); border: 1px solid var(--clr-border);">
+                  <p class="text-sm mb-1 font-semibold" style="color: var(--clr-text-secondary);">Funcionario a Cargo</p>
                   <p class="font-bold m-0" style="color: var(--clr-text);">{{ activeAsignacion.funcionario?.nombre }} {{ activeAsignacion.funcionario?.apellido }}</p>
                 </div>
-                <div class="flex-1 bg-white/50 p-4 rounded-xl border border-white/20">
-                  <p class="text-sm text-gray-500 mb-1 font-semibold">Centro Médico</p>
+                <div class="flex-1 p-4 rounded-xl" style="background: var(--clr-surface-2); border: 1px solid var(--clr-border);">
+                  <p class="text-sm mb-1 font-semibold" style="color: var(--clr-text-secondary);">Centro Médico</p>
                   <p class="font-bold m-0" style="color: var(--clr-text);">{{ activeAsignacion.centro?.nombre }}</p>
                 </div>
               </div>
@@ -116,7 +116,7 @@
                   </div>
                   <div class="event-info">
                     <p class="font-bold m-0">{{ event.title }}</p>
-                    <p class="text-xs text-gray-500 m-0">Pendiente</p>
+                    <p class="text-xs m-0" style="color: var(--clr-text-secondary);">Pendiente</p>
                   </div>
                 </div>
               }
