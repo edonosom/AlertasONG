@@ -34,12 +34,24 @@ export class UsuariosComponent implements OnInit {
 
   // Selected roles for filtering
   selectedRoles = signal<string[]>([]);
+  
+  // Search query
+  searchQuery = signal<string>('');
 
   matchesRoleFilter(u: any): boolean {
     const roles = this.selectedRoles();
     if (roles.length === 0) return true;
     const r = typeof u.rol === 'object' ? u.rol?.value : u.rol;
     return roles.includes(r);
+  }
+
+  matchesSearchFilter(u: any): boolean {
+    const query = this.searchQuery().toLowerCase().trim();
+    if (!query) return true;
+    const name = `${u.nombre} ${u.apellido}`.toLowerCase();
+    const email = (u.email || '').toLowerCase();
+    const rut = (u.rut || '').toLowerCase();
+    return name.includes(query) || email.includes(query) || rut.includes(query);
   }
 
   toggleRoleFilter(role: string) {
@@ -51,9 +63,17 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
+  onSearchChange(event: any) {
+    this.searchQuery.set(event.target.value);
+  }
+
+  clearSearch() {
+    this.searchQuery.set('');
+  }
+
   // Derived computed signals — no extra API calls
-  usuariosActivos = computed(() => this.allUsuarios().filter(u => u.activo && !u.deleted_at && this.matchesRoleFilter(u)));
-  usuariosInactivos = computed(() => this.allUsuarios().filter(u => (!u.activo || !!u.deleted_at) && this.matchesRoleFilter(u)));
+  usuariosActivos = computed(() => this.allUsuarios().filter(u => u.activo && !u.deleted_at && this.matchesRoleFilter(u) && this.matchesSearchFilter(u)));
+  usuariosInactivos = computed(() => this.allUsuarios().filter(u => (!u.activo || !!u.deleted_at) && this.matchesRoleFilter(u) && this.matchesSearchFilter(u)));
 
   // Convenience: what to show in current tab
   usuarios = computed(() =>
@@ -64,6 +84,12 @@ export class UsuariosComponent implements OnInit {
     const user = this.authService.currentUser();
     const rol = (user?.rol as any)?.value ?? user?.rol;
     return rol === 'root' || rol === 'admin';
+  }
+
+  isRoot(): boolean {
+    const user = this.authService.currentUser();
+    const rol = (user?.rol as any)?.value ?? user?.rol;
+    return rol === 'root';
   }
 
   ngOnInit() {
@@ -123,7 +149,7 @@ export class UsuariosComponent implements OnInit {
       case 'root': return 'Super Admin';
       case 'admin': return 'Administrador';
       case 'director': return 'Director';
-      case 'funcionario': return 'Funcionario';
+      case 'funcionario': return 'Profesional';
       default: return r || '-';
     }
   }
@@ -215,6 +241,32 @@ export class UsuariosComponent implements OnInit {
       },
       error: (err) => {
         this.showToast(err.error?.message || 'Error al restaurar', 'danger');
+      }
+    });
+  }
+
+  async confirmResetPassword(user: any) {
+    const alert = await this.alertCtrl.create({
+      header: 'Resetear Contraseña',
+      message: `¿Estás seguro de que deseas resetear la contraseña de ${user.nombre} ${user.apellido}? Su nueva clave será su RUT (sin puntos ni guión) y deberá cambiarla al iniciar sesión.`,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Resetear',
+          handler: () => { this.resetPassword(user.id); }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  resetPassword(id: string) {
+    this.usuarioService.resetPassword(id).subscribe({
+      next: (res) => {
+        this.showToast(res.message || 'Contraseña reseteada exitosamente', 'success', 5000);
+      },
+      error: (err) => {
+        this.showToast(err.error?.message || 'Error al resetear contraseña', 'danger');
       }
     });
   }

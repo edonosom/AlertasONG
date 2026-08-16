@@ -3,7 +3,7 @@
     <div class="patient-info">
       <h3 class="patient-name">{{ data().nna_nombre_completo }}</h3>
       <span class="patient-rut">RUT: {{ data().rut || maskedRut() }} | Edad: {{ data().edad }} años</span>
-      <span class="patient-demographics">Ciclo {{ data().ciclo }} | Día {{ data().dias_nna }}</span>
+      <span class="patient-demographics">{{ data().ciclo }} Informe de proceso | Día {{ data().dias_nna }}</span>
     </div>
     
     <div class="alert-badge" [ngClass]="semanticColorClass()">
@@ -14,6 +14,17 @@
       }
     </div>
   </div>
+
+  @if (data().tipo !== 'PERSONALIZADA' && data().dias_transcurridos >= 90 && data().fase_estado === 'en_progreso') {
+    <div style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 12px; border-radius: var(--radius-sm); margin: 12px 0 0 0; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; animation: pulse-opacity 2s infinite;">
+      <ion-icon name="warning" style="font-size: 1.2rem;"></ion-icon>
+      @if (data().dias_transcurridos === 90) {
+        <span>Pendiente de confirmación de envío de documentos</span>
+      } @else {
+        <span>Alerta Máxima: Plazo Vencido hace {{ data().dias_transcurridos - 90 }} día(s)</span>
+      }
+    </div>
+  }
 
   <div class="progress-section">
     <div class="progress-labels">
@@ -33,10 +44,34 @@
 
   @if (data().tipo !== 'PERSONALIZADA' && data().estado_alerta === 'en_progreso') {
     <div class="action-section" style="margin-top: 16px;">
-      <ion-button expand="block" color="primary" (click)="confirmarGestion()">
-        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-        Confirmar Gestión en Sistema Gubernamental
-      </ion-button>
+      @if (data().nivel_alerta === 90) {
+        @if (!data().documentacion_subida) {
+          <ion-button expand="block" color="success" (click)="enviarDocumentos()">
+            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+            Marcar Documentos como Enviados
+          </ion-button>
+        } @else {
+          <div class="status-badge pending">
+            <ion-icon name="time-outline"></ion-icon> Pendiente de confirmación de envío
+          </div>
+          
+          <ion-button expand="block" color="primary" class="mt-2" (click)="confirmarRecepcion()">
+            <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+            Confirmar Recepción y Avanzar Ciclo
+          </ion-button>
+        }
+      } @else {
+        <ion-button expand="block" color="primary" (click)="confirmarGestion()">
+          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+          Confirmar Gestión en Sistema Gubernamental
+        </ion-button>
+      }
+    </div>
+  } @else if (data().tipo !== 'PERSONALIZADA' && data().fase_estado !== 'en_progreso' && data().fase_estado) {
+    <div class="action-section" style="margin-top: 16px;">
+      <div class="status-badge completed">
+        <ion-icon name="checkmark-circle"></ion-icon> Ciclo {{ data().fase_estado === 'completada_a_tiempo' ? 'completado a tiempo' : 'completado atrasado' }}
+      </div>
     </div>
   }
 </div>

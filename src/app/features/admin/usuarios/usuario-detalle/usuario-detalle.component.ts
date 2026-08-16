@@ -51,7 +51,7 @@ export class UsuarioDetalleComponent implements OnInit {
       case 'root': return 'Super Admin';
       case 'admin': return 'Administrador Global';
       case 'director': return 'Director';
-      case 'funcionario': return 'Funcionario';
+      case 'funcionario': return 'Profesional';
       default: return r || '-';
     }
   }

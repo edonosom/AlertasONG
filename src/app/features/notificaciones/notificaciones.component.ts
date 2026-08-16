@@ -120,11 +120,11 @@ import { NotificacionService, Notificacion } from '../../core/services/notificac
     .notif-header-left { display: flex; align-items: center; gap: 14px; }
     .notif-icon-wrap {
       width: 46px; height: 46px;
-      border-radius: 14px;
-      background: rgba(13,146,136,0.12);
-      border: 1px solid rgba(13,146,136,0.22);
+      border-radius: var(--radius-sm);
+      background: var(--clr-accent-dim);
+      border: 1px solid var(--clr-border-accent);
       display: flex; align-items: center; justify-content: center;
-      color: #0D9288;
+      color: var(--clr-accent);
       flex-shrink: 0;
     }
     .notif-title {
@@ -138,12 +138,12 @@ import { NotificacionService, Notificacion } from '../../core/services/notificac
     .btn-mark-all {
       display: flex; align-items: center; gap: 6px;
       padding: 8px 16px; border-radius: 10px;
-      background: rgba(13,146,136,0.1);
-      border: 1px solid rgba(13,146,136,0.22);
-      color: #0D9288; font-size: 0.8rem; font-weight: 700;
-      cursor: pointer; transition: all 0.2s; font-family: inherit;
+      background: var(--clr-accent-dim);
+      border: 1px solid var(--clr-border-accent);
+      color: var(--clr-accent); font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; transition: var(--t-fast); font-family: inherit;
     }
-    .btn-mark-all:hover { background: rgba(13,146,136,0.18); }
+    .btn-mark-all:hover { background: rgba(13,146,136,0.22); }
 
     /* List */
     .notif-list { display: flex; flex-direction: column; gap: 8px; }
@@ -152,18 +152,18 @@ import { NotificacionService, Notificacion } from '../../core/services/notificac
       display: flex; align-items: flex-start; gap: 14px;
       background: var(--clr-card);
       border: 1px solid var(--clr-border);
-      border-radius: 14px; padding: 16px;
-      cursor: pointer; transition: all 0.2s ease;
+      border-radius: var(--radius-md); padding: 16px;
+      cursor: pointer; transition: var(--t-base);
       position: relative;
     }
     .notif-item:hover {
-      border-color: rgba(13,146,136,0.28);
+      border-color: var(--clr-border-accent);
       background: var(--clr-card-hover);
       transform: translateX(3px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow-card);
     }
     .notif-unread {
-      border-left: 3px solid #0D9288 !important;
+      border-left: 3px solid var(--clr-accent) !important;
     }
 
     .notif-item-icon {
@@ -171,8 +171,8 @@ import { NotificacionService, Notificacion } from '../../core/services/notificac
       border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
     }
-    .icon-ciclo { background: rgba(239,68,68,0.12); color: #EF4444; border: 1px solid rgba(239,68,68,0.2); }
-    .icon-alerta { background: rgba(13,146,136,0.12); color: #0D9288; border: 1px solid rgba(13,146,136,0.2); }
+    .icon-ciclo { background: var(--clr-danger-dim); color: var(--clr-danger); border: 1px solid rgba(220,38,38,0.2); }
+    .icon-alerta { background: var(--clr-accent-dim); color: var(--clr-accent); border: 1px solid var(--clr-border-accent); }
 
     .notif-item-body { flex: 1; min-width: 0; }
     .notif-item-title {
@@ -189,7 +189,8 @@ import { NotificacionService, Notificacion } from '../../core/services/notificac
     }
     .notif-unread-dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: #0D9288; flex-shrink: 0; margin-top: 4px;
+      background: var(--clr-accent); flex-shrink: 0; margin-top: 4px;
+      box-shadow: 0 0 8px var(--clr-accent-glow);
     }
 
     /* Empty */
@@ -199,18 +200,18 @@ import { NotificacionService, Notificacion } from '../../core/services/notificac
       color: var(--clr-text-secondary); text-align: center;
     }
     .notif-empty-icon {
-      width: 72px; height: 72px; border-radius: 20px;
-      background: rgba(13,146,136,0.07);
-      border: 1px solid rgba(13,146,136,0.12);
+      width: 72px; height: 72px; border-radius: var(--radius-md);
+      background: var(--clr-accent-dim);
+      border: 1px solid var(--clr-border-accent);
       display: flex; align-items: center; justify-content: center;
-      color: rgba(13,146,136,0.5); margin-bottom: 8px;
+      color: var(--clr-accent); opacity: 0.6; margin-bottom: 8px;
     }
     .notif-empty h3 { font-size: 1rem; font-weight: 700; color: var(--clr-text); margin: 0; }
     .notif-empty p { font-size: 0.85rem; margin: 0; }
     .notif-spinner {
       width: 32px; height: 32px; border-radius: 50%;
-      border: 3px solid rgba(13,146,136,0.2);
-      border-top-color: #0D9288;
+      border: 2.5px solid var(--clr-border);
+      border-top-color: var(--clr-accent);
       animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -224,7 +225,7 @@ import { NotificacionService, Notificacion } from '../../core/services/notificac
       color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;
       cursor: pointer; transition: all 0.2s; font-family: inherit;
     }
-    .btn-load-more:hover:not(:disabled) { color: #0D9288; border-color: rgba(13,146,136,0.3); }
+    .btn-load-more:hover:not(:disabled) { color: var(--clr-accent); border-color: var(--clr-border-accent); }
     .btn-load-more:disabled { opacity: 0.5; cursor: not-allowed; }
   `]
 })

@@ -50,7 +50,8 @@ export interface AlertaPersonalizada {
   titulo: string;
   fecha_programada: string;
   descripcion?: string;
-  paciente_id?: string;
+  nna_id?: string;
+  es_critica?: boolean;
 }
 
 @Injectable({

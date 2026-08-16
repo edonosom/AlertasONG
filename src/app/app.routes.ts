@@ -77,10 +77,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/director/director.component').then(m => m.DirectorComponent)
       },
       {
-        path: 'dashboard/funcionario',
+        path: 'alertas-criticas',
         canActivate: [roleGuard],
         data: { roles: ['root', 'admin', 'director', 'funcionario'] },
-        loadComponent: () => import('./features/dashboard/funcionario/funcionario.component').then(m => m.FuncionarioComponent)
+        loadComponent: () => import('./features/alertas-criticas/alertas-criticas.component').then(m => m.AlertasCriticasComponent)
       },
       {
         path: 'dashboard/root',

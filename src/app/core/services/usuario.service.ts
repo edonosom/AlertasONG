@@ -56,4 +56,8 @@ export class UsuarioService {
   restoreUsuario(id: string): Observable<{ success: boolean; message: string }> {
     return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/usuarios/${id}/restore`, {});
   }
+
+  resetPassword(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.put<{ success: boolean; message: string }>(`${this.apiUrl}/usuarios/${id}/reset-password`, {});
+  }
 }

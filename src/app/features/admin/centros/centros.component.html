@@ -29,6 +29,25 @@
     </ion-segment>
   </div>
 
+  <!-- Search -->
+  <div class="filters-bar fade-in" style="flex-wrap: wrap;">
+    <div class="search-wrap flex-1" style="min-width: 280px; position: relative;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input type="text" placeholder="Buscar por nombre o código del centro..." 
+        style="width: 100%; padding: 10px 14px 10px 40px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.9rem;"
+        (input)="onSearchChange($event)" [value]="searchQuery()" />
+      @if (searchQuery()) {
+        <button (click)="clearSearch()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--clr-text-secondary); cursor: pointer; display: flex;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+
   <!-- Skeletons -->
   @if (isLoading()) {
     <div class="centros-grid stagger-children">
@@ -123,8 +142,17 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
-                FUNCIONARIOS: {{ centro.funcionarios_asignados?.length || 0 }} asignado(s)
+                PROFESIONALES: {{ centro.funcionarios_asignados?.length || 0 }} asignado(s)
               </span>
+
+              @if (centro.asignaciones_con_alerta90_count > 0) {
+                <span class="centro-code" style="color: var(--clr-danger); font-weight: 600; animation: pulse-opacity 2s infinite;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  Tiene {{ centro.asignaciones_con_alerta90_count }} NNA(s) con plazos críticos
+                </span>
+              }
             </div>
           </div>
 

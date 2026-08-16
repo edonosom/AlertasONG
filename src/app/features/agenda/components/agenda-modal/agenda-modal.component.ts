@@ -45,6 +45,11 @@ import { PacienteService } from '../../../../core/services/nna.service';
             <ion-textarea formControlName="descripcion" rows="3" placeholder="Anotaciones para el recordatorio..."></ion-textarea>
           </ion-item>
 
+          <ion-item class="clinical-input" lines="none" style="margin-bottom: 12px;">
+            <ion-label style="font-weight: 700; color: var(--clr-text-secondary); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em;">Marcar como Alerta Crítica</ion-label>
+            <ion-toggle formControlName="es_critica" slot="end" class="clinical-toggle critica-toggle"></ion-toggle>
+          </ion-item>
+
           <ion-item class="clinical-input" lines="none" style="margin-bottom: 24px;">
             <ion-label style="font-weight: 700; color: var(--clr-text-secondary); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em;">Notificar por Correo</ion-label>
             <ion-toggle formControlName="notificar_email" slot="end" class="clinical-toggle"></ion-toggle>
@@ -104,6 +109,9 @@ import { PacienteService } from '../../../../core/services/nna.service';
       --background: var(--clr-input-bd);
       --background-checked: var(--clr-accent);
     }
+    .critica-toggle {
+      --background-checked: var(--clr-danger);
+    }
     .validation-error {
       color: var(--clr-danger);
       font-size: 0.75rem;
@@ -148,7 +156,8 @@ export class AgendaModalComponent implements OnInit {
     fecha_programada: ['', [Validators.required]],
     titulo: ['', [Validators.required]],
     descripcion: [''],
-    notificar_email: [true]
+    notificar_email: [true],
+    es_critica: [false]
   });
 
   ngOnInit() {
@@ -167,7 +176,7 @@ export class AgendaModalComponent implements OnInit {
   onAlertaSubmit() {
     if (this.alertaForm.valid) {
       this.isSubmitting = true;
-      const payload = { ...this.alertaForm.value, paciente_id: this.pacienteId };
+      const payload = { ...this.alertaForm.value, nna_id: this.pacienteId };
       
       this.pacienteService.createAlerta(payload).subscribe({
         next: (res) => {

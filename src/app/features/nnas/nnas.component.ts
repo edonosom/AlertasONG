@@ -156,7 +156,7 @@ export class PacientesComponent implements OnInit {
 
     const { data } = await modal.onWillDismiss();
     if (data && !data.error) {
-      this.showToast(nna ? 'Nna actualizado exitosamente' : 'Nna enrolado exitosamente');
+      this.showToast(nna ? 'NNA actualizado exitosamente' : 'NNA enrolado exitosamente');
       this.loadPacientes();
     } else if (data && data.error) {
       this.showToast(data.error, 'danger');
@@ -173,7 +173,7 @@ export class PacientesComponent implements OnInit {
     
     const alert = await this.alertCtrl.create({
       header: 'Confirmar Eliminación',
-      message: `¿Estás seguro de que deseas eliminar permanentemente al nna <strong>${nna.nombre} ${nna.apellido}</strong>? Esta acción no se puede deshacer.`,
+      message: `¿Estás seguro de que deseas eliminar permanentemente al NNA <strong>${nna.nombre} ${nna.apellido}</strong>? Esta acción no se puede deshacer.`,
       buttons: [
         {
           text: 'Cancelar',
@@ -197,7 +197,7 @@ export class PacientesComponent implements OnInit {
   deletePaciente(id: string) {
     this.pacienteService.deletePaciente(id).subscribe({
       next: () => {
-        this.showToast('Nna eliminado exitosamente');
+        this.showToast('NNA eliminado exitosamente');
         this.loadPacientes();
       },
       error: (err) => {

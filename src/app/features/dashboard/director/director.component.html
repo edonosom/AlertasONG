@@ -1,439 +1,659 @@
-<div class="w-full h-full flex flex-col gap-6 fade-in">
+<div class="cmd-root fade-in">
 
   <!-- Header -->
-  <div class="page-header">
+  <header class="cmd-header">
     <div>
-      <h2 class="page-title">Centro de Mando</h2>
-      <p class="page-subtitle">Supervisión estratégica de equipo clínico</p>
+      <h1 class="cmd-title">Centro de Mando</h1>
+      <p class="cmd-subtitle">Supervisión estratégica de equipo clínico</p>
     </div>
-  </div>
+    <div class="cmd-header-stats">
+      <div class="cmd-stat">
+        <span class="cmd-stat-value">{{ funcionarios().length }}</span>
+        <span class="cmd-stat-label">Profesionales</span>
+      </div>
+      <div class="cmd-stat">
+        <span class="cmd-stat-value cmd-stat-alert">{{ getTotalAlertas() }}</span>
+        <span class="cmd-stat-label">Alertas</span>
+      </div>
+    </div>
+  </header>
 
-  <div class="flex flex-col xl:flex-row gap-5 flex-1 min-h-0">
+  <!-- Main Layout -->
+  <div class="cmd-layout">
 
-    <!-- ─── Left: Funcionarios list ─────────────────────── -->
-    <div class="director-panel director-left">
-      <div class="director-panel-header">
-        <h3 class="director-panel-title">
-          <span class="panel-title-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </span>
-          Mi Equipo
-        </h3>
+    <!-- ─── Left Panel: Equipo ───────────────────── -->
+    <aside class="cmd-panel cmd-panel-team">
+      <div class="cmd-panel-head">
+        <div class="cmd-icon-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Mi Equipo</h3>
+        <span class="cmd-count-badge">{{ filteredFuncionarios().length }}</span>
       </div>
 
-      <div class="flex flex-col gap-3 overflow-y-auto flex-1 pr-1" style="scrollbar-width:thin;">
+      <div class="search-wrap" style="padding: 0 16px; margin-bottom: 12px; position: relative;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 26px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <input type="text" placeholder="Buscar profesional..." 
+               style="width: 100%; padding: 8px 12px 8px 32px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.85rem;"
+               [ngModel]="searchQueryFuncionarios()" (ngModelChange)="searchQueryFuncionarios.set($event)" />
+      </div>
+
+      <div class="cmd-team-list">
         @if (loadingFuncionarios()) {
-          @for (i of [1,2,3]; track i) {
-            <div class="func-skeleton">
-              <div class="skeleton" style="width:48px;height:48px;border-radius:14px;flex-shrink:0;"></div>
+          @for (i of [1,2,3,4]; track i) {
+            <div class="cmd-team-skeleton">
+              <div class="skeleton" style="width:42px;height:42px;border-radius:var(--radius-sm);flex-shrink:0;"></div>
               <div class="flex flex-col gap-2 flex-1">
-                <div class="skeleton" style="width:60%;height:13px;"></div>
-                <div class="skeleton" style="width:40%;height:10px;"></div>
+                <div class="skeleton" style="width:70%;height:12px;"></div>
+                <div class="skeleton" style="width:45%;height:9px;"></div>
               </div>
             </div>
           }
         } @else {
-          @for (f of funcionarios(); track f.id) {
+          @for (f of filteredFuncionarios(); track f.id) {
             <div (click)="seleccionarFuncionario(f)"
-                 class="func-item"
-                 [ngClass]="selectedFuncionarioId() === f.id ? 'func-item-active' : ''">
-              <div class="func-avatar"
-                   [ngClass]="selectedFuncionarioId() === f.id ? 'func-avatar-active' : ''">
+                 class="cmd-team-item"
+                 [class.cmd-team-item--active]="selectedFuncionarioId() === f.id">
+              <div class="cmd-team-avatar"
+                   [class.cmd-team-avatar--active]="selectedFuncionarioId() === f.id">
                 {{ f.nombre.charAt(0) }}{{ f.apellido.charAt(0) }}
               </div>
-              <div class="flex flex-col min-w-0">
-                <span class="func-name" [ngClass]="{'func-name-active': selectedFuncionarioId() === f.id}">
-                  {{ f.nombre }} {{ f.apellido }}
-                </span>
-                <span class="func-role">Psicólogo(a) Clínico</span>
+              <div class="cmd-team-info">
+                <span class="cmd-team-name">{{ f.nombre }} {{ f.apellido }}</span>
+                <div class="cmd-team-meta">
+                  <span class="cmd-team-nnas">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                    {{ f.pacientes_count || 0 }}
+                  </span>
+                  @if (f.alertas_90_count) {
+                    <span class="cmd-team-alerts" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); animation: pulse-opacity 2s infinite;">
+                      <span class="cmd-pulse-dot" style="background: #ef4444; box-shadow: 0 0 8px #ef4444;"></span>
+                      {{ f.alertas_90_count }} crítico(s)
+                    </span>
+                  } @else if (f.alertas_count) {
+                    <span class="cmd-team-alerts">
+                      <span class="cmd-pulse-dot"></span>
+                      {{ f.alertas_count }}
+                    </span>
+                  }
+                </div>
               </div>
               @if (selectedFuncionarioId() === f.id) {
-                <div class="func-selected-dot"></div>
+                <div class="cmd-active-indicator"></div>
               }
             </div>
           }
         }
       </div>
-    </div>
+    </aside>
 
-    <!-- ─── Right: Nnas panel ───────────────────────── -->
-    <div class="director-panel director-right">
-      <div class="director-panel-header">
-        <h3 class="director-panel-title">
-          <span class="panel-title-icon" style="background:rgba(3,105,161,0.12);border-color:rgba(3,105,161,0.2);color:#0369A1;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <!-- ─── Right Panel: NNAs ────────────────────── -->
+    <main class="cmd-panel cmd-panel-nnas">
+      <div class="cmd-panel-head">
+        <div class="cmd-icon-box cmd-icon-box--blue">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>{{ selectedFuncionarioId() ? 'NNAs Asignados' : 'Selecciona un Profesional' }}</h3>
+        @if (selectedFuncionarioId() && !loadingPacientes()) {
+          <div class="search-wrap" style="margin-left: auto; position: relative; width: 240px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
-          </span>
-          {{ selectedFuncionarioId() ? 'Nnas Asignados' : 'Selecciona un funcionario' }}
-        </h3>
+            <input type="text" placeholder="Buscar NNA..." 
+                   style="width: 100%; padding: 8px 12px 8px 30px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.85rem;"
+                   [ngModel]="searchQueryNnas()" (ngModelChange)="searchQueryNnas.set($event)" />
+          </div>
+          <span class="cmd-count-badge cmd-count-badge--blue" style="margin-left: 12px;">{{ filteredNnas().length }}</span>
+        }
       </div>
 
-      <div class="flex-1 overflow-y-auto pr-1" style="scrollbar-width:thin;">
+      <div class="cmd-nnas-content">
 
         @if (!selectedFuncionarioId()) {
-          <!-- Empty: select funcionario -->
-          <div class="director-empty fade-in">
-            <div class="director-empty-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <div class="cmd-empty fade-in">
+            <div class="cmd-empty-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                <path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </div>
-            <p>Selecciona un funcionario del equipo para ver su carga clínica.</p>
+            <h4>Selecciona un profesional</h4>
+            <p>Haz clic en un miembro del equipo para visualizar y gestionar sus NNAs asignados.</p>
           </div>
 
         } @else if (loadingPacientes()) {
-          <div class="flex justify-center py-10">
-            <div class="loading-spinner"></div>
+          <div class="cmd-loading">
+            <div class="cmd-spinner"></div>
           </div>
 
         } @else if (nnas().length === 0) {
-          <!-- Empty: no patients -->
-          <div class="director-empty slide-up">
-            <div class="director-empty-icon" style="background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.2);">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <div class="cmd-empty slide-up">
+            <div class="cmd-empty-icon cmd-empty-icon--success">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      stroke="#00E676" stroke-width="2" stroke-linecap="round"/>
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </div>
-            <p>El funcionario no tiene nnas asignados actualmente.</p>
+            <h4>Sin NNAs asignados</h4>
+            <p>Este profesional no tiene NNAs asignados actualmente.</p>
           </div>
 
         } @else {
-          <div class="nnas-grid slide-up stagger-children">
-            @for (p of nnas(); track p.id) {
-              <div class="nna-card" [ngClass]="getSemanticColor(p)">
+          <div class="cmd-nnas-grid slide-up">
+            @for (p of filteredNnas(); track p.id) {
+              <div class="cmd-nna-card" [class.cmd-nna-card--alert]="p.alertas_pendientes_count && p.alertas_pendientes_count > 0">
 
-                <!-- Alert indicator bar -->
-                <div class="nna-bar"
-                     [ngClass]="p.alertas_pendientes_count ? 'nna-bar-alert' : 'nna-bar-ok'">
+                <!-- Status bar -->
+                <div class="cmd-nna-bar"
+                     [class.cmd-nna-bar--danger]="(p.dias_transcurridos || 0) >= 80"
+                     [class.cmd-nna-bar--warning]="(p.dias_transcurridos || 0) >= 75 && (p.dias_transcurridos || 0) < 80"
+                     [class.cmd-nna-bar--ok]="(p.dias_transcurridos || 0) < 75">
                 </div>
 
-                <!-- Content -->
-                <div class="flex flex-col gap-3 flex-1 pl-4">
-                  <div class="flex justify-between items-start">
-                    <h4 class="nna-name">{{ p.nombre }} {{ p.apellido }}</h4>
+                <!-- Card content -->
+                <div class="cmd-nna-body">
+                  <div class="cmd-nna-top">
+                    <div class="cmd-nna-identity">
+                      <h4 class="cmd-nna-name">{{ p.nombre }} {{ p.apellido }}</h4>
+                      <span class="cmd-nna-rut">{{ p.rut }}</span>
+                    </div>
                     @if (p.alertas_pendientes_count && p.alertas_pendientes_count > 0) {
-                      <span class="alert-badge">
-                        <span class="alert-dot" style="width:5px;height:5px;"></span>
+                      <span class="cmd-alert-badge">
+                        <span class="cmd-pulse-dot cmd-pulse-dot--danger"></span>
                         {{ p.alertas_pendientes_count }} alerta{{ p.alertas_pendientes_count > 1 ? 's' : '' }}
                       </span>
                     }
                   </div>
 
-                  <p class="nna-rut">{{ p.rut }}</p>
-
-                  <div class="flex items-center justify-between">
-                    <span class="nna-days">Día {{ p.dias_transcurridos || 0 }} de tratamiento</span>
-                    <div class="flex gap-2">
-                      <button class="pac-btn pac-btn-ghost" title="Reasignar" (click)="abrirReasignacion(p)">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                          <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </button>
-                      <a [routerLink]="['/nnas', p.id, 'agenda']" class="pac-btn pac-btn-accent">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                          <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </a>
+                  @if ((p.dias_transcurridos || 0) >= 90) {
+                    <div style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem; animation: pulse-opacity 2s infinite;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                      </svg>
+                      @if (p.dias_transcurridos === 90) {
+                        <span>Pendiente confirmación docs.</span>
+                      } @else {
+                        <span>Plazo Vencido hace {{ (p.dias_transcurridos || 0) - 90 }} día(s)</span>
+                      }
                     </div>
+                  }
+
+                  <div class="cmd-nna-progress">
+                    <div class="cmd-progress-track">
+                      <div class="cmd-progress-fill"
+                           [style.width.%]="((p.dias_transcurridos || 0) / 90) * 100"
+                           [class.cmd-progress-danger]="(p.dias_transcurridos || 0) >= 80"
+                           [class.cmd-progress-warning]="(p.dias_transcurridos || 0) >= 75 && (p.dias_transcurridos || 0) < 80">
+                      </div>
+                    </div>
+                    <span class="cmd-progress-label">
+                      Día <strong>{{ p.dias_transcurridos || 0 }}</strong> / 90
+                      <span class="cmd-progress-remain">({{ p.dias_restantes || 0 }} restantes)</span>
+                    </span>
+                  </div>
+
+                  <div class="cmd-nna-actions">
+                    <button class="cmd-btn cmd-btn--ghost" title="Reasignar" (click)="abrirReasignacion(p)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                      Reasignar
+                    </button>
+                    <a [routerLink]="['/nnas', p.id, 'agenda']" class="cmd-btn cmd-btn--primary">
+                      Ver Agenda
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </a>
                   </div>
                 </div>
-
               </div>
             }
           </div>
         }
-
       </div>
-    </div>
+    </main>
 
   </div>
-
 </div>
 
-<!-- Reassign Modal -->
+<!-- ─── Reassignment Modal ───────────────────── -->
 <ion-modal [isOpen]="isReassignModalOpen()" (didDismiss)="cerrarModal()" class="clinical-modal">
   <ng-template>
     <ion-header class="ion-no-border">
       <ion-toolbar class="glass-toolbar">
-        <ion-title>Reasignar Ficha</ion-title>
+        <ion-title>Reasignar NNA</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="cerrarModal()">Cerrar</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <div class="modal-body">
-        <p>Seleccione el nuevo funcionario que tomará el caso.</p>
-        <ion-item class="glass-input">
-          <ion-select [(ngModel)]="targetFuncionarioId" interface="popover" placeholder="Seleccionar Funcionario">
-            <ion-select-option *ngFor="let af of availableFuncionarios()" [value]="af.id">
-              {{ af.nombre }} {{ af.apellido }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-button expand="block"
-                    class="btn-primary"
-                    [disabled]="!targetFuncionarioId() || isSubmitting()"
-                    (click)="confirmarReasignacion()">
+      <div class="reassign-body">
+        <div class="reassign-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="reassign-title">Transferir Caso Clínico</h2>
+        <p class="reassign-desc">Seleccione el profesional que tomará la responsabilidad de este NNA.</p>
+
+        <div class="reassign-field">
+          <label>Profesional destino</label>
+          <ion-item class="glass-input reassign-select">
+            <ion-select [(ngModel)]="targetFuncionarioId" interface="popover" placeholder="Seleccionar Profesional...">
+              <ion-select-option *ngFor="let af of availableFuncionarios()" [value]="af.id">
+                {{ af.nombre }} {{ af.apellido }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <button class="reassign-confirm"
+                [disabled]="!targetFuncionarioId() || isSubmitting()"
+                (click)="confirmarReasignacion()">
           <ion-spinner *ngIf="isSubmitting()" name="crescent"></ion-spinner>
           <span *ngIf="!isSubmitting()">Confirmar Transferencia</span>
-        </ion-button>
+        </button>
       </div>
     </ion-content>
   </ng-template>
 </ion-modal>
 
 <style>
-.page-header {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
-.page-title {
-  font-size: 2rem; font-weight: 900; color: #F1F5F9;
-  letter-spacing: -0.04em; margin: 0;
-}
-.page-subtitle {
-  font-size: 0.85rem; color: rgba(148,163,184,0.6); margin: 4px 0 0; font-weight: 500;
+/* ============================================================
+   Centro de Mando  |  Director Dashboard
+   Uses CSS custom props from global.scss
+   ============================================================ */
+
+.cmd-root {
+  display: flex; flex-direction: column; gap: 24px;
+  width: 100%; height: 100%;
 }
 
-/* ─── Director Panels ─ */
-.director-panel {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 26px;
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  backdrop-filter: blur(20px);
+/* ─── Header ─ */
+.cmd-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.cmd-title {
+  font-size: 1.8rem; font-weight: 900; margin: 0;
+  color: var(--clr-text); letter-spacing: -0.03em;
+}
+.cmd-subtitle {
+  font-size: 0.82rem; color: var(--clr-text-secondary);
+  margin: 4px 0 0; font-weight: 500; opacity: 0.7;
+}
+.cmd-header-stats {
+  display: flex; gap: 8px;
+}
+.cmd-stat {
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--clr-card); border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm); padding: 8px 18px;
+  min-width: 80px;
+}
+.cmd-stat-value {
+  font-size: 1.4rem; font-weight: 800; color: var(--clr-accent);
+  line-height: 1;
+}
+.cmd-stat-alert { color: var(--clr-danger) !important; }
+.cmd-stat-label {
+  font-size: 0.62rem; font-weight: 700; color: var(--clr-text-secondary);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px;
+}
+
+/* ─── Layout ─ */
+.cmd-layout {
+  display: flex; flex-direction: column; gap: 16px; flex: 1; min-height: 0;
+}
+@media (min-width: 1200px) {
+  .cmd-layout { flex-direction: row; }
+}
+
+/* ─── Panel Base ─ */
+.cmd-panel {
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex; flex-direction: column;
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
 }
-.director-left  { width: 100%; flex-shrink: 0; }
-.director-right { flex: 1; min-w-0: 0; }
-
-@media (min-width: 1280px) {
-  .director-left  { width: 300px; }
+.cmd-panel-team {
+  width: 100%; flex-shrink: 0;
+}
+.cmd-panel-nnas {
+  flex: 1; min-width: 0;
+}
+@media (min-width: 1200px) {
+  .cmd-panel-team { width: 380px; }
 }
 
-.director-panel-header { margin-bottom: 18px; }
-.director-panel-title {
+.cmd-panel-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--clr-border);
+}
+.cmd-panel-head h3 {
+  font-size: 0.9rem; font-weight: 800; color: var(--clr-text); margin: 0;
+}
+.cmd-icon-box {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--clr-accent-dim); border: 1px solid var(--clr-border-accent);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--clr-accent); flex-shrink: 0;
+}
+.cmd-icon-box--blue {
+  background: var(--clr-accent-2-dim);
+  border-color: rgba(3,105,161,0.2);
+  color: var(--clr-accent-2);
+}
+.cmd-count-badge {
+  margin-left: auto; font-size: 0.7rem; font-weight: 800;
+  background: var(--clr-accent-dim); color: var(--clr-accent);
+  border: 1px solid var(--clr-border-accent);
+  padding: 2px 10px; border-radius: 100px;
+}
+.cmd-count-badge--blue {
+  background: var(--clr-accent-2-dim); color: var(--clr-accent-2);
+  border-color: rgba(3,105,161,0.2);
+}
+
+/* ─── Team List ─ */
+.cmd-team-list {
+  flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;
+  scrollbar-width: thin; scrollbar-color: var(--clr-border) transparent;
+}
+.cmd-team-skeleton {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  background: var(--clr-card); border: 1px solid var(--clr-border);
+}
+.cmd-team-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; border: 1px solid transparent;
+  background: transparent; transition: var(--t-fast);
+  position: relative;
+}
+.cmd-team-item:hover {
+  background: var(--clr-card); border-color: var(--clr-border);
+}
+.cmd-team-item--active {
+  background: var(--clr-accent-dim) !important;
+  border-color: var(--clr-border-accent) !important;
+  box-shadow: 0 0 24px rgba(13,146,136,0.06);
+}
+
+.cmd-team-avatar {
+  width: 42px; height: 42px; border-radius: var(--radius-sm);
+  background: var(--clr-card); border: 1px solid var(--clr-border);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.78rem; color: var(--clr-text-secondary);
+  text-transform: uppercase; flex-shrink: 0;
+  transition: var(--t-fast); letter-spacing: 0.02em;
+}
+.cmd-team-avatar--active {
+  background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-dark) 100%) !important;
+  color: white !important; border-color: transparent !important;
+  box-shadow: 0 4px 16px var(--clr-accent-glow);
+}
+
+.cmd-team-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.cmd-team-name {
+  font-size: 0.82rem; font-weight: 700; color: var(--clr-text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: color 0.15s;
+}
+.cmd-team-item--active .cmd-team-name { color: var(--clr-accent-bright); }
+
+.cmd-team-meta {
   display: flex; align-items: center; gap: 8px;
-  font-size: 0.95rem; font-weight: 800; color: #F1F5F9; margin: 0;
 }
-.panel-title-icon {
-  width: 26px; height: 26px;
-  border-radius: 8px;
-  background: rgba(13,146,136,0.12);
-  border: 1px solid rgba(13,146,136,0.2);
-  display: flex; align-items: center; justify-content: center;
-  color: #0D9288;
+.cmd-team-nnas {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 0.68rem; font-weight: 700;
+  color: var(--clr-text-secondary); opacity: 0.7;
+}
+.cmd-team-alerts {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.62rem; font-weight: 800;
+  color: var(--clr-danger);
+  background: var(--clr-danger-dim);
+  padding: 1px 7px; border-radius: 100px;
+  border: 1px solid rgba(220,38,38,0.18);
+}
+.cmd-active-indicator {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--clr-accent);
+  box-shadow: 0 0 10px var(--clr-accent-glow);
+  margin-left: auto; flex-shrink: 0;
 }
 
-/* ─── Funcionario Items ─ */
-.func-skeleton {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px; border-radius: 14px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.04);
-}
-.func-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.04);
-  background: rgba(255,255,255,0.02);
-  transition: all 0.2s ease;
+/* ─── Pulse dot ─ */
+.cmd-pulse-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--clr-danger); flex-shrink: 0;
   position: relative;
 }
-.func-item:hover {
-  background: rgba(255,255,255,0.05);
-  border-color: rgba(13,146,136,0.1);
+.cmd-pulse-dot::after {
+  content: ''; position: absolute; inset: -2px;
+  border-radius: 50%; background: var(--clr-danger);
+  animation: cmdPing 1.5s ease-out infinite; opacity: 0;
 }
-.func-item-active {
-  background: rgba(13,146,136,0.08) !important;
-  border-color: rgba(13,146,136,0.2) !important;
-  box-shadow: 0 0 20px rgba(13,146,136,0.08);
-}
+.cmd-pulse-dot--danger { background: var(--clr-danger); }
 
-.func-avatar {
-  width: 44px; height: 44px;
-  border-radius: 14px;
-  background: rgba(71,85,105,0.4);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.85rem; color: rgba(148,163,184,0.8);
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-.func-avatar-active {
-  background: linear-gradient(135deg, #0D9288, #0A6E6A) !important;
-  color: white !important;
-  box-shadow: 0 4px 16px rgba(13,146,136,0.3);
-}
-.func-name {
-  font-size: 0.88rem; font-weight: 700; color: #CBD5E1;
-  transition: color 0.2s;
-}
-.func-name-active { color: #0D9288 !important; }
-.func-role {
-  font-size: 0.68rem; font-weight: 600; color: rgba(148,163,184,0.4);
-  text-transform: uppercase; letter-spacing: 0.05em;
-}
-.func-selected-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #0D9288;
-  box-shadow: 0 0 8px rgba(13,146,136,0.6);
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-/* ─── Director Empty ─ */
-.director-empty {
+/* ─── Empty / Loading ─ */
+.cmd-empty {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; min-height: 220px; gap: 10px; text-align: center; padding: 24px;
+}
+.cmd-empty h4 {
+  font-size: 1rem; font-weight: 700; color: var(--clr-text); margin: 0;
+}
+.cmd-empty p {
+  font-size: 0.82rem; color: var(--clr-text-secondary);
+  max-width: 280px; margin: 0; line-height: 1.5;
+}
+.cmd-empty-icon {
+  width: 68px; height: 68px; border-radius: var(--radius-md);
+  background: var(--clr-accent-dim); border: 1px solid var(--clr-border-accent);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--clr-accent); animation: cmdFloat 4s ease-in-out infinite;
+}
+.cmd-empty-icon--success {
+  background: var(--clr-success-dim);
+  border-color: rgba(5,150,105,0.2);
+  color: var(--clr-success);
+}
+.cmd-loading {
+  display: flex; align-items: center; justify-content: center;
   height: 100%; min-height: 200px;
-  gap: 12px; color: rgba(148,163,184,0.5); text-align: center; font-size: 0.85rem;
 }
-.director-empty-icon {
-  width: 64px; height: 64px;
-  border-radius: 20px;
-  background: rgba(13,146,136,0.06);
-  border: 1px solid rgba(13,146,136,0.15);
-  display: flex; align-items: center; justify-content: center;
-  color: rgba(13,146,136,0.4);
-  animation: float 4s ease-in-out infinite;
+.cmd-spinner {
+  width: 32px; height: 32px;
+  border: 2.5px solid var(--clr-border);
+  border-top-color: var(--clr-accent);
+  border-radius: 50%; animation: cmdSpin 0.7s linear infinite;
 }
 
-/* ─── Loading Spinner ─ */
-.loading-spinner {
-  width: 36px; height: 36px;
-  border: 2px solid rgba(13,146,136,0.15);
-  border-top-color: #0D9288;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+/* ─── NNA Grid ─ */
+.cmd-nnas-content {
+  flex: 1; overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--clr-border) transparent;
 }
-
-/* ─── Nnas Grid ─ */
-.nnas-grid {
+.cmd-nnas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 14px;
-  padding-bottom: 16px;
+  grid-template-columns: 1fr;
+  gap: 10px; padding-bottom: 8px;
+}
+@media (min-width: 1500px) {
+  .cmd-nnas-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* ─── Nna Card ─ */
-.nna-card {
-  display: flex;
-  align-items: stretch;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 18px;
-  overflow: hidden;
-  transition: all 0.25s ease;
-  min-height: 130px;
+/* ─── NNA Card ─ */
+.cmd-nna-card {
+  display: flex; overflow: hidden;
+  background: var(--clr-card); border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md); transition: var(--t-base);
 }
-.nna-card:hover {
-  background: rgba(255,255,255,0.055);
-  border-color: rgba(13,146,136,0.12);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+.cmd-nna-card:hover {
+  background: var(--clr-card-hover);
+  border-color: var(--clr-border-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
 }
-.nna-bar {
-  width: 4px;
-  border-radius: 0;
-  flex-shrink: 0;
-}
-.nna-bar-alert { background: linear-gradient(to bottom, #FF4757, #C62828); }
-.nna-bar-ok    { background: linear-gradient(to bottom, #00E676, #00C853); }
+.cmd-nna-card--alert { border-color: rgba(220,38,38,0.12); }
+.cmd-nna-card--alert:hover { border-color: rgba(220,38,38,0.25); }
 
-.nna-name {
-  font-size: 0.9rem; font-weight: 700; color: #E2E8F0; margin: 0;
+.cmd-nna-bar {
+  width: 4px; flex-shrink: 0; border-radius: 0;
 }
-.nna-rut {
-  font-size: 0.72rem; color: rgba(148,163,184,0.5);
-  font-family: 'Fira Code', monospace; margin: 0;
-}
-.nna-days {
-  font-size: 0.72rem; font-weight: 600;
-  color: rgba(148,163,184,0.5);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  padding: 4px 10px;
-  border-radius: 8px;
-}
+.cmd-nna-bar--ok     { background: linear-gradient(to bottom, var(--clr-success), #00C853); }
+.cmd-nna-bar--warning{ background: linear-gradient(to bottom, var(--clr-warning), #F59E0B); }
+.cmd-nna-bar--danger { background: linear-gradient(to bottom, var(--clr-danger), #B91C1C); }
 
-/* Alert badge */
-.alert-badge {
+.cmd-nna-body {
+  flex: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+}
+.cmd-nna-top {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+}
+.cmd-nna-identity { min-width: 0; }
+.cmd-nna-name {
+  font-size: 0.88rem; font-weight: 700; color: var(--clr-text); margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cmd-nna-rut {
+  font-size: 0.7rem; color: var(--clr-text-secondary); opacity: 0.6;
+  font-family: 'Inter', monospace; margin-top: 2px;
+}
+.cmd-alert-badge {
   display: inline-flex; align-items: center; gap: 5px;
-  background: rgba(255,71,87,0.12);
-  color: #FF4757;
-  border: 1px solid rgba(255,71,87,0.2);
-  font-size: 0.65rem; font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 100px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.alert-dot {
-  position: relative;
-  border-radius: 50%;
-  background: #FF4757;
-  flex-shrink: 0;
-}
-.alert-dot::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: 50%;
-  background: #FF4757;
-  animation: ping 1.4s ease-out infinite;
+  background: var(--clr-danger-dim); color: var(--clr-danger);
+  border: 1px solid rgba(220,38,38,0.18);
+  font-size: 0.6rem; font-weight: 800;
+  padding: 2px 8px; border-radius: 100px;
+  text-transform: uppercase; letter-spacing: 0.03em;
+  flex-shrink: 0; white-space: nowrap;
 }
 
-/* Nna action buttons */
-.pac-btn {
-  width: 30px; height: 30px;
-  border-radius: 9px;
+/* Progress */
+.cmd-nna-progress { display: flex; flex-direction: column; gap: 5px; }
+.cmd-progress-track {
+  width: 100%; height: 4px; border-radius: 100px;
+  background: var(--clr-border); overflow: hidden;
+}
+.cmd-progress-fill {
+  height: 100%; border-radius: 100px;
+  background: var(--clr-accent);
+  transition: width 0.6s var(--ease-out);
+  max-width: 100%;
+}
+.cmd-progress-warning { background: var(--clr-warning); }
+.cmd-progress-danger  { background: var(--clr-danger); }
+
+.cmd-progress-label {
+  font-size: 0.68rem; font-weight: 600; color: var(--clr-text-secondary);
+}
+.cmd-progress-label strong { color: var(--clr-text); }
+.cmd-progress-remain { opacity: 0.5; }
+
+/* Actions */
+.cmd-nna-actions {
+  display: flex; align-items: center; gap: 8px;
+  justify-content: flex-end; margin-top: auto;
+}
+.cmd-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 10px;
+  font-size: 0.72rem; font-weight: 700;
+  cursor: pointer; transition: var(--t-fast);
+  outline: none; text-decoration: none; border: 1px solid var(--clr-border);
+}
+.cmd-btn--ghost {
+  background: transparent; color: var(--clr-text-secondary);
+}
+.cmd-btn--ghost:hover {
+  background: var(--clr-card); border-color: var(--clr-border-accent);
+  color: var(--clr-accent);
+}
+.cmd-btn--primary {
+  background: var(--clr-accent-dim); color: var(--clr-accent);
+  border-color: var(--clr-border-accent);
+}
+.cmd-btn--primary:hover {
+  background: var(--clr-accent); color: var(--clr-bg);
+  border-color: transparent; box-shadow: 0 4px 16px var(--clr-accent-glow);
+}
+
+/* ─── Reassign Modal ─ */
+.reassign-body {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 16px 0;
+}
+.reassign-icon {
+  width: 60px; height: 60px; border-radius: var(--radius-md);
+  background: var(--clr-accent-dim); border: 1px solid var(--clr-border-accent);
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid rgba(255,255,255,0.07);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  outline: none; text-decoration: none;
+  color: var(--clr-accent); margin-bottom: 16px;
 }
-.pac-btn-ghost {
-  background: rgba(255,255,255,0.04);
-  color: rgba(148,163,184,0.5);
+.reassign-title {
+  font-size: 1.2rem; font-weight: 800; color: var(--clr-text); margin: 0 0 6px;
 }
-.pac-btn-ghost:hover {
-  background: rgba(13,146,136,0.1);
-  border-color: rgba(13,146,136,0.2);
-  color: #0D9288;
+.reassign-desc {
+  font-size: 0.85rem; color: var(--clr-text-secondary);
+  margin: 0 0 24px; max-width: 320px;
 }
-.pac-btn-accent {
-  background: rgba(13,146,136,0.12);
-  border-color: rgba(13,146,136,0.2);
-  color: #0D9288;
+.reassign-field {
+  width: 100%; text-align: left; margin-bottom: 20px;
 }
-.pac-btn-accent:hover {
-  background: #0D9288;
-  color: #060E10;
-  border-color: transparent;
+.reassign-field label {
+  display: block; font-size: 0.7rem; font-weight: 700;
+  color: var(--clr-text-secondary); text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.reassign-select {
+  border-radius: var(--radius-sm) !important;
+}
+.reassign-confirm {
+  width: 100%; padding: 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-dark) 100%);
+  color: white; font-weight: 800; font-size: 0.88rem;
+  border: none; outline: none; cursor: pointer;
+  box-shadow: 0 4px 20px var(--clr-accent-glow);
+  transition: var(--t-base);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.reassign-confirm:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px var(--clr-accent-glow);
+}
+.reassign-confirm:disabled {
+  opacity: 0.45; cursor: not-allowed;
 }
 
-@keyframes float {
-  0%   { transform: translateY(0px); }
-  50%  { transform: translateY(-6px); }
-  100% { transform: translateY(0px); }
+/* ─── Animations ─ */
+@keyframes cmdFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes ping {
-  0%   { transform: scale(1); opacity: 0.8; }
+@keyframes cmdSpin { to { transform: rotate(360deg); } }
+@keyframes cmdPing {
+  0%   { transform: scale(1); opacity: 0.7; }
   80%  { transform: scale(2.5); opacity: 0; }
   100% { transform: scale(2.5); opacity: 0; }
 }

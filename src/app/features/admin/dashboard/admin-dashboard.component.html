@@ -37,9 +37,9 @@
             }
           </a>
 
-          <!-- Nnas (central highlight) -->
+          <!-- NNAs (central highlight) -->
           <a routerLink="/nnas" class="hero-metric-center hover:opacity-80 transition-opacity" style="text-decoration: none; cursor: pointer;">
-            <span class="hero-metric-label" style="color:rgba(13,146,136,0.8);">Nnas Totales</span>
+            <span class="hero-metric-label" style="color:rgba(13,146,136,0.8);">NNAs Totales</span>
             @if (metrics()) {
             <span class="hero-metric-value count-up" style="font-size:2.8rem;">{{ metrics()!.pacientes_totales }}</span>
             } @else {
@@ -47,9 +47,9 @@
             }
           </a>
 
-          <!-- Funcionarios -->
+          <!-- Profesionales -->
           <a routerLink="/admin/usuarios" [queryParams]="{ role: 'funcionario' }" class="hero-metric hover:opacity-80 transition-opacity" style="align-items:flex-end; text-decoration: none; cursor: pointer;">
-            <span class="hero-metric-label">Funcionarios</span>
+            <span class="hero-metric-label">Profesionales</span>
             @if (metrics()) {
             <span class="hero-metric-value count-up">{{ metrics()!.funcionarios_activos }}</span>
             } @else {
@@ -84,7 +84,7 @@
         </a>
 
         <!-- Alertas Card -->
-        <a routerLink="/notificaciones" class="metric-card metric-danger hover:opacity-90" style="text-decoration: none; cursor: pointer;">
+        <a routerLink="/alertas-criticas" class="metric-card metric-danger hover:opacity-90" style="text-decoration: none; cursor: pointer;">
           <div class="metric-icon-wrap">
             <div class="metric-icon metric-icon-pulse metric-icon-danger">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -179,7 +179,7 @@
       </a>
 
       <!-- Auditoría (coming soon) -->
-      <div class="quick-card quick-card-inactive">
+      <div class="quick-card quick-card-inactive" *ngIf="user()?.rol === 'root'">
         <div class="quick-icon-wrap" style="background: linear-gradient(135deg, #374151, #1F2937);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <path

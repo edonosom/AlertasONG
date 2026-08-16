@@ -15,7 +15,7 @@ import { switchMap, of, forkJoin, catchError } from 'rxjs';
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar class="modal-toolbar">
-        <ion-title>{{ isEditMode ? 'Editar Perfil de Funcionario' : 'Nuevo Funcionario Clínico' }}</ion-title>
+        <ion-title>{{ isEditMode ? 'Editar Perfil de Profesional' : 'Nuevo Profesional' }}</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="closeModal()" class="close-btn">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -159,7 +159,7 @@ import { switchMap, of, forkJoin, catchError } from 'rxjs';
               @if (isSubmitting) {
                 <div class="tw-spinner"></div>
               } @else {
-                {{ isEditMode ? 'Guardar Cambios' : 'Registrar Funcionario' }}
+                {{ isEditMode ? 'Guardar Cambios' : 'Registrar Profesional' }}
               }
             </button>
           </div>
@@ -406,7 +406,7 @@ export class UsuarioModalComponent implements OnInit {
       { value: 'root', label: 'Super Administrador' },
       { value: 'admin', label: 'Administrador Global' },
       { value: 'director', label: 'Director de Centro' },
-      { value: 'funcionario', label: 'Funcionario Clínico' },
+      { value: 'funcionario', label: 'Profesional' },
     ];
     if (rolAuth === 'root') return todosLosRoles;
     // admin: solo puede crear director y funcionario

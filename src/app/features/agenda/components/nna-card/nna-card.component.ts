@@ -1,7 +1,8 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { DetalleAlertaDia } from '../../../../core/services/alerta-api.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-nna-card',
@@ -11,6 +12,9 @@ import { DetalleAlertaDia } from '../../../../core/services/alerta-api.service';
   styleUrls: ['./nna-card.component.scss']
 })
 export class NnaCardComponent {
+  private readonly authService = inject(AuthService);
+  currentUserRole = computed(() => this.authService.currentUser()?.rol);
+
   data = input.required<DetalleAlertaDia>();
   onConfirmarGestion = output<string>();
 
@@ -42,5 +46,16 @@ export class NnaCardComponent {
 
   confirmarGestion() {
     this.onConfirmarGestion.emit(this.data().alerta_id);
+  }
+
+  onEnviarDocumentos = output<string>();
+  onConfirmarRecepcion = output<string>();
+
+  enviarDocumentos() {
+    this.onEnviarDocumentos.emit(this.data().alerta_id);
+  }
+
+  confirmarRecepcion() {
+    this.onConfirmarRecepcion.emit(this.data().alerta_id);
   }
 }

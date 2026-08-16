@@ -97,4 +97,16 @@ export class NnaDetalleComponent implements OnInit {
     }
     return Math.max(0, 90 - (n.dias_transcurridos || 0));
   }
+
+  get activeAdultos(): any[] {
+    const n = this.nna() as any;
+    if (!n || !n.adultos_responsables) return [];
+    return n.adultos_responsables.filter((a: any) => a.activo);
+  }
+
+  get historicAdultos(): any[] {
+    const n = this.nna() as any;
+    if (!n || !n.adultos_responsables) return [];
+    return n.adultos_responsables.filter((a: any) => !a.activo);
+  }
 }

@@ -32,6 +32,14 @@ export interface DetalleAlertaDia {
   fecha_inicio_sla: string;
   estado_alerta: string;
   tipo: 'SLA' | 'PERSONALIZADA';
+  titulo?: string;
+  descripcion?: string;
+  fecha_programada?: string;
+  centro_nombre?: string;
+  profesional_nombre?: string;
+  tiempo_restante?: string;
+  documentacion_subida?: boolean;
+  fase_estado?: string;
 }
 
 export interface DetalleDiarioResponse {
@@ -60,7 +68,19 @@ export class AlertaApiService {
     return this.http.get<DetalleDiarioResponse>(`${this.apiUrl}/fecha/${fecha}`, { params });
   }
 
+  getAlertasCriticas(): Observable<DetalleDiarioResponse> {
+    return this.http.get<DetalleDiarioResponse>(`${this.apiUrl}/criticas`);
+  }
+
   cerrarFase(faseId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/fases/${faseId}/cierre`, {});
+    return this.http.post(`${environment.apiUrl}/fases/${faseId}/cierre`, {});
+  }
+
+  enviarDocumentos(faseId: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/fases/${faseId}/enviar-documentos`, {});
+  }
+
+  confirmarRecepcion(faseId: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/fases/${faseId}/confirmar-recepcion`, {});
   }
 }

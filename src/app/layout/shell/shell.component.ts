@@ -24,106 +24,97 @@ interface NavItem {
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
 
-  <!-- ─── SIDEBAR desktop ─── -->
-  <aside class="sidebar">
-
-    <!-- Logo -->
-    <div class="logo-group">
-      <div class="logo-btn" title="Alertas ONG Surco">
-        <img src="assets/icon/favicon.png" alt="Alertas ONG Surco" style="width:28px;height:28px;object-fit:contain;" />
+  <!-- Header / Top-bar -->
+  <header class="top-bar">
+    <div class="top-left">
+      <!-- Logo in Navbar (Clean design) -->
+      <a routerLink="/" class="logo-link" title="Alertas ONG Surcos" style="display: flex; align-items: center; text-decoration: none; cursor: pointer; margin-right: 4px;">
+        <img src="assets/icon/favicon.png" alt="Alertas ONG Surcos" style="height: 38px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(13,146,136,0.3)); transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='drop-shadow(0 4px 8px rgba(13,146,136,0.5))'" onmouseout="this.style.transform='scale(1)'; this.style.filter='drop-shadow(0 2px 4px rgba(13,146,136,0.3))'" />
+      </a>
+      <div>
+        <span class="top-label">ONG Surcos</span>
+        <h1 class="top-title">Alertas <span class="top-badge">2026</span></h1>
       </div>
     </div>
-
-    <!-- Nav -->
-    <nav class="nav-list">
-      @for (item of visibleNav(); track item.route) {
-        <div class="nav-wrap" [title]="item.label">
-          <a [routerLink]="[item.route]"
-             routerLinkActive="nav-link-active"
-             [routerLinkActiveOptions]="{exact: false}"
-             class="nav-link">
-            <span class="nav-ring"></span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    [attr.d]="item.svgPath"/>
-            </svg>
-          </a>
-          <span class="nav-tip">{{ item.label }}</span>
-        </div>
-      }
-    </nav>
-
-    <!-- Bottom nav removed per user request -->
-  </aside>
-
-  <!-- ─── MAIN COLUMN ─── -->
-  <div class="main-col">
-
-    <!-- Header / Top-bar -->
-    <header class="top-bar">
-      <!-- Mobile hamburger / logo area -->
-      <div class="top-left">
-        <div class="mobile-logo-btn">
-          <img src="assets/icon/favicon.png" alt="Alertas ONG Surco" style="width:24px;height:24px;object-fit:contain;" />
-        </div>
-        <div>
-          <span class="top-label">ONG Surco</span>
-          <h1 class="top-title">Alertas <span class="top-badge">2026</span></h1>
-        </div>
+    
+    <div class="top-right">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input type="text" placeholder="Buscar..." class="search-input" />
+        <span class="search-kbd">⌘K</span>
       </div>
-      <div class="top-right">
-        <div class="search-wrap">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;">
-            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <input type="text" placeholder="Buscar..." class="search-input" />
-          <span class="search-kbd">⌘K</span>
-        </div>
 
-        <!-- Theme toggle in top bar (mobile & tablet) -->
-        <button class="topbar-theme-btn" (click)="toggleTheme()" [title]="isDark() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
-          @if (isDark()) {
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          } @else {
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+      <!-- Theme toggle in top bar (mobile & tablet) -->
+      <button class="topbar-theme-btn" (click)="toggleTheme()" [title]="isDark() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
+        @if (isDark()) {
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        } @else {
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        }
+      </button>
+
+      <!-- Bell -->
+      <div class="bell-wrap">
+        <button class="bell-btn" id="bell-toggle" (click)="toggleDropdown($event)" [class.bell-active]="dropdownOpen()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          @if (notifService.unreadCount() > 0) {
+            <span class="bell-count">{{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}</span>
           }
         </button>
-
-        <!-- Bell -->
-        <div class="bell-wrap">
-          <button class="bell-btn" id="bell-toggle" (click)="toggleDropdown($event)" [class.bell-active]="dropdownOpen()">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-              <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            @if (notifService.unreadCount() > 0) {
-              <span class="bell-count">{{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}</span>
-            }
-          </button>
-        </div>
-        <!-- User Profile Dropdown Toggle -->
-        <div class="user-profile-btn" id="profile-toggle" (click)="toggleProfileDropdown($event)" [class.active]="profileDropdownOpen()">
-          <span class="user-name">{{ userName() }}</span>
-          <div class="avatar-chip" style="pointer-events: none;">{{ userInitials() }}</div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity: 0.6; margin-left: 4px;">
-            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
       </div>
-    </header>
+      <!-- User Profile Dropdown Toggle -->
+      <div class="user-profile-btn" id="profile-toggle" (click)="toggleProfileDropdown($event)" [class.active]="profileDropdownOpen()">
+        <span class="user-name">{{ userName() }}</span>
+        <div class="avatar-chip" style="pointer-events: none;">{{ userInitials() }}</div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity: 0.6; margin-left: 4px;">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </header>
 
-    <!-- Page content -->
-    <main class="content-area">
-      <router-outlet></router-outlet>
-    </main>
+  <div class="shell-body">
+    <!-- ─── SIDEBAR desktop ─── -->
+    <aside class="sidebar">
+      <!-- Nav -->
+      <nav class="nav-list">
+        @for (item of visibleNav(); track item.route) {
+          <div class="nav-wrap" [title]="item.label">
+            <a [routerLink]="[item.route]"
+               routerLinkActive="nav-link-active"
+               [routerLinkActiveOptions]="{exact: false}"
+               class="nav-link">
+              <span class="nav-ring"></span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      [attr.d]="item.svgPath"/>
+              </svg>
+            </a>
+            <span class="nav-tip">{{ item.label }}</span>
+          </div>
+        }
+      </nav>
+    </aside>
 
+    <!-- ─── MAIN COLUMN ─── -->
+    <div class="main-col">
+      <!-- Page content -->
+      <main class="content-area">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
   </div>
 
   <!-- ─── BOTTOM NAV mobile ─── -->
@@ -237,6 +228,7 @@ interface NavItem {
     /* ── Root wrapper ── */
     .shell-root {
       display: flex;
+      flex-direction: column;
       width: 100vw;
       height: 100vh;
       background: var(--sh-bg);
@@ -245,6 +237,14 @@ interface NavItem {
       position: relative;
       font-family: 'Outfit', 'Inter', sans-serif;
       transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .shell-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      width: 100%;
     }
 
     /* ═══════════════════════════════════════
@@ -405,22 +405,11 @@ interface NavItem {
       .sidebar { display: flex; }
     }
 
-    /* Logo */
-    .logo-group { width: 100%; display: flex; justify-content: center; margin-bottom: 28px; }
-    .logo-btn {
-      width: 46px; height: 46px;
-      border-radius: 14px;
-      background: var(--sh-logo-bg);
-      border: 1px solid var(--sh-logo-bd);
+    /* Logo is now in top-bar (removed square background) */
+    .logo-link {
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: var(--sh-logo-sh);
-    }
-    .logo-btn:hover {
-      box-shadow: 0 0 28px rgba(13,146,136,0.28);
-      border-color: rgba(13,146,136,0.45);
-      transform: translateY(-1px);
+      cursor: pointer;
     }
 
     /* Nav list */
@@ -567,12 +556,14 @@ interface NavItem {
       justify-content: space-between;
       padding: 0 20px;
       flex-shrink: 0;
+      width: 100%;
       background: var(--sh-surface-top);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--sh-border-top);
       transition: background 0.3s ease, border-color 0.3s ease;
       gap: 12px;
+      z-index: 40;
     }
     @media (max-width: 480px) {
       .top-bar { padding: 0 12px; gap: 8px; }
@@ -581,20 +572,8 @@ interface NavItem {
     .top-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       min-width: 0;
-    }
-
-    .mobile-logo-btn {
-      width: 36px; height: 36px;
-      border-radius: 11px;
-      background: var(--sh-logo-bg);
-      border: 1px solid var(--sh-logo-bd);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    @media (min-width: 1024px) {
-      .mobile-logo-btn { display: none; }
     }
 
     .top-label {
@@ -1025,10 +1004,10 @@ export class ShellComponent implements OnInit {
       svgPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z'
     },
     {
-      label: 'Panel',
-      route: '/dashboard/funcionario',
-      roles: ['funcionario'],
-      svgPath: 'M22 12h-4l-3 9L9 3l-3 9H2'
+      label: 'Alertas Críticas',
+      route: '/alertas-criticas',
+      roles: ['root', 'admin', 'director', 'funcionario'],
+      svgPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
     }
   ];
 

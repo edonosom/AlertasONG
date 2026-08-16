@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, Input, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { PacienteService, Nna } from '../../../../core/services/nna.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -14,7 +14,7 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar class="clinical-toolbar">
-        <ion-title>{{ nna ? 'Editar Nna' : 'Nuevo Nna' }}</ion-title>
+        <ion-title>{{ nna ? 'Editar NNA' : 'Nuevo NNA' }}</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="closeModal()" color="medium">
             <ion-icon name="close" slot="icon-only"></ion-icon>
@@ -76,31 +76,31 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
         <div class="form-row" *ngIf="!isFuncionario()">
           <div class="form-col">
             <ion-item class="clinical-input" [class.ion-invalid]="nnaForm.get('centro_id')?.invalid && nnaForm.get('centro_id')?.touched">
-              <ion-label position="stacked">Centro Médico / Sede *</ion-label>
+              <ion-label position="stacked">Programa *</ion-label>
               <select formControlName="centro_id" (change)="onCentroChange($event)" class="modal-native-select">
-                <option [value]="null" disabled selected>Seleccione un Centro...</option>
+                <option [value]="null" disabled selected>Seleccione un Programa...</option>
                 @for (centro of centros(); track centro.id) {
                   <option [value]="centro.id">{{ centro.nombre }}</option>
                 }
               </select>
             </ion-item>
             <span class="validation-error" *ngIf="nnaForm.get('centro_id')?.invalid && nnaForm.get('centro_id')?.touched">
-              Debe seleccionar un Centro Médico.
+              Debe seleccionar un Programa.
             </span>
           </div>
 
           <div class="form-col">
             <ion-item class="clinical-input" [class.ion-invalid]="nnaForm.get('funcionario_id')?.invalid && nnaForm.get('funcionario_id')?.touched">
-              <ion-label position="stacked">Funcionario Asignado *</ion-label>
+              <ion-label position="stacked">Profesional Asignado *</ion-label>
               <select formControlName="funcionario_id" (change)="onFuncionarioChange($event)" class="modal-native-select">
-                <option [value]="null" disabled selected>Seleccione un Funcionario...</option>
+                <option [value]="null" disabled selected>Seleccione un Profesional...</option>
                 @for (func of filteredFuncionarios(); track func.id) {
                   <option [value]="func.id">{{ func.nombre }} {{ func.apellido }}</option>
                 }
               </select>
             </ion-item>
             <span class="validation-error" *ngIf="nnaForm.get('funcionario_id')?.invalid && nnaForm.get('funcionario_id')?.touched">
-              Debe asignar un Funcionario Clínico.
+              Debe asignar un Profesional.
             </span>
           </div>
         </div>
@@ -130,24 +130,24 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
           </div>
         </div>
 
-        <!-- Fila 5: Motor de Alertas (Solo Nuevo Nna) -->
+        <!-- Fila 5: Motor de Alertas -->
         <div class="form-row">
           <div class="form-col">
             <ion-item class="clinical-input" [class.ion-invalid]="nnaForm.get('numero_fase')?.invalid && nnaForm.get('numero_fase')?.touched">
-              <ion-label position="stacked">Ciclo Actual</ion-label>
+              <ion-label position="stacked">Proceso de Intervención</ion-label>
               <select formControlName="numero_fase" class="modal-native-select">
-                <option value="1">Ciclo 1</option>
-                <option value="2">Ciclo 2</option>
-                <option value="3">Ciclo 3</option>
-                <option value="4">Ciclo 4</option>
-                <option value="5">Ciclo 5</option>
+                <option value="1">1 Informe de proceso</option>
+                <option value="2">2 Informe de proceso</option>
+                <option value="3">3 Informe de proceso</option>
+                <option value="4">4 Informe de proceso</option>
+                <option value="5">5 Informe de proceso</option>
               </select>
             </ion-item>
           </div>
 
           <div class="form-col">
             <ion-item class="clinical-input" [class.ion-invalid]="nnaForm.get('dias_transcurridos')?.invalid && nnaForm.get('dias_transcurridos')?.touched">
-              <ion-label position="stacked">Días Transcurridos en Ciclo</ion-label>
+              <ion-label position="stacked">Días Transcurridos en Proceso</ion-label>
               <ion-input type="number" min="0" max="90" formControlName="dias_transcurridos"></ion-input>
             </ion-item>
             <span class="validation-error" *ngIf="nnaForm.get('dias_transcurridos')?.invalid && nnaForm.get('dias_transcurridos')?.touched">
@@ -156,12 +156,85 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
           </div>
         </div>
 
+        <!-- Sección: Adultos Responsables -->
+        <div class="adultos-section">
+          <div class="adultos-header">
+            <div class="adultos-title-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color: var(--clr-accent);">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="adultos-title">Adultos Responsables *</span>
+              <span class="adultos-count">(mín. 2)</span>
+            </div>
+            <button type="button" class="btn-add-adulto" (click)="addAdulto()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Agregar
+            </button>
+          </div>
+
+          <div formArrayName="adultos_responsables">
+            @for (adulto of adultosArray.controls; track $index) {
+              <div class="adulto-card" [formGroupName]="$index">
+                <div class="adulto-card-header">
+                  <span class="adulto-index">Adulto {{ $index + 1 }}</span>
+                  <button type="button" class="btn-remove-adulto" (click)="removeAdulto($index)" [disabled]="adultosArray.length <= 2" [title]="adultosArray.length <= 2 ? 'Mínimo 2 adultos requeridos' : 'Eliminar adulto'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="form-row">
+                  <div class="form-col">
+                    <ion-item class="clinical-input">
+                      <ion-label position="stacked">Nombre *</ion-label>
+                      <ion-input type="text" formControlName="nombre" placeholder="Nombre del adulto"></ion-input>
+                    </ion-item>
+                  </div>
+                  <div class="form-col">
+                    <ion-item class="clinical-input">
+                      <ion-label position="stacked">Apellido *</ion-label>
+                      <ion-input type="text" formControlName="apellido" placeholder="Apellido del adulto"></ion-input>
+                    </ion-item>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col">
+                    <ion-item class="clinical-input">
+                      <ion-label position="stacked">Teléfono *</ion-label>
+                      <ion-input type="tel" formControlName="telefono" placeholder="+56 9 1234 5678"></ion-input>
+                    </ion-item>
+                  </div>
+                  <div class="form-col">
+                    <ion-item class="clinical-input">
+                      <ion-label position="stacked">Parentesco *</ion-label>
+                      <select formControlName="parentesco" class="modal-native-select">
+                        <option value="" disabled>Seleccione...</option>
+                        <option value="Padre">Padre</option>
+                        <option value="Madre">Madre</option>
+                        <option value="Abuelo/a">Abuelo/a</option>
+                        <option value="Tío/a">Tío/a</option>
+                        <option value="Hermano/a">Hermano/a</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                    </ion-item>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <span class="validation-error" *ngIf="adultosArray.length < 2">
+            Se requieren al menos 2 adultos responsables.
+          </span>
+        </div>
+
         <!-- Acciones del Formulario -->
         <div class="form-actions">
           <button type="button" class="btn-ghost-modal" (click)="closeModal()">Cancelar</button>
           <button type="submit" [disabled]="nnaForm.invalid || isSubmitting" class="btn-primary-modal">
             <ion-spinner *ngIf="isSubmitting" name="crescent" color="light" style="margin-right: 8px;"></ion-spinner>
-            <span>{{ nna ? 'Guardar Cambios' : 'Crear Nna' }}</span>
+            <span>{{ nna ? 'Guardar Cambios' : 'Crear NNA' }}</span>
           </button>
         </div>
 
@@ -322,6 +395,105 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
       from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Adultos Responsables Section */
+    .adultos-section {
+      margin-top: 8px;
+      padding-top: 20px;
+      border-top: 2px solid var(--clr-border);
+    }
+    .adultos-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .adultos-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .adultos-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--clr-text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .adultos-count {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--clr-text-secondary);
+    }
+    .btn-add-adulto {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(13,146,136,0.25);
+      background: rgba(13,146,136,0.08);
+      color: var(--clr-accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .btn-add-adulto:hover {
+      background: rgba(13,146,136,0.15);
+      border-color: rgba(13,146,136,0.4);
+      transform: translateY(-1px);
+    }
+    .adulto-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+      animation: fadeIn 0.25s ease both;
+    }
+    .adulto-card:hover {
+      border-color: var(--clr-border-accent, rgba(13,146,136,0.25));
+    }
+    .adulto-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .adulto-index {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--clr-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .btn-remove-adulto {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--clr-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .btn-remove-adulto:hover:not(:disabled) {
+      background: rgba(239,68,68,0.1);
+      border-color: rgba(239,68,68,0.25);
+      color: #EF4444;
+    }
+    .btn-remove-adulto:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
   `]
 })
 export class NnaModalComponent implements OnInit {
@@ -368,7 +540,35 @@ export class NnaModalComponent implements OnInit {
     numero_fase: [{ value: 1, disabled: true }, [Validators.min(1), Validators.max(5)]],
     dias_transcurridos: [{ value: 0, disabled: true }, [Validators.min(0), Validators.max(90)]],
     ciclo: [1],
+    adultos_responsables: this.fb.array([
+      this.createAdultoGroup(),
+      this.createAdultoGroup()
+    ])
   });
+
+  get adultosArray(): FormArray {
+    return this.nnaForm.get('adultos_responsables') as FormArray;
+  }
+
+  createAdultoGroup(data?: any): FormGroup {
+    return this.fb.group({
+      id: [data?.id || null],
+      nombre: [data?.nombre || '', Validators.required],
+      apellido: [data?.apellido || '', Validators.required],
+      telefono: [data?.telefono || '', Validators.required],
+      parentesco: [data?.parentesco || '', Validators.required]
+    });
+  }
+
+  addAdulto() {
+    this.adultosArray.push(this.createAdultoGroup());
+  }
+
+  removeAdulto(index: number) {
+    if (this.adultosArray.length > 2) {
+      this.adultosArray.removeAt(index);
+    }
+  }
 
   ngOnInit() {
     if (!this.isFuncionario()) {
@@ -402,6 +602,20 @@ export class NnaModalComponent implements OnInit {
         dias_transcurridos: this.nna.dias_transcurridos || 0
       });
       this.nnaForm.get('rut')?.disable();
+
+      // Load existing adultos responsables
+      const adultos = (this.nna as any).adultos_responsables || [];
+      const activeAdultos = adultos.filter((a: any) => a.activo);
+      if (activeAdultos.length > 0) {
+        this.adultosArray.clear();
+        activeAdultos.forEach((a: any) => {
+          this.adultosArray.push(this.createAdultoGroup(a));
+        });
+        // Ensure minimum 2
+        while (this.adultosArray.length < 2) {
+          this.adultosArray.push(this.createAdultoGroup());
+        }
+      }
     } else {
       this.nnaForm.patchValue({ fecha_ingreso: new Date().toISOString().substring(0, 10) });
     }
@@ -462,7 +676,10 @@ export class NnaModalComponent implements OnInit {
     if (this.nnaForm.valid) {
       this.isSubmitting = true;
       const payload = { ...this.nnaForm.getRawValue() };
-      payload.ciclo = payload.numero_fase; // asegurar que se mande como ciclo
+      payload.ciclo = payload.numero_fase;
+      
+      // Include adultos_responsables
+      payload.adultos_responsables = this.adultosArray.getRawValue();
       
       if (!this.nna) {
         if (payload.rut) payload.rut = payload.rut.replace(/\./g, '');
@@ -473,7 +690,7 @@ export class NnaModalComponent implements OnInit {
           },
           error: (err: any) => {
             this.isSubmitting = false;
-            this.closeModal({ error: err.error?.message || 'Error al crear nna' });
+            this.closeModal({ error: err.error?.message || 'Error al crear NNA' });
           }
         });
       } else {
@@ -484,7 +701,7 @@ export class NnaModalComponent implements OnInit {
           },
           error: (err: any) => {
             this.isSubmitting = false;
-            this.closeModal({ error: err.error?.message || 'Error al actualizar nna' });
+            this.closeModal({ error: err.error?.message || 'Error al actualizar NNA' });
           }
         });
       }

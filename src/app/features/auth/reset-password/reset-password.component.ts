@@ -15,9 +15,9 @@ import { HttpClientModule } from '@angular/common/http';
         <div class="left-content fade-in-up">
           <div class="brand">
             <div class="logo-box">
-              <img src="assets/icon/favicon.png" alt="Alertas ONG Surco">
+              <img src="assets/icon/favicon.png" alt="Alertas ONG Surcos">
             </div>
-            <span class="brand-text">Alertas ONG Surco</span>
+            <span class="brand-text">Alertas ONG Surcos</span>
           </div>
           <div class="welcome-text">
             <h2>Nueva<br>Contraseña</h2>
@@ -30,7 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
         <div class="form-container slide-left">
           <div class="mobile-logo">
             <div class="logo-box">
-              <img src="assets/icon/favicon.png" alt="Alertas ONG Surco">
+              <img src="assets/icon/favicon.png" alt="Alertas ONG Surcos">
             </div>
           </div>
           <div class="form-header">

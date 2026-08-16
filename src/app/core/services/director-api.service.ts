@@ -8,6 +8,8 @@ export interface DirectorFuncionario {
   apellido: string;
   email: string;
   pacientes_count?: number;
+  alertas_count?: number;
+  alertas_90_count?: number;
   pivot?: { activo: boolean };
 }
 

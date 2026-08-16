@@ -128,3 +128,29 @@ $border-radius: var(--radius-md);
   70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
   100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
 }
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 700;
+  
+  ion-icon {
+    font-size: 1.1rem;
+  }
+  
+  &.pending {
+    background: var(--clr-warning-dim);
+    color: var(--clr-warning);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+  }
+  
+  &.completed {
+    background: var(--clr-success-dim);
+    color: var(--clr-success);
+    border: 1px solid rgba(5, 150, 105, 0.2);
+  }
+}

@@ -32,6 +32,7 @@ export class AgendaClinicaComponent implements OnInit {
 
   nnaId = signal<string | null>(null);
   nnaData = signal<Nna | null>(null);
+  nnaError = signal<string | null>(null);
 
   edadNna = computed(() => {
     const data = this.nnaData();
@@ -148,11 +149,26 @@ export class AgendaClinicaComponent implements OnInit {
         this.nnaId.set(id);
         this.cargarNnaInfo(id);
       }
-      this.cargarMes();
       
-      const today = new Date();
-      const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
-      this.seleccionarFecha(todayStr);
+      this.route.queryParamMap.subscribe(queryParams => {
+        const queryFecha = queryParams.get('fecha');
+        let targetDate = new Date();
+        
+        if (queryFecha) {
+          const parts = queryFecha.split('-');
+          if (parts.length === 3) {
+            targetDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+          }
+        }
+        
+        this.currentYear.set(targetDate.getFullYear());
+        this.currentMonth.set(targetDate.getMonth() + 1);
+        
+        this.cargarMes();
+        
+        const targetDateStr = `${targetDate.getFullYear()}-${(targetDate.getMonth() + 1).toString().padStart(2, '0')}-${targetDate.getDate().toString().padStart(2, '0')}`;
+        this.seleccionarFecha(targetDateStr);
+      });
     });
   }
 
@@ -164,8 +180,12 @@ export class AgendaClinicaComponent implements OnInit {
     this.nnaService.getPaciente(id).subscribe({
       next: (res) => {
         this.nnaData.set(res.data);
+        this.nnaError.set(null);
       },
-      error: (err) => console.error('Error cargando info NNA', err)
+      error: (err) => {
+        console.error('Error cargando info NNA', err);
+        this.nnaError.set(err.message || 'Error desconocido');
+      }
     });
   }
 
@@ -295,6 +315,38 @@ export class AgendaClinicaComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al confirmar gestión', err);
+      }
+    });
+  }
+
+  enviarDocumentos(alertaId: string) {
+    this.alertaApi.enviarDocumentos(alertaId).subscribe({
+      next: () => {
+        this.cargarMes();
+        if (this.selectedDate()) {
+          this.seleccionarFecha(this.selectedDate()!);
+        }
+      },
+      error: (err) => {
+        console.error('Error al enviar documentos', err);
+      }
+    });
+  }
+
+  confirmarRecepcion(alertaId: string) {
+    this.alertaApi.confirmarRecepcion(alertaId).subscribe({
+      next: () => {
+        // Al confirmar, se avanza el ciclo, recargamos la info del NNA también
+        if (this.nnaId()) {
+          this.cargarNnaInfo(this.nnaId()!);
+        }
+        this.cargarMes();
+        if (this.selectedDate()) {
+          this.seleccionarFecha(this.selectedDate()!);
+        }
+      },
+      error: (err) => {
+        console.error('Error al confirmar recepción', err);
       }
     });
   }

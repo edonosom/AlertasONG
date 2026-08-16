@@ -30,9 +30,28 @@ export class CentrosComponent implements OnInit {
   // Active tab
   activeTab = signal<string>('activos');
 
+  // Search query
+  searchQuery = signal<string>('');
+
+  matchesSearchFilter(c: any): boolean {
+    const query = this.searchQuery().toLowerCase().trim();
+    if (!query) return true;
+    const name = (c.nombre || '').toLowerCase();
+    const code = (c.codigo || '').toLowerCase();
+    return name.includes(query) || code.includes(query);
+  }
+
+  onSearchChange(event: any) {
+    this.searchQuery.set(event.target.value);
+  }
+
+  clearSearch() {
+    this.searchQuery.set('');
+  }
+
   // Derived computed signals — no extra API calls
-  centrosActivos = computed(() => this.allCentros().filter(c => !c.deleted_at));
-  centrosInactivos = computed(() => this.allCentros().filter(c => !!c.deleted_at));
+  centrosActivos = computed(() => this.allCentros().filter(c => !c.deleted_at && this.matchesSearchFilter(c)));
+  centrosInactivos = computed(() => this.allCentros().filter(c => !!c.deleted_at && this.matchesSearchFilter(c)));
 
   centros = computed(() =>
     this.activeTab() === 'activos' ? this.centrosActivos() : this.centrosInactivos()

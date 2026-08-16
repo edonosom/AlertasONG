@@ -29,14 +29,32 @@
     </ion-segment>
   </div>
 
-  <!-- Filters -->
-  <div class="filters-bar fade-in">
-    <button class="filter-chip" [class.active]="selectedRoles().includes('admin')" (click)="toggleRoleFilter('admin')">Administradores</button>
-    <button class="filter-chip" [class.active]="selectedRoles().includes('director')" (click)="toggleRoleFilter('director')">Directores</button>
-    <button class="filter-chip" [class.active]="selectedRoles().includes('funcionario')" (click)="toggleRoleFilter('funcionario')">Funcionarios</button>
-    @if (isAdminOrRoot()) {
-      <button class="filter-chip" [class.active]="selectedRoles().includes('root')" (click)="toggleRoleFilter('root')">Super Admin</button>
-    }
+  <!-- Filters & Search -->
+  <div class="filters-bar fade-in" style="flex-wrap: wrap;">
+    <div class="search-wrap flex-1" style="min-width: 280px; position: relative;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input type="text" placeholder="Buscar por nombre, apellido, RUT o email..." 
+        style="width: 100%; padding: 10px 14px 10px 40px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.9rem;"
+        (input)="onSearchChange($event)" [value]="searchQuery()" />
+      @if (searchQuery()) {
+        <button (click)="clearSearch()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--clr-text-secondary); cursor: pointer; display: flex;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      }
+    </div>
+    
+    <div class="role-filters" style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button class="filter-chip" [class.active]="selectedRoles().includes('admin')" (click)="toggleRoleFilter('admin')">Administradores</button>
+      <button class="filter-chip" [class.active]="selectedRoles().includes('director')" (click)="toggleRoleFilter('director')">Directores</button>
+      <button class="filter-chip" [class.active]="selectedRoles().includes('funcionario')" (click)="toggleRoleFilter('funcionario')">Profesionales</button>
+      @if (isAdminOrRoot()) {
+        <button class="filter-chip" [class.active]="selectedRoles().includes('root')" (click)="toggleRoleFilter('root')">Super Admin</button>
+      }
+    </div>
   </div>
 
   <!-- Skeletons -->
@@ -120,6 +138,16 @@
                 <span class="truncate">{{ user.email }}</span>
               </span>
 
+              @if (user.asignaciones_con_alerta90_count > 0) {
+                <span style="display: flex; align-items: center; gap: 6px; color: var(--clr-danger); font-size: 0.85rem; font-weight: 600; margin-top: 4px; animation: pulse-opacity 2s infinite;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  Tiene {{ user.asignaciones_con_alerta90_count }} NNA(s) con plazos críticos
+                </span>
+              }
+
+
               <!-- Centro -->
               @if (user.centro_nombre || user.centro?.nombre) {
                 <span class="user-code" style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
@@ -142,6 +170,13 @@
           <!-- Bottom: Actions -->
           <div class="flex items-center justify-end gap-2 w-full pt-3 mt-auto border-t border-white/5 relative z-10">
             @if (!user.deleted_at) {
+              @if (isRoot()) {
+                <button (click)="confirmResetPassword(user); $event.stopPropagation()" title="Resetear Contraseña" class="action-btn" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.2);">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4v-3l5.257-5.257A6 6 0 1121 9z" />
+                  </svg>
+                </button>
+              }
               <button (click)="editUsuario(user); $event.stopPropagation()" title="Editar Perfil" class="action-btn action-btn-edit">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
