@@ -27,8 +27,8 @@
   </div>
 
   <!-- Search -->
-  <div class="filters-bar fade-in" class="flex-wrap">
-    <div class="search-wrap flex-1" class="min-w-[280px] relative">
+  <div class="filters-bar fade-in flex-wrap">
+    <div class="search-wrap flex-1 min-w-[280px] relative">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
         class="absolute left-[14px] top-1/2 -translate-y-1/2 text-text-muted">
         <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
@@ -53,10 +53,10 @@
   <div class="centros-grid stagger-children">
     @for (i of [1,2,3,4,5,6]; track i) {
     <div class="centro-skeleton slide-up">
-      <div class="skeleton" class="w-12 h-12 rounded-[14px] shrink-0"></div>
+      <div class="skeleton w-12 h-12 rounded-[14px] shrink-0"></div>
       <div class="flex-1 flex flex-col gap-2">
-        <div class="skeleton" class="w-[60%] h-[14px]"></div>
-        <div class="skeleton" class="w-[40%] h-[11px]"></div>
+        <div class="skeleton w-[60%] h-[14px]"></div>
+        <div class="skeleton w-[40%] h-[11px]"></div>
       </div>
     </div>
     }
@@ -85,7 +85,7 @@
   @if (!isLoading() && centros().length > 0) {
   <div class="centros-grid stagger-children slide-up pb-20 lg:pb-6">
     @for (centro of centros(); track centro.id) {
-    <div class="centro-card flex-col items-start" [routerLink]="['/admin/centros', centro.id]" class="cursor-pointer"
+    <div class="centro-card flex-col items-start cursor-pointer" [routerLink]="['/admin/centros', centro.id]"
       [style.opacity]="centro.deleted_at ? '0.45' : '1'" [style.filter]="centro.deleted_at ? 'grayscale(60%)' : 'none'">
 
       <!-- Glow orb on hover -->
@@ -93,7 +93,7 @@
 
       <!-- Top: Icon & Status -->
       <div class="flex items-center justify-between w-full relative z-10">
-        <div class="centro-icon" class="w-[42px] h-[42px] rounded-xl">
+        <div class="centro-icon w-[42px] h-[42px] rounded-xl">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" />
@@ -102,7 +102,7 @@
 
         @if (!centro.deleted_at) {
         <span class="status-badge status-active">
-          <span class="online-dot" class="w-[5px] h-[5px]"></span>
+          <span class="online-dot w-[5px] h-[5px]"></span>
           Activo
         </span>
         } @else {
@@ -112,12 +112,12 @@
 
       <!-- Middle: Info -->
       <div class="flex flex-col w-full relative z-10 mt-1 mb-2">
-        <h3 class="centro-name" class="whitespace-normal overflow-visible text-[1.05rem] leading-[1.3]">{{ centro.nombre
+        <h3 class="centro-name whitespace-normal overflow-visible text-[1.05rem] leading-[1.3]">{{ centro.nombre
           }}</h3>
 
         <div class="flex flex-col gap-1.5 mt-3">
           @if (centro.codigo) {
-          <span class="centro-code" class="opacity-80">
+          <span class="centro-code opacity-80">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
               <path d="M7 8l-4 4 4 4m10-8l4 4-4 4M14 4l-4 16" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round" />
@@ -125,11 +125,11 @@
             CÓDIGO: {{ centro.codigo }}
           </span>
           } @else {
-          <span class="centro-code" class="opacity-40 italic">Sin código</span>
+          <span class="centro-code opacity-40 italic">Sin código</span>
           }
 
           <!-- Director Asignado -->
-          <span class="centro-code" class="opacity-80">
+          <span class="centro-code opacity-80">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
@@ -138,7 +138,7 @@
           </span>
 
           <!-- Funcionarios Asignados -->
-          <span class="centro-code" class="opacity-80">
+          <span class="centro-code opacity-80">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -149,7 +149,7 @@
           </span>
 
           @if (centro.asignaciones_con_alerta90_count > 0) {
-          <span class="centro-code" class="text-danger font-semibold animate-pulse">
+          <span class="centro-code text-danger font-semibold animate-pulse">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
               stroke-linecap="round" stroke-linejoin="round">
               <path
