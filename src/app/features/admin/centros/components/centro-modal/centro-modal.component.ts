@@ -14,7 +14,7 @@ import { switchMap, of, catchError } from 'rxjs';
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar class="modal-toolbar">
-        <ion-title>{{ isEditMode ? 'Editar Centro Médico' : 'Nuevo Centro Médico' }}</ion-title>
+        <ion-title>{{ isEditMode ? 'Editar Programa' : 'Nuevo Programa' }}</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="closeModal()" class="close-btn">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -35,7 +35,7 @@ import { switchMap, of, catchError } from 'rxjs';
         <form [formGroup]="centroForm" (ngSubmit)="onSubmit()" class="tw-form">
           
           <div class="tw-input-group">
-            <label>Nombre del Centro <span>*</span></label>
+            <label>Nombre del Programa <span>*</span></label>
             <div class="tw-input-wrapper" [class.error]="centroForm.controls['nombre'].invalid && centroForm.controls['nombre'].touched">
               <input type="text" formControlName="nombre" placeholder="Ej. Administracion Central">
             </div>
@@ -45,7 +45,7 @@ import { switchMap, of, catchError } from 'rxjs';
           </div>
           
           <div class="tw-input-group">
-            <label>Código del Centro <span>*</span></label>
+            <label>Código del Programa <span>*</span></label>
             <div class="tw-input-wrapper" [class.error]="centroForm.controls['codigo'].invalid && centroForm.controls['codigo'].touched">
               <input type="text" formControlName="codigo" placeholder="Ej. 7037">
             </div>
@@ -55,7 +55,7 @@ import { switchMap, of, catchError } from 'rxjs';
           </div>
 
           <div class="tw-input-group slide-down">
-            <label>Director del Centro</label>
+            <label>Director del Programa</label>
             <div class="tw-input-wrapper">
               <select formControlName="director_id">
                 <option value="null" selected>Sin director asignado...</option>
@@ -77,7 +77,7 @@ import { switchMap, of, catchError } from 'rxjs';
               @if (isSubmitting) {
                 <div class="tw-spinner"></div>
               } @else {
-                {{ isEditMode ? 'Guardar Cambios' : 'Crear Centro' }}
+                {{ isEditMode ? 'Guardar Cambios' : 'Crear Programa' }}
               }
             </button>
           </div>

@@ -27,59 +27,40 @@ interface NavItem {
   <!-- Header / Top-bar -->
   <header class="top-bar">
     <div class="top-left">
-      <!-- Logo in Navbar (Clean design) -->
-      <a routerLink="/" class="logo-link" title="Alertas ONG Surcos" style="display: flex; align-items: center; text-decoration: none; cursor: pointer; margin-right: 4px;">
-        <img src="assets/icon/favicon.png" alt="Alertas ONG Surcos" style="height: 38px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(13,146,136,0.3)); transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='drop-shadow(0 4px 8px rgba(13,146,136,0.5))'" onmouseout="this.style.transform='scale(1)'; this.style.filter='drop-shadow(0 2px 4px rgba(13,146,136,0.3))'" />
+      <a routerLink="/" class="logo-link flex items-center no-underline cursor-pointer gap-3" title="Alertas">
+        <img src="assets/icon/favicon.png" alt="Alertas Logo" class="h-[38px] w-auto object-contain drop-shadow-md hover:drop-shadow-lg hover:scale-105 transition-all duration-300" />
+        <h1 class="m-0 tracking-tighter font-black text-[1.4rem] uppercase" style="background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          ALERTAS
+        </h1>
       </a>
-      <div>
-        <span class="top-label">ONG Surcos</span>
-        <h1 class="top-title">Alertas <span class="top-badge">2026</span></h1>
-      </div>
     </div>
     
-    <div class="top-right">
-      <div class="search-wrap">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;">
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <input type="text" placeholder="Buscar..." class="search-input" />
-        <span class="search-kbd">⌘K</span>
-      </div>
-
-      <!-- Theme toggle in top bar (mobile & tablet) -->
-      <button class="topbar-theme-btn" (click)="toggleTheme()" [title]="isDark() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
-        @if (isDark()) {
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        } @else {
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        }
-      </button>
-
+    <div class="top-right flex items-center gap-3 md:gap-4">
       <!-- Bell -->
-      <div class="bell-wrap">
+      <div class="bell-wrap relative">
         <button class="bell-btn" id="bell-toggle" (click)="toggleDropdown($event)" [class.bell-active]="dropdownOpen()">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
           </svg>
           @if (notifService.unreadCount() > 0) {
-            <span class="bell-count">{{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}</span>
+            <span class="bell-count absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-danger text-white text-[0.65rem] font-black flex items-center justify-center border-2 border-surface-top animate-bounce">
+              {{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}
+            </span>
           }
         </button>
       </div>
+
       <!-- User Profile Dropdown Toggle -->
-      <div class="user-profile-btn" id="profile-toggle" (click)="toggleProfileDropdown($event)" [class.active]="profileDropdownOpen()">
-        <span class="user-name">{{ userName() }}</span>
-        <div class="avatar-chip" style="pointer-events: none;">{{ userInitials() }}</div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity: 0.6; margin-left: 4px;">
-          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <div class="user-profile-btn flex items-center gap-3 cursor-pointer p-1 md:pr-3 rounded-xl transition-colors hover:bg-card-hover" id="profile-toggle" (click)="toggleProfileDropdown($event)" [class.bg-card-hover]="profileDropdownOpen()">
+        <div class="avatar-chip flex items-center justify-center w-[40px] h-[40px] rounded-[12px] bg-gradient-to-br from-accent to-accent-dark text-white font-extrabold text-[0.8rem] uppercase tracking-tighter border-[1.5px] border-accent/40 shadow-glow shrink-0 pointer-events-none">
+          {{ userInitials() }}
+        </div>
+        <div class="hidden md:flex flex-col min-w-0">
+          <span class="user-name text-[0.85rem] font-bold text-text truncate max-w-[150px] leading-tight">{{ userName() }}</span>
+          <span class="text-[0.65rem] font-bold text-text-secondary uppercase tracking-wider leading-tight">{{ userRole() }}</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="opacity-50 hidden md:block">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
     </div>
@@ -152,7 +133,7 @@ interface NavItem {
 
       @if (notifService.recientes().length === 0) {
         <div class="notif-dd-empty">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.4;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="opacity-40">
             <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
@@ -636,25 +617,7 @@ interface NavItem {
     }
     @media (max-width: 768px) { .search-wrap { display: none; } }
 
-    /* Theme toggle in top bar */
-    .topbar-theme-btn {
-      position: relative; width: 38px; height: 38px;
-      border-radius: 11px;
-      border: 1px solid var(--sh-bell-bd);
-      background: var(--sh-bell-bg);
-      color: var(--sh-bell-color);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.2s ease; outline: none;
-    }
-    .topbar-theme-btn:hover {
-      border-color: rgba(13,146,136,0.24);
-      color: #0D9288;
-      background: rgba(13,146,136,0.07);
-    }
-    /* Hide on desktop (sidebar has it) */
-    @media (min-width: 1024px) {
-      .topbar-theme-btn { display: none; }
-    }
+
 
     .bell-btn {
       position: relative; width: 38px; height: 38px;
@@ -980,7 +943,7 @@ export class ShellComponent implements OnInit {
       svgPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
     },
     {
-      label: 'Centros',
+      label: 'Programas',
       route: '/admin/centros',
       roles: ['root', 'admin'],
       svgPath: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'
@@ -992,7 +955,7 @@ export class ShellComponent implements OnInit {
       svgPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
     },
     {
-      label: 'Nnas',
+      label: 'NNA',
       route: '/nnas',
       roles: ['root', 'admin', 'funcionario'],
       svgPath: 'M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z'
@@ -1008,6 +971,12 @@ export class ShellComponent implements OnInit {
       route: '/alertas-criticas',
       roles: ['root', 'admin', 'director', 'funcionario'],
       svgPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+    },
+    {
+      label: 'Mi Calendario',
+      route: '/mi-calendario',
+      roles: ['root', 'admin', 'director', 'funcionario'],
+      svgPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
     }
   ];
 
@@ -1035,7 +1004,7 @@ export class ShellComponent implements OnInit {
 
   logout() {
     this.authService.logout().subscribe({
-      next:  () => window.location.href = '/login',
+      next: () => window.location.href = '/login',
       error: () => window.location.href = '/login'
     });
   }

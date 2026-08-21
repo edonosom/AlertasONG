@@ -4,12 +4,12 @@
   <div class="page-header">
     <div>
       <h2 class="page-title">Usuarios del Sistema</h2>
-      <p class="page-subtitle">Gestión de roles, accesos y jerarquías clínicas</p>
+      <p class="page-subtitle">Gestión de roles, accesos y jerarquías.</p>
     </div>
     <button (click)="openAddModal()" class="btn-add-primary" id="add-usuario-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
         <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8zm11 2h-4m-2-2v4"
-              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
       Nuevo Usuario
     </button>
@@ -22,9 +22,9 @@
         <ion-label>✓ Activos ({{ usuariosActivos().length }})</ion-label>
       </ion-segment-button>
       @if (isAdminOrRoot()) {
-        <ion-segment-button value="inactivos">
-          <ion-label>⟳ Desactivados ({{ usuariosInactivos().length }})</ion-label>
-        </ion-segment-button>
+      <ion-segment-button value="inactivos">
+        <ion-label>⟳ Desactivados ({{ usuariosInactivos().length }})</ion-label>
+      </ion-segment-button>
       }
     </ion-segment>
   </div>
@@ -32,163 +32,183 @@
   <!-- Filters & Search -->
   <div class="filters-bar fade-in" style="flex-wrap: wrap;">
     <div class="search-wrap flex-1" style="min-width: 280px; position: relative;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
-        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+        style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" />
       </svg>
-      <input type="text" placeholder="Buscar por nombre, apellido, RUT o email..." 
+      <input type="text" placeholder="Buscar por nombre, apellido, RUT o email..."
         style="width: 100%; padding: 10px 14px 10px 40px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.9rem;"
         (input)="onSearchChange($event)" [value]="searchQuery()" />
       @if (searchQuery()) {
-        <button (click)="clearSearch()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--clr-text-secondary); cursor: pointer; display: flex;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
+      <button (click)="clearSearch()"
+        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--clr-text-secondary); cursor: pointer; display: flex;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
       }
     </div>
-    
+
     <div class="role-filters" style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <button class="filter-chip" [class.active]="selectedRoles().includes('admin')" (click)="toggleRoleFilter('admin')">Administradores</button>
-      <button class="filter-chip" [class.active]="selectedRoles().includes('director')" (click)="toggleRoleFilter('director')">Directores</button>
-      <button class="filter-chip" [class.active]="selectedRoles().includes('funcionario')" (click)="toggleRoleFilter('funcionario')">Profesionales</button>
+      <button class="filter-chip" [class.active]="selectedRoles().includes('admin')"
+        (click)="toggleRoleFilter('admin')">Administradores</button>
+      <button class="filter-chip" [class.active]="selectedRoles().includes('director')"
+        (click)="toggleRoleFilter('director')">Directores</button>
+      <button class="filter-chip" [class.active]="selectedRoles().includes('funcionario')"
+        (click)="toggleRoleFilter('funcionario')">Profesionales</button>
       @if (isAdminOrRoot()) {
-        <button class="filter-chip" [class.active]="selectedRoles().includes('root')" (click)="toggleRoleFilter('root')">Super Admin</button>
+      <button class="filter-chip" [class.active]="selectedRoles().includes('root')"
+        (click)="toggleRoleFilter('root')">Super Admin</button>
       }
     </div>
   </div>
 
   <!-- Skeletons -->
   @if (isLoading()) {
-    <div class="usuarios-grid stagger-children">
-      @for (i of [1,2,3,4,5,6]; track i) {
-        <div class="user-skeleton slide-up">
-          <div class="skeleton" style="width:48px;height:48px;border-radius:14px;flex-shrink:0;"></div>
-          <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
-            <div class="skeleton" style="width:65%;height:13px;"></div>
-            <div class="skeleton" style="width:40%;height:10px;"></div>
-            <div class="skeleton" style="width:55%;height:10px;"></div>
-          </div>
-        </div>
-      }
+  <div class="usuarios-grid stagger-children">
+    @for (i of [1,2,3,4,5,6]; track i) {
+    <div class="user-skeleton slide-up">
+      <div class="skeleton" style="width:48px;height:48px;border-radius:14px;flex-shrink:0;"></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+        <div class="skeleton" style="width:65%;height:13px;"></div>
+        <div class="skeleton" style="width:40%;height:10px;"></div>
+        <div class="skeleton" style="width:55%;height:10px;"></div>
+      </div>
     </div>
+    }
+  </div>
   }
 
   <!-- Empty State -->
   @if (!isLoading() && usuarios().length === 0) {
-    <div class="empty-state fade-in-delayed">
-      <div class="empty-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path [attr.d]="activeTab() === 'activos'
+  <div class="empty-state fade-in-delayed">
+    <div class="empty-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path [attr.d]="activeTab() === 'activos'
             ? 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'
-            : 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'"
-                stroke="var(--clr-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <h3>{{ activeTab() === 'activos' ? 'No hay usuarios activos' : 'Sin historial de usuarios' }}</h3>
-      <p>{{ activeTab() === 'activos' ? 'Crea el primer usuario del sistema.' : 'Los usuarios desactivados aparecerán aquí.' }}</p>
-      @if (activeTab() === 'activos') {
-        <button class="btn-add-primary" (click)="openAddModal()">Crear Usuario</button>
-      }
+            : 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'" stroke="var(--clr-accent)"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
     </div>
+    <h3>{{ activeTab() === 'activos' ? 'No hay usuarios activos' : 'Sin historial de usuarios' }}</h3>
+    <p>{{ activeTab() === 'activos' ? 'Crea el primer usuario del sistema.' : 'Los usuarios desactivados aparecerán
+      aquí.' }}</p>
+    @if (activeTab() === 'activos') {
+    <button class="btn-add-primary" (click)="openAddModal()">Crear Usuario</button>
+    }
+  </div>
   }
 
   <!-- Grid de usuarios -->
   @if (!isLoading() && usuarios().length > 0) {
-    <div class="usuarios-grid stagger-children slide-up pb-20 lg:pb-6">
-      @for (user of usuarios(); track user.id) {
-        <div class="user-card flex-col items-start cursor-pointer hover:shadow-lg transition-all"
-             [routerLink]="['/admin/usuarios', user.id]"
-             [style.opacity]="(!user.activo || user.deleted_at) ? '0.45' : '1'"
-             [style.filter]="(!user.activo || user.deleted_at) ? 'grayscale(60%)' : 'none'">
+  <div class="usuarios-grid stagger-children slide-up pb-20 lg:pb-6">
+    @for (user of usuarios(); track user.id) {
+    <div class="user-card flex-col items-start cursor-pointer hover:shadow-lg transition-all"
+      [routerLink]="['/admin/usuarios', user.id]" [style.opacity]="(!user.activo || user.deleted_at) ? '0.45' : '1'"
+      [style.filter]="(!user.activo || user.deleted_at) ? 'grayscale(60%)' : 'none'">
 
-          <!-- Glow orb on hover -->
-          <div class="user-card-glow"></div>
+      <!-- Glow orb on hover -->
+      <div class="user-card-glow"></div>
 
-          <!-- Top: Avatar & Status/Role -->
-          <div class="flex items-center justify-between w-full relative z-10">
-            <!-- Avatar with role color -->
-            <div class="user-avatar" [ngClass]="user.rol?.value || user.rol || 'medium'" style="width:42px; height:42px; border-radius:12px;">
-              {{ user.nombre?.charAt(0)?.toUpperCase() }}{{ user.apellido?.charAt(0)?.toUpperCase() }}
-            </div>
-            
-            <span class="role-badge" [ngClass]="'role-' + (user.rol?.value || user.rol)">
-              {{ getRoleLabel(user.rol) }}
-            </span>
-          </div>
-
-          <!-- Middle: Info -->
-          <div class="flex flex-col w-full relative z-10 mt-1 mb-2">
-            <h3 class="user-name" style="white-space: normal; overflow: visible; font-size: 1.05rem; line-height: 1.3;">{{ user.nombre }} {{ user.apellido }}</h3>
-            
-            <div class="flex flex-col gap-1.5 mt-3">
-              <span class="user-code" style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                  <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
-                  <path d="M2 10h20" stroke="currentColor" stroke-width="2"/>
-                </svg>
-                RUT: {{ user.rut }}
-              </span>
-
-              <span class="user-code" style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <span class="truncate">{{ user.email }}</span>
-              </span>
-
-              @if (user.asignaciones_con_alerta90_count > 0) {
-                <span style="display: flex; align-items: center; gap: 6px; color: var(--clr-danger); font-size: 0.85rem; font-weight: 600; margin-top: 4px; animation: pulse-opacity 2s infinite;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                  </svg>
-                  Tiene {{ user.asignaciones_con_alerta90_count }} NNA(s) con plazos críticos
-                </span>
-              }
-
-
-              <!-- Centro -->
-              @if (user.centro_nombre || user.centro?.nombre) {
-                <span class="user-code" style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6"/>
-                  </svg>
-                  CENTRO: {{ user.centro_nombre || user.centro?.nombre }}
-                </span>
-              } @else {
-                <span class="user-code" style="opacity: 0.5; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8); font-style: italic;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6"/>
-                  </svg>
-                  Sin centro asignado
-                </span>
-              }
-            </div>
-          </div>
-
-          <!-- Bottom: Actions -->
-          <div class="flex items-center justify-end gap-2 w-full pt-3 mt-auto border-t border-white/5 relative z-10">
-            @if (!user.deleted_at) {
-              @if (isRoot()) {
-                <button (click)="confirmResetPassword(user); $event.stopPropagation()" title="Resetear Contraseña" class="action-btn" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.2);">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4v-3l5.257-5.257A6 6 0 1121 9z" />
-                  </svg>
-                </button>
-              }
-              <button (click)="editUsuario(user); $event.stopPropagation()" title="Editar Perfil" class="action-btn action-btn-edit">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                </svg>
-              </button>
-            }
-          </div>
-
+      <!-- Top: Avatar & Status/Role -->
+      <div class="flex items-center justify-between w-full relative z-10">
+        <!-- Avatar with role color -->
+        <div class="user-avatar" [ngClass]="user.rol?.value || user.rol || 'medium'"
+          style="width:42px; height:42px; border-radius:12px;">
+          {{ user.nombre?.charAt(0)?.toUpperCase() }}{{ user.apellido?.charAt(0)?.toUpperCase() }}
         </div>
-      }
+
+        <span class="role-badge" [ngClass]="'role-' + (user.rol?.value || user.rol)">
+          {{ getRoleLabel(user.rol) }}
+        </span>
+      </div>
+
+      <!-- Middle: Info -->
+      <div class="flex flex-col w-full relative z-10 mt-1 mb-2">
+        <h3 class="user-name" style="white-space: normal; overflow: visible; font-size: 1.05rem; line-height: 1.3;">{{
+          user.nombre }} {{ user.apellido }}</h3>
+
+        <div class="flex flex-col gap-1.5 mt-3">
+          <span class="user-code"
+            style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2" />
+              <path d="M2 10h20" stroke="currentColor" stroke-width="2" />
+            </svg>
+            RUT: {{ user.rut }}
+          </span>
+
+          <span class="user-code"
+            style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <span class="truncate">{{ user.email }}</span>
+          </span>
+
+          @if (user.asignaciones_con_alerta90_count > 0) {
+          <span
+            style="display: flex; align-items: center; gap: 6px; color: var(--clr-danger); font-size: 0.85rem; font-weight: 600; margin-top: 4px; animation: pulse-opacity 2s infinite;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Tiene {{ user.asignaciones_con_alerta90_count }} NNA(s) con plazos críticos
+          </span>
+          }
+
+
+          <!-- Programa -->
+          @if (user.centro_nombre || user.centro?.nombre) {
+          <span class="user-code"
+            style="opacity: 0.8; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6" />
+            </svg>
+            PROGRAMA: {{ user.centro_nombre || user.centro?.nombre }}
+          </span>
+          } @else {
+          <span class="user-code"
+            style="opacity: 0.5; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: rgba(148, 163, 184, 0.8); font-style: italic;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6" />
+            </svg>
+            Sin programa asignado
+          </span>
+          }
+        </div>
+      </div>
+
+      <!-- Bottom: Actions -->
+      <div class="flex items-center justify-end gap-2 w-full pt-3 mt-auto border-t border-white/5 relative z-10">
+        @if (!user.deleted_at) {
+        @if (isRoot()) {
+        <button (click)="confirmResetPassword(user); $event.stopPropagation()" title="Resetear Contraseña"
+          class="action-btn"
+          style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.2);">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4v-3l5.257-5.257A6 6 0 1121 9z" />
+          </svg>
+        </button>
+        }
+        <button (click)="editUsuario(user); $event.stopPropagation()" title="Editar Perfil"
+          class="action-btn action-btn-edit">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </button>
+        }
+      </div>
+
     </div>
+    }
+  </div>
   }
 
 </div>

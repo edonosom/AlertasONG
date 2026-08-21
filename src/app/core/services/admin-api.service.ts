@@ -7,7 +7,7 @@ export interface AdminMetrics {
   centros_activos: number;
   directores_activos: number;
   funcionarios_activos: number;
-  pacientes_totales: number;
+  nnas_totales: number;
   alertas_criticas: number;
   recent_users: any[];
 }

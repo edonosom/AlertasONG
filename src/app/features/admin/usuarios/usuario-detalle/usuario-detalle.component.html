@@ -56,11 +56,11 @@
                   <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <h2 class="text-xl font-bold m-0" style="color: var(--clr-text);">Historial de Centros</h2>
+              <h2 class="text-xl font-bold m-0" style="color: var(--clr-text);">Historial de Programas</h2>
             </div>
 
             @if (centrosDirigidos.length === 0) {
-              <p class="italic text-sm" style="color: var(--clr-text-muted);">Este director no ha sido asignado a ningún centro.</p>
+              <p class="italic text-sm" style="color: var(--clr-text-muted);">Este director no ha sido asignado a ningún programa.</p>
             } @else {
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
                 @for (centro of centrosDirigidos; track centro.id) {
@@ -71,7 +71,7 @@
                       @if (!centro.pivot?.activo) {
                         <span class="text-xs text-red-500 font-bold mt-1 inline-block">Asignación Inactiva</span>
                       } @else {
-                        <span class="text-xs text-green-500 font-bold mt-1 inline-block">Centro Actual</span>
+                        <span class="text-xs text-green-500 font-bold mt-1 inline-block">Programa Actual</span>
                       }
                     </div>
                   </div>

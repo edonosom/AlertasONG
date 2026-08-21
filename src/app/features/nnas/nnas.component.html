@@ -23,22 +23,34 @@
   <!-- Métricas Rápidas -->
   <div *ngIf="!isLoading() && nnas().length > 0" class="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
     <!-- Total -->
-    <div class="stat-card glass-card">
+    <div class="stat-card glass-card cursor-pointer transition-all hover:scale-[1.02]" 
+         (click)="filterByComplexity('')" 
+         [class.ring-2]="selectedComplexity() === '' || selectedComplexity() === 'No definida'" 
+         [class.ring-[var(--clr-accent)]]="selectedComplexity() === '' || selectedComplexity() === 'No definida'">
       <span class="stat-label">Total NNAs</span>
       <span class="stat-value text-gradient">{{ totalCount() }}</span>
     </div>
     <!-- Alta -->
-    <div class="stat-card glass-card border-l-4 border-l-[var(--clr-danger)]">
+    <div class="stat-card glass-card border-l-4 border-l-[var(--clr-danger)] cursor-pointer transition-all hover:scale-[1.02]" 
+         (click)="filterByComplexity('alta')" 
+         [class.ring-2]="selectedComplexity() === 'alta'" 
+         [class.ring-[var(--clr-danger)]]="selectedComplexity() === 'alta'">
       <span class="stat-label">Alta Complejidad</span>
       <span class="stat-value text-[var(--clr-danger)]">{{ altaCount() }}</span>
     </div>
     <!-- Media -->
-    <div class="stat-card glass-card border-l-4 border-l-[var(--clr-warning)]">
+    <div class="stat-card glass-card border-l-4 border-l-[var(--clr-warning)] cursor-pointer transition-all hover:scale-[1.02]" 
+         (click)="filterByComplexity('media')" 
+         [class.ring-2]="selectedComplexity() === 'media'" 
+         [class.ring-[var(--clr-warning)]]="selectedComplexity() === 'media'">
       <span class="stat-label">Media Complejidad</span>
       <span class="stat-value text-[var(--clr-warning)]">{{ mediaCount() }}</span>
     </div>
     <!-- Baja -->
-    <div class="stat-card glass-card border-l-4 border-l-[var(--clr-success)]">
+    <div class="stat-card glass-card border-l-4 border-l-[var(--clr-success)] cursor-pointer transition-all hover:scale-[1.02]" 
+         (click)="filterByComplexity('baja')" 
+         [class.ring-2]="selectedComplexity() === 'baja'" 
+         [class.ring-[var(--clr-success)]]="selectedComplexity() === 'baja'">
       <span class="stat-label">Baja Complejidad</span>
       <span class="stat-value text-[var(--clr-success)]">{{ bajaCount() }}</span>
     </div>
@@ -145,7 +157,13 @@
 
             <!-- Detalles del NNA -->
             <div class="flex flex-col min-w-0">
-              <h3 class="patient-name m-0 truncate">{{ p.nombre }} {{ p.apellido }}</h3>
+              <h3 class="patient-name m-0 truncate flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full flex-shrink-0 shadow-sm" 
+                      [ngStyle]="{'background-color': 'var(--clr-' + getComplejidadColor(p.complejidad) + ', #888)'}"
+                      title="Complejidad: {{ p.complejidad || 'Sin definir' | uppercase }}">
+                </span>
+                {{ p.nombre }} {{ p.apellido }}
+              </h3>
               <span class="patient-rut mt-1 truncate">RUT: {{ p.rut }}</span>
               <span class="patient-age mt-0.5 truncate">{{ calcularEdad(p.fecha_nacimiento) }} años (Nac. {{
                 formatFecha(p.fecha_nacimiento) }})</span>
@@ -159,7 +177,7 @@
                     <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
-                  Sede: {{ p.asignaciones[0].centro?.nombre || '-' }}
+                  Programa: {{ p.asignaciones[0].centro?.nombre || '-' }}
                 </span>
                 <span class="truncate flex items-center gap-1">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
@@ -254,7 +272,13 @@
                     {{ p.nombre.charAt(0) }}{{ p.apellido.charAt(0) }}
                   </div>
                   <div class="flex flex-col">
-                    <span class="font-bold text-lg" style="color: var(--clr-text);">{{ p.nombre }} {{ p.apellido }}</span>
+                    <span class="font-bold text-lg flex items-center gap-2" style="color: var(--clr-text);">
+                      <span class="w-3 h-3 rounded-full flex-shrink-0 shadow-sm" 
+                            [ngStyle]="{'background-color': 'var(--clr-' + getComplejidadColor(p.complejidad) + ', #888)'}"
+                            title="Complejidad: {{ p.complejidad || 'Sin definir' | uppercase }}">
+                      </span>
+                      {{ p.nombre }} {{ p.apellido }}
+                    </span>
                     <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium mt-1" style="color: var(--clr-text-secondary);">
                       <span>RUT: {{ p.rut }}</span>
                       <span>Ingreso: {{ p.fecha_ingreso ? formatFecha(p.fecha_ingreso) : 'No definido' }}</span>

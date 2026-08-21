@@ -4,7 +4,7 @@
   <header class="cmd-header">
     <div>
       <h1 class="cmd-title">Centro de Mando</h1>
-      <p class="cmd-subtitle">Supervisión estratégica de equipo clínico</p>
+      <p class="cmd-subtitle">Supervisión estratégica de equipo ONG SURCOS</p>
     </div>
     <div class="cmd-header-stats">
       <div class="cmd-stat">
@@ -26,8 +26,9 @@
       <div class="cmd-panel-head">
         <div class="cmd-icon-box">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
         <h3>Mi Equipo</h3>
@@ -35,59 +36,63 @@
       </div>
 
       <div class="search-wrap" style="padding: 0 16px; margin-bottom: 12px; position: relative;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 26px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+          style="position: absolute; left: 26px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" />
         </svg>
-        <input type="text" placeholder="Buscar profesional..." 
-               style="width: 100%; padding: 8px 12px 8px 32px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.85rem;"
-               [ngModel]="searchQueryFuncionarios()" (ngModelChange)="searchQueryFuncionarios.set($event)" />
+        <input type="text" placeholder="Buscar profesional..."
+          style="width: 100%; padding: 8px 12px 8px 32px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.85rem;"
+          [ngModel]="searchQueryFuncionarios()" (ngModelChange)="searchQueryFuncionarios.set($event)" />
       </div>
 
       <div class="cmd-team-list">
         @if (loadingFuncionarios()) {
-          @for (i of [1,2,3,4]; track i) {
-            <div class="cmd-team-skeleton">
-              <div class="skeleton" style="width:42px;height:42px;border-radius:var(--radius-sm);flex-shrink:0;"></div>
-              <div class="flex flex-col gap-2 flex-1">
-                <div class="skeleton" style="width:70%;height:12px;"></div>
-                <div class="skeleton" style="width:45%;height:9px;"></div>
-              </div>
-            </div>
-          }
+        @for (i of [1,2,3,4]; track i) {
+        <div class="cmd-team-skeleton">
+          <div class="skeleton" style="width:42px;height:42px;border-radius:var(--radius-sm);flex-shrink:0;"></div>
+          <div class="flex flex-col gap-2 flex-1">
+            <div class="skeleton" style="width:70%;height:12px;"></div>
+            <div class="skeleton" style="width:45%;height:9px;"></div>
+          </div>
+        </div>
+        }
         } @else {
-          @for (f of filteredFuncionarios(); track f.id) {
-            <div (click)="seleccionarFuncionario(f)"
-                 class="cmd-team-item"
-                 [class.cmd-team-item--active]="selectedFuncionarioId() === f.id">
-              <div class="cmd-team-avatar"
-                   [class.cmd-team-avatar--active]="selectedFuncionarioId() === f.id">
-                {{ f.nombre.charAt(0) }}{{ f.apellido.charAt(0) }}
-              </div>
-              <div class="cmd-team-info">
-                <span class="cmd-team-name">{{ f.nombre }} {{ f.apellido }}</span>
-                <div class="cmd-team-meta">
-                  <span class="cmd-team-nnas">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-                    {{ f.pacientes_count || 0 }}
-                  </span>
-                  @if (f.alertas_90_count) {
-                    <span class="cmd-team-alerts" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); animation: pulse-opacity 2s infinite;">
-                      <span class="cmd-pulse-dot" style="background: #ef4444; box-shadow: 0 0 8px #ef4444;"></span>
-                      {{ f.alertas_90_count }} crítico(s)
-                    </span>
-                  } @else if (f.alertas_count) {
-                    <span class="cmd-team-alerts">
-                      <span class="cmd-pulse-dot"></span>
-                      {{ f.alertas_count }}
-                    </span>
-                  }
-                </div>
-              </div>
-              @if (selectedFuncionarioId() === f.id) {
-                <div class="cmd-active-indicator"></div>
+        @for (f of filteredFuncionarios(); track f.id) {
+        <div (click)="seleccionarFuncionario(f)" class="cmd-team-item"
+          [class.cmd-team-item--active]="selectedFuncionarioId() === f.id">
+          <div class="cmd-team-avatar" [class.cmd-team-avatar--active]="selectedFuncionarioId() === f.id">
+            {{ f.nombre.charAt(0) }}{{ f.apellido.charAt(0) }}
+          </div>
+          <div class="cmd-team-info">
+            <span class="cmd-team-name">{{ f.nombre }} {{ f.apellido }}</span>
+            <div class="cmd-team-meta">
+              <span class="cmd-team-nnas">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" />
+                </svg>
+                {{ f.pacientes_count || 0 }}
+              </span>
+              @if (f.alertas_90_count) {
+              <span class="cmd-team-alerts"
+                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); animation: pulse-opacity 2s infinite;">
+                <span class="cmd-pulse-dot" style="background: #ef4444; box-shadow: 0 0 8px #ef4444;"></span>
+                {{ f.alertas_90_count }} crítico(s)
+              </span>
+              } @else if (f.alertas_count) {
+              <span class="cmd-team-alerts">
+                <span class="cmd-pulse-dot"></span>
+                {{ f.alertas_count }}
+              </span>
               }
             </div>
+          </div>
+          @if (selectedFuncionarioId() === f.id) {
+          <div class="cmd-active-indicator"></div>
           }
+        </div>
+        }
         }
       </div>
     </aside>
@@ -97,128 +102,135 @@
       <div class="cmd-panel-head">
         <div class="cmd-icon-box cmd-icon-box--blue">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
         <h3>{{ selectedFuncionarioId() ? 'NNAs Asignados' : 'Selecciona un Profesional' }}</h3>
         @if (selectedFuncionarioId() && !loadingPacientes()) {
-          <div class="search-wrap" style="margin-left: auto; position: relative; width: 240px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-            <input type="text" placeholder="Buscar NNA..." 
-                   style="width: 100%; padding: 8px 12px 8px 30px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.85rem;"
-                   [ngModel]="searchQueryNnas()" (ngModelChange)="searchQueryNnas.set($event)" />
-          </div>
-          <span class="cmd-count-badge cmd-count-badge--blue" style="margin-left: 12px;">{{ filteredNnas().length }}</span>
+        <div class="search-wrap" style="margin-left: auto; position: relative; width: 240px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" />
+          </svg>
+          <input type="text" placeholder="Buscar NNA..."
+            style="width: 100%; padding: 8px 12px 8px 30px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.85rem;"
+            [ngModel]="searchQueryNnas()" (ngModelChange)="searchQueryNnas.set($event)" />
+        </div>
+        <span class="cmd-count-badge cmd-count-badge--blue" style="margin-left: 12px;">{{ filteredNnas().length
+          }}</span>
         }
       </div>
 
       <div class="cmd-nnas-content">
 
         @if (!selectedFuncionarioId()) {
-          <div class="cmd-empty fade-in">
-            <div class="cmd-empty-icon">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-                <path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <h4>Selecciona un profesional</h4>
-            <p>Haz clic en un miembro del equipo para visualizar y gestionar sus NNAs asignados.</p>
+        <div class="cmd-empty fade-in">
+          <div class="cmd-empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
           </div>
+          <h4>Selecciona un profesional</h4>
+          <p>Haz clic en un miembro del equipo para visualizar y gestionar sus NNAs asignados.</p>
+        </div>
 
         } @else if (loadingPacientes()) {
-          <div class="cmd-loading">
-            <div class="cmd-spinner"></div>
-          </div>
+        <div class="cmd-loading">
+          <div class="cmd-spinner"></div>
+        </div>
 
         } @else if (nnas().length === 0) {
-          <div class="cmd-empty slide-up">
-            <div class="cmd-empty-icon cmd-empty-icon--success">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <h4>Sin NNAs asignados</h4>
-            <p>Este profesional no tiene NNAs asignados actualmente.</p>
+        <div class="cmd-empty slide-up">
+          <div class="cmd-empty-icon cmd-empty-icon--success">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" />
+            </svg>
           </div>
+          <h4>Sin NNAs asignados</h4>
+          <p>Este profesional no tiene NNAs asignados actualmente.</p>
+        </div>
 
         } @else {
-          <div class="cmd-nnas-grid slide-up">
-            @for (p of filteredNnas(); track p.id) {
-              <div class="cmd-nna-card" [class.cmd-nna-card--alert]="p.alertas_pendientes_count && p.alertas_pendientes_count > 0">
+        <div class="cmd-nnas-grid slide-up">
+          @for (p of filteredNnas(); track p.id) {
+          <div class="cmd-nna-card"
+            [class.cmd-nna-card--alert]="p.alertas_pendientes_count && p.alertas_pendientes_count > 0">
 
-                <!-- Status bar -->
-                <div class="cmd-nna-bar"
-                     [class.cmd-nna-bar--danger]="(p.dias_transcurridos || 0) >= 80"
-                     [class.cmd-nna-bar--warning]="(p.dias_transcurridos || 0) >= 75 && (p.dias_transcurridos || 0) < 80"
-                     [class.cmd-nna-bar--ok]="(p.dias_transcurridos || 0) < 75">
+            <!-- Status bar -->
+            <div class="cmd-nna-bar" [class.cmd-nna-bar--danger]="(p.dias_transcurridos || 0) >= 80"
+              [class.cmd-nna-bar--warning]="(p.dias_transcurridos || 0) >= 75 && (p.dias_transcurridos || 0) < 80"
+              [class.cmd-nna-bar--ok]="(p.dias_transcurridos || 0) < 75">
+            </div>
+
+            <!-- Card content -->
+            <div class="cmd-nna-body">
+              <div class="cmd-nna-top">
+                <div class="cmd-nna-identity">
+                  <h4 class="cmd-nna-name">{{ p.nombre }} {{ p.apellido }}</h4>
+                  <span class="cmd-nna-rut">{{ p.rut }}</span>
                 </div>
-
-                <!-- Card content -->
-                <div class="cmd-nna-body">
-                  <div class="cmd-nna-top">
-                    <div class="cmd-nna-identity">
-                      <h4 class="cmd-nna-name">{{ p.nombre }} {{ p.apellido }}</h4>
-                      <span class="cmd-nna-rut">{{ p.rut }}</span>
-                    </div>
-                    @if (p.alertas_pendientes_count && p.alertas_pendientes_count > 0) {
-                      <span class="cmd-alert-badge">
-                        <span class="cmd-pulse-dot cmd-pulse-dot--danger"></span>
-                        {{ p.alertas_pendientes_count }} alerta{{ p.alertas_pendientes_count > 1 ? 's' : '' }}
-                      </span>
-                    }
-                  </div>
-
-                  @if ((p.dias_transcurridos || 0) >= 90) {
-                    <div style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem; animation: pulse-opacity 2s infinite;">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                      </svg>
-                      @if (p.dias_transcurridos === 90) {
-                        <span>Pendiente confirmación docs.</span>
-                      } @else {
-                        <span>Plazo Vencido hace {{ (p.dias_transcurridos || 0) - 90 }} día(s)</span>
-                      }
-                    </div>
-                  }
-
-                  <div class="cmd-nna-progress">
-                    <div class="cmd-progress-track">
-                      <div class="cmd-progress-fill"
-                           [style.width.%]="((p.dias_transcurridos || 0) / 90) * 100"
-                           [class.cmd-progress-danger]="(p.dias_transcurridos || 0) >= 80"
-                           [class.cmd-progress-warning]="(p.dias_transcurridos || 0) >= 75 && (p.dias_transcurridos || 0) < 80">
-                      </div>
-                    </div>
-                    <span class="cmd-progress-label">
-                      Día <strong>{{ p.dias_transcurridos || 0 }}</strong> / 90
-                      <span class="cmd-progress-remain">({{ p.dias_restantes || 0 }} restantes)</span>
-                    </span>
-                  </div>
-
-                  <div class="cmd-nna-actions">
-                    <button class="cmd-btn cmd-btn--ghost" title="Reasignar" (click)="abrirReasignacion(p)">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      </svg>
-                      Reasignar
-                    </button>
-                    <a [routerLink]="['/nnas', p.id, 'agenda']" class="cmd-btn cmd-btn--primary">
-                      Ver Agenda
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
+                @if (p.alertas_pendientes_count && p.alertas_pendientes_count > 0) {
+                <span class="cmd-alert-badge">
+                  <span class="cmd-pulse-dot cmd-pulse-dot--danger"></span>
+                  {{ p.alertas_pendientes_count }} alerta{{ p.alertas_pendientes_count > 1 ? 's' : '' }}
+                </span>
+                }
               </div>
-            }
+
+              @if ((p.dias_transcurridos || 0) >= 90) {
+              <div
+                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem; animation: pulse-opacity 2s infinite;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                @if (p.dias_transcurridos === 90) {
+                <span>Pendiente confirmación docs.</span>
+                } @else {
+                <span>Plazo Vencido hace {{ (p.dias_transcurridos || 0) - 90 }} día(s)</span>
+                }
+              </div>
+              }
+
+              <div class="cmd-nna-progress">
+                <div class="cmd-progress-track">
+                  <div class="cmd-progress-fill" [style.width.%]="((p.dias_transcurridos || 0) / 90) * 100"
+                    [class.cmd-progress-danger]="(p.dias_transcurridos || 0) >= 80"
+                    [class.cmd-progress-warning]="(p.dias_transcurridos || 0) >= 75 && (p.dias_transcurridos || 0) < 80">
+                  </div>
+                </div>
+                <span class="cmd-progress-label">
+                  Día <strong>{{ p.dias_transcurridos || 0 }}</strong> / 90
+                  <span class="cmd-progress-remain">({{ p.dias_restantes || 0 }} restantes)</span>
+                </span>
+              </div>
+
+              <div class="cmd-nna-actions">
+                <button class="cmd-btn cmd-btn--ghost" title="Reasignar" (click)="abrirReasignacion(p)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" />
+                  </svg>
+                  Reasignar
+                </button>
+                <a [routerLink]="['/nnas', p.id, 'agenda']" class="cmd-btn cmd-btn--primary">
+                  Ver Agenda
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
+          }
+        </div>
         }
       </div>
     </main>
@@ -241,8 +253,8 @@
       <div class="reassign-body">
         <div class="reassign-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
         <h2 class="reassign-title">Transferir Caso Clínico</h2>
@@ -259,9 +271,8 @@
           </ion-item>
         </div>
 
-        <button class="reassign-confirm"
-                [disabled]="!targetFuncionarioId() || isSubmitting()"
-                (click)="confirmarReasignacion()">
+        <button class="reassign-confirm" [disabled]="!targetFuncionarioId() || isSubmitting()"
+          (click)="confirmarReasignacion()">
           <ion-spinner *ngIf="isSubmitting()" name="crescent"></ion-spinner>
           <span *ngIf="!isSubmitting()">Confirmar Transferencia</span>
         </button>
@@ -271,390 +282,724 @@
 </ion-modal>
 
 <style>
-/* ============================================================
+  /* ============================================================
    Centro de Mando  |  Director Dashboard
    Uses CSS custom props from global.scss
    ============================================================ */
 
-.cmd-root {
-  display: flex; flex-direction: column; gap: 24px;
-  width: 100%; height: 100%;
-}
+  .cmd-root {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    height: 100%;
+  }
 
-/* ─── Header ─ */
-.cmd-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap;
-}
-.cmd-title {
-  font-size: 1.8rem; font-weight: 900; margin: 0;
-  color: var(--clr-text); letter-spacing: -0.03em;
-}
-.cmd-subtitle {
-  font-size: 0.82rem; color: var(--clr-text-secondary);
-  margin: 4px 0 0; font-weight: 500; opacity: 0.7;
-}
-.cmd-header-stats {
-  display: flex; gap: 8px;
-}
-.cmd-stat {
-  display: flex; flex-direction: column; align-items: center;
-  background: var(--clr-card); border: 1px solid var(--clr-border);
-  border-radius: var(--radius-sm); padding: 8px 18px;
-  min-width: 80px;
-}
-.cmd-stat-value {
-  font-size: 1.4rem; font-weight: 800; color: var(--clr-accent);
-  line-height: 1;
-}
-.cmd-stat-alert { color: var(--clr-danger) !important; }
-.cmd-stat-label {
-  font-size: 0.62rem; font-weight: 700; color: var(--clr-text-secondary);
-  text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px;
-}
+  /* ─── Header ─ */
+  .cmd-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 
-/* ─── Layout ─ */
-.cmd-layout {
-  display: flex; flex-direction: column; gap: 16px; flex: 1; min-height: 0;
-}
-@media (min-width: 1200px) {
-  .cmd-layout { flex-direction: row; }
-}
+  .cmd-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0;
+    color: var(--clr-text);
+    letter-spacing: -0.03em;
+  }
 
-/* ─── Panel Base ─ */
-.cmd-panel {
-  background: var(--clr-card);
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  display: flex; flex-direction: column;
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  overflow: hidden;
-}
-.cmd-panel-team {
-  width: 100%; flex-shrink: 0;
-}
-.cmd-panel-nnas {
-  flex: 1; min-width: 0;
-}
-@media (min-width: 1200px) {
-  .cmd-panel-team { width: 380px; }
-}
+  .cmd-subtitle {
+    font-size: 0.82rem;
+    color: var(--clr-text-secondary);
+    margin: 4px 0 0;
+    font-weight: 500;
+    opacity: 0.7;
+  }
 
-.cmd-panel-head {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 16px; padding-bottom: 14px;
-  border-bottom: 1px solid var(--clr-border);
-}
-.cmd-panel-head h3 {
-  font-size: 0.9rem; font-weight: 800; color: var(--clr-text); margin: 0;
-}
-.cmd-icon-box {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: var(--clr-accent-dim); border: 1px solid var(--clr-border-accent);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--clr-accent); flex-shrink: 0;
-}
-.cmd-icon-box--blue {
-  background: var(--clr-accent-2-dim);
-  border-color: rgba(3,105,161,0.2);
-  color: var(--clr-accent-2);
-}
-.cmd-count-badge {
-  margin-left: auto; font-size: 0.7rem; font-weight: 800;
-  background: var(--clr-accent-dim); color: var(--clr-accent);
-  border: 1px solid var(--clr-border-accent);
-  padding: 2px 10px; border-radius: 100px;
-}
-.cmd-count-badge--blue {
-  background: var(--clr-accent-2-dim); color: var(--clr-accent-2);
-  border-color: rgba(3,105,161,0.2);
-}
+  .cmd-header-stats {
+    display: flex;
+    gap: 8px;
+  }
 
-/* ─── Team List ─ */
-.cmd-team-list {
-  flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;
-  scrollbar-width: thin; scrollbar-color: var(--clr-border) transparent;
-}
-.cmd-team-skeleton {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px; border-radius: var(--radius-sm);
-  background: var(--clr-card); border: 1px solid var(--clr-border);
-}
-.cmd-team-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px; border-radius: var(--radius-sm);
-  cursor: pointer; border: 1px solid transparent;
-  background: transparent; transition: var(--t-fast);
-  position: relative;
-}
-.cmd-team-item:hover {
-  background: var(--clr-card); border-color: var(--clr-border);
-}
-.cmd-team-item--active {
-  background: var(--clr-accent-dim) !important;
-  border-color: var(--clr-border-accent) !important;
-  box-shadow: 0 0 24px rgba(13,146,136,0.06);
-}
+  .cmd-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-sm);
+    padding: 8px 18px;
+    min-width: 80px;
+  }
 
-.cmd-team-avatar {
-  width: 42px; height: 42px; border-radius: var(--radius-sm);
-  background: var(--clr-card); border: 1px solid var(--clr-border);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.78rem; color: var(--clr-text-secondary);
-  text-transform: uppercase; flex-shrink: 0;
-  transition: var(--t-fast); letter-spacing: 0.02em;
-}
-.cmd-team-avatar--active {
-  background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-dark) 100%) !important;
-  color: white !important; border-color: transparent !important;
-  box-shadow: 0 4px 16px var(--clr-accent-glow);
-}
+  .cmd-stat-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--clr-accent);
+    line-height: 1;
+  }
 
-.cmd-team-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-.cmd-team-name {
-  font-size: 0.82rem; font-weight: 700; color: var(--clr-text);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  transition: color 0.15s;
-}
-.cmd-team-item--active .cmd-team-name { color: var(--clr-accent-bright); }
+  .cmd-stat-alert {
+    color: var(--clr-danger) !important;
+  }
 
-.cmd-team-meta {
-  display: flex; align-items: center; gap: 8px;
-}
-.cmd-team-nnas {
-  display: flex; align-items: center; gap: 3px;
-  font-size: 0.68rem; font-weight: 700;
-  color: var(--clr-text-secondary); opacity: 0.7;
-}
-.cmd-team-alerts {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 0.62rem; font-weight: 800;
-  color: var(--clr-danger);
-  background: var(--clr-danger-dim);
-  padding: 1px 7px; border-radius: 100px;
-  border: 1px solid rgba(220,38,38,0.18);
-}
-.cmd-active-indicator {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--clr-accent);
-  box-shadow: 0 0 10px var(--clr-accent-glow);
-  margin-left: auto; flex-shrink: 0;
-}
+  .cmd-stat-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--clr-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
 
-/* ─── Pulse dot ─ */
-.cmd-pulse-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--clr-danger); flex-shrink: 0;
-  position: relative;
-}
-.cmd-pulse-dot::after {
-  content: ''; position: absolute; inset: -2px;
-  border-radius: 50%; background: var(--clr-danger);
-  animation: cmdPing 1.5s ease-out infinite; opacity: 0;
-}
-.cmd-pulse-dot--danger { background: var(--clr-danger); }
+  /* ─── Layout ─ */
+  .cmd-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+  }
 
-/* ─── Empty / Loading ─ */
-.cmd-empty {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  height: 100%; min-height: 220px; gap: 10px; text-align: center; padding: 24px;
-}
-.cmd-empty h4 {
-  font-size: 1rem; font-weight: 700; color: var(--clr-text); margin: 0;
-}
-.cmd-empty p {
-  font-size: 0.82rem; color: var(--clr-text-secondary);
-  max-width: 280px; margin: 0; line-height: 1.5;
-}
-.cmd-empty-icon {
-  width: 68px; height: 68px; border-radius: var(--radius-md);
-  background: var(--clr-accent-dim); border: 1px solid var(--clr-border-accent);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--clr-accent); animation: cmdFloat 4s ease-in-out infinite;
-}
-.cmd-empty-icon--success {
-  background: var(--clr-success-dim);
-  border-color: rgba(5,150,105,0.2);
-  color: var(--clr-success);
-}
-.cmd-loading {
-  display: flex; align-items: center; justify-content: center;
-  height: 100%; min-height: 200px;
-}
-.cmd-spinner {
-  width: 32px; height: 32px;
-  border: 2.5px solid var(--clr-border);
-  border-top-color: var(--clr-accent);
-  border-radius: 50%; animation: cmdSpin 0.7s linear infinite;
-}
+  @media (min-width: 1200px) {
+    .cmd-layout {
+      flex-direction: row;
+    }
+  }
 
-/* ─── NNA Grid ─ */
-.cmd-nnas-content {
-  flex: 1; overflow-y: auto;
-  scrollbar-width: thin; scrollbar-color: var(--clr-border) transparent;
-}
-.cmd-nnas-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px; padding-bottom: 8px;
-}
-@media (min-width: 1500px) {
-  .cmd-nnas-grid { grid-template-columns: repeat(2, 1fr); }
-}
+  /* ─── Panel Base ─ */
+  .cmd-panel {
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    overflow: hidden;
+  }
 
-/* ─── NNA Card ─ */
-.cmd-nna-card {
-  display: flex; overflow: hidden;
-  background: var(--clr-card); border: 1px solid var(--clr-border);
-  border-radius: var(--radius-md); transition: var(--t-base);
-}
-.cmd-nna-card:hover {
-  background: var(--clr-card-hover);
-  border-color: var(--clr-border-accent);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-card);
-}
-.cmd-nna-card--alert { border-color: rgba(220,38,38,0.12); }
-.cmd-nna-card--alert:hover { border-color: rgba(220,38,38,0.25); }
+  .cmd-panel-team {
+    width: 100%;
+    flex-shrink: 0;
+  }
 
-.cmd-nna-bar {
-  width: 4px; flex-shrink: 0; border-radius: 0;
-}
-.cmd-nna-bar--ok     { background: linear-gradient(to bottom, var(--clr-success), #00C853); }
-.cmd-nna-bar--warning{ background: linear-gradient(to bottom, var(--clr-warning), #F59E0B); }
-.cmd-nna-bar--danger { background: linear-gradient(to bottom, var(--clr-danger), #B91C1C); }
+  .cmd-panel-nnas {
+    flex: 1;
+    min-width: 0;
+  }
 
-.cmd-nna-body {
-  flex: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
-}
-.cmd-nna-top {
-  display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
-}
-.cmd-nna-identity { min-width: 0; }
-.cmd-nna-name {
-  font-size: 0.88rem; font-weight: 700; color: var(--clr-text); margin: 0;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.cmd-nna-rut {
-  font-size: 0.7rem; color: var(--clr-text-secondary); opacity: 0.6;
-  font-family: 'Inter', monospace; margin-top: 2px;
-}
-.cmd-alert-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: var(--clr-danger-dim); color: var(--clr-danger);
-  border: 1px solid rgba(220,38,38,0.18);
-  font-size: 0.6rem; font-weight: 800;
-  padding: 2px 8px; border-radius: 100px;
-  text-transform: uppercase; letter-spacing: 0.03em;
-  flex-shrink: 0; white-space: nowrap;
-}
+  @media (min-width: 1200px) {
+    .cmd-panel-team {
+      width: 380px;
+    }
+  }
 
-/* Progress */
-.cmd-nna-progress { display: flex; flex-direction: column; gap: 5px; }
-.cmd-progress-track {
-  width: 100%; height: 4px; border-radius: 100px;
-  background: var(--clr-border); overflow: hidden;
-}
-.cmd-progress-fill {
-  height: 100%; border-radius: 100px;
-  background: var(--clr-accent);
-  transition: width 0.6s var(--ease-out);
-  max-width: 100%;
-}
-.cmd-progress-warning { background: var(--clr-warning); }
-.cmd-progress-danger  { background: var(--clr-danger); }
+  .cmd-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--clr-border);
+  }
 
-.cmd-progress-label {
-  font-size: 0.68rem; font-weight: 600; color: var(--clr-text-secondary);
-}
-.cmd-progress-label strong { color: var(--clr-text); }
-.cmd-progress-remain { opacity: 0.5; }
+  .cmd-panel-head h3 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--clr-text);
+    margin: 0;
+  }
 
-/* Actions */
-.cmd-nna-actions {
-  display: flex; align-items: center; gap: 8px;
-  justify-content: flex-end; margin-top: auto;
-}
-.cmd-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 12px; border-radius: 10px;
-  font-size: 0.72rem; font-weight: 700;
-  cursor: pointer; transition: var(--t-fast);
-  outline: none; text-decoration: none; border: 1px solid var(--clr-border);
-}
-.cmd-btn--ghost {
-  background: transparent; color: var(--clr-text-secondary);
-}
-.cmd-btn--ghost:hover {
-  background: var(--clr-card); border-color: var(--clr-border-accent);
-  color: var(--clr-accent);
-}
-.cmd-btn--primary {
-  background: var(--clr-accent-dim); color: var(--clr-accent);
-  border-color: var(--clr-border-accent);
-}
-.cmd-btn--primary:hover {
-  background: var(--clr-accent); color: var(--clr-bg);
-  border-color: transparent; box-shadow: 0 4px 16px var(--clr-accent-glow);
-}
+  .cmd-icon-box {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--clr-accent-dim);
+    border: 1px solid var(--clr-border-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-accent);
+    flex-shrink: 0;
+  }
 
-/* ─── Reassign Modal ─ */
-.reassign-body {
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center; padding: 16px 0;
-}
-.reassign-icon {
-  width: 60px; height: 60px; border-radius: var(--radius-md);
-  background: var(--clr-accent-dim); border: 1px solid var(--clr-border-accent);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--clr-accent); margin-bottom: 16px;
-}
-.reassign-title {
-  font-size: 1.2rem; font-weight: 800; color: var(--clr-text); margin: 0 0 6px;
-}
-.reassign-desc {
-  font-size: 0.85rem; color: var(--clr-text-secondary);
-  margin: 0 0 24px; max-width: 320px;
-}
-.reassign-field {
-  width: 100%; text-align: left; margin-bottom: 20px;
-}
-.reassign-field label {
-  display: block; font-size: 0.7rem; font-weight: 700;
-  color: var(--clr-text-secondary); text-transform: uppercase;
-  letter-spacing: 0.06em; margin-bottom: 8px;
-}
-.reassign-select {
-  border-radius: var(--radius-sm) !important;
-}
-.reassign-confirm {
-  width: 100%; padding: 14px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-dark) 100%);
-  color: white; font-weight: 800; font-size: 0.88rem;
-  border: none; outline: none; cursor: pointer;
-  box-shadow: 0 4px 20px var(--clr-accent-glow);
-  transition: var(--t-base);
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.reassign-confirm:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 30px var(--clr-accent-glow);
-}
-.reassign-confirm:disabled {
-  opacity: 0.45; cursor: not-allowed;
-}
+  .cmd-icon-box--blue {
+    background: var(--clr-accent-2-dim);
+    border-color: rgba(3, 105, 161, 0.2);
+    color: var(--clr-accent-2);
+  }
 
-/* ─── Animations ─ */
-@keyframes cmdFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
-}
-@keyframes cmdSpin { to { transform: rotate(360deg); } }
-@keyframes cmdPing {
-  0%   { transform: scale(1); opacity: 0.7; }
-  80%  { transform: scale(2.5); opacity: 0; }
-  100% { transform: scale(2.5); opacity: 0; }
-}
+  .cmd-count-badge {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 800;
+    background: var(--clr-accent-dim);
+    color: var(--clr-accent);
+    border: 1px solid var(--clr-border-accent);
+    padding: 2px 10px;
+    border-radius: 100px;
+  }
+
+  .cmd-count-badge--blue {
+    background: var(--clr-accent-2-dim);
+    color: var(--clr-accent-2);
+    border-color: rgba(3, 105, 161, 0.2);
+  }
+
+  /* ─── Team List ─ */
+  .cmd-team-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--clr-border) transparent;
+  }
+
+  .cmd-team-skeleton {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+  }
+
+  .cmd-team-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    transition: var(--t-fast);
+    position: relative;
+  }
+
+  .cmd-team-item:hover {
+    background: var(--clr-card);
+    border-color: var(--clr-border);
+  }
+
+  .cmd-team-item--active {
+    background: var(--clr-accent-dim) !important;
+    border-color: var(--clr-border-accent) !important;
+    box-shadow: 0 0 24px rgba(13, 146, 136, 0.06);
+  }
+
+  .cmd-team-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.78rem;
+    color: var(--clr-text-secondary);
+    text-transform: uppercase;
+    flex-shrink: 0;
+    transition: var(--t-fast);
+    letter-spacing: 0.02em;
+  }
+
+  .cmd-team-avatar--active {
+    background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-dark) 100%) !important;
+    color: white !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 16px var(--clr-accent-glow);
+  }
+
+  .cmd-team-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .cmd-team-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.15s;
+  }
+
+  .cmd-team-item--active .cmd-team-name {
+    color: var(--clr-accent-bright);
+  }
+
+  .cmd-team-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cmd-team-nnas {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--clr-text-secondary);
+    opacity: 0.7;
+  }
+
+  .cmd-team-alerts {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--clr-danger);
+    background: var(--clr-danger-dim);
+    padding: 1px 7px;
+    border-radius: 100px;
+    border: 1px solid rgba(220, 38, 38, 0.18);
+  }
+
+  .cmd-active-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--clr-accent);
+    box-shadow: 0 0 10px var(--clr-accent-glow);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* ─── Pulse dot ─ */
+  .cmd-pulse-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--clr-danger);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .cmd-pulse-dot::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: var(--clr-danger);
+    animation: cmdPing 1.5s ease-out infinite;
+    opacity: 0;
+  }
+
+  .cmd-pulse-dot--danger {
+    background: var(--clr-danger);
+  }
+
+  /* ─── Empty / Loading ─ */
+  .cmd-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 220px;
+    gap: 10px;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .cmd-empty h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin: 0;
+  }
+
+  .cmd-empty p {
+    font-size: 0.82rem;
+    color: var(--clr-text-secondary);
+    max-width: 280px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .cmd-empty-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-md);
+    background: var(--clr-accent-dim);
+    border: 1px solid var(--clr-border-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-accent);
+    animation: cmdFloat 4s ease-in-out infinite;
+  }
+
+  .cmd-empty-icon--success {
+    background: var(--clr-success-dim);
+    border-color: rgba(5, 150, 105, 0.2);
+    color: var(--clr-success);
+  }
+
+  .cmd-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 200px;
+  }
+
+  .cmd-spinner {
+    width: 32px;
+    height: 32px;
+    border: 2.5px solid var(--clr-border);
+    border-top-color: var(--clr-accent);
+    border-radius: 50%;
+    animation: cmdSpin 0.7s linear infinite;
+  }
+
+  /* ─── NNA Grid ─ */
+  .cmd-nnas-content {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--clr-border) transparent;
+  }
+
+  .cmd-nnas-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding-bottom: 8px;
+  }
+
+  @media (min-width: 1500px) {
+    .cmd-nnas-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ─── NNA Card ─ */
+  .cmd-nna-card {
+    display: flex;
+    overflow: hidden;
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-md);
+    transition: var(--t-base);
+  }
+
+  .cmd-nna-card:hover {
+    background: var(--clr-card-hover);
+    border-color: var(--clr-border-accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .cmd-nna-card--alert {
+    border-color: rgba(220, 38, 38, 0.12);
+  }
+
+  .cmd-nna-card--alert:hover {
+    border-color: rgba(220, 38, 38, 0.25);
+  }
+
+  .cmd-nna-bar {
+    width: 4px;
+    flex-shrink: 0;
+    border-radius: 0;
+  }
+
+  .cmd-nna-bar--ok {
+    background: linear-gradient(to bottom, var(--clr-success), #00C853);
+  }
+
+  .cmd-nna-bar--warning {
+    background: linear-gradient(to bottom, var(--clr-warning), #F59E0B);
+  }
+
+  .cmd-nna-bar--danger {
+    background: linear-gradient(to bottom, var(--clr-danger), #B91C1C);
+  }
+
+  .cmd-nna-body {
+    flex: 1;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cmd-nna-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cmd-nna-identity {
+    min-width: 0;
+  }
+
+  .cmd-nna-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cmd-nna-rut {
+    font-size: 0.7rem;
+    color: var(--clr-text-secondary);
+    opacity: 0.6;
+    font-family: 'Inter', monospace;
+    margin-top: 2px;
+  }
+
+  .cmd-alert-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--clr-danger-dim);
+    color: var(--clr-danger);
+    border: 1px solid rgba(220, 38, 38, 0.18);
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Progress */
+  .cmd-nna-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .cmd-progress-track {
+    width: 100%;
+    height: 4px;
+    border-radius: 100px;
+    background: var(--clr-border);
+    overflow: hidden;
+  }
+
+  .cmd-progress-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: var(--clr-accent);
+    transition: width 0.6s var(--ease-out);
+    max-width: 100%;
+  }
+
+  .cmd-progress-warning {
+    background: var(--clr-warning);
+  }
+
+  .cmd-progress-danger {
+    background: var(--clr-danger);
+  }
+
+  .cmd-progress-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--clr-text-secondary);
+  }
+
+  .cmd-progress-label strong {
+    color: var(--clr-text);
+  }
+
+  .cmd-progress-remain {
+    opacity: 0.5;
+  }
+
+  /* Actions */
+  .cmd-nna-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: auto;
+  }
+
+  .cmd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--t-fast);
+    outline: none;
+    text-decoration: none;
+    border: 1px solid var(--clr-border);
+  }
+
+  .cmd-btn--ghost {
+    background: transparent;
+    color: var(--clr-text-secondary);
+  }
+
+  .cmd-btn--ghost:hover {
+    background: var(--clr-card);
+    border-color: var(--clr-border-accent);
+    color: var(--clr-accent);
+  }
+
+  .cmd-btn--primary {
+    background: var(--clr-accent-dim);
+    color: var(--clr-accent);
+    border-color: var(--clr-border-accent);
+  }
+
+  .cmd-btn--primary:hover {
+    background: var(--clr-accent);
+    color: var(--clr-bg);
+    border-color: transparent;
+    box-shadow: 0 4px 16px var(--clr-accent-glow);
+  }
+
+  /* ─── Reassign Modal ─ */
+  .reassign-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  .reassign-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    background: var(--clr-accent-dim);
+    border: 1px solid var(--clr-border-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-accent);
+    margin-bottom: 16px;
+  }
+
+  .reassign-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--clr-text);
+    margin: 0 0 6px;
+  }
+
+  .reassign-desc {
+    font-size: 0.85rem;
+    color: var(--clr-text-secondary);
+    margin: 0 0 24px;
+    max-width: 320px;
+  }
+
+  .reassign-field {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .reassign-field label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--clr-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .reassign-select {
+    border-radius: var(--radius-sm) !important;
+  }
+
+  .reassign-confirm {
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-accent-dark) 100%);
+    color: white;
+    font-weight: 800;
+    font-size: 0.88rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px var(--clr-accent-glow);
+    transition: var(--t-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .reassign-confirm:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px var(--clr-accent-glow);
+  }
+
+  .reassign-confirm:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ─── Animations ─ */
+  @keyframes cmdFloat {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes cmdSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes cmdPing {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+
+    80% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
 </style>

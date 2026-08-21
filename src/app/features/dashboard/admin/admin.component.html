@@ -4,122 +4,107 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding bg-light">
+<ion-content class="ion-padding">
   <!-- Metrics -->
-  <ion-grid>
-    <ion-row *ngIf="metrics">
-      <ion-col size="12" size-md="3">
-        <ion-card class="metric-card">
-          <ion-card-header>
-            <ion-card-subtitle>Centros</ion-card-subtitle>
-            <ion-card-title>{{ metrics.centros_activos }}</ion-card-title>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-      <ion-col size="12" size-md="3">
-        <ion-card class="metric-card">
-          <ion-card-header>
-            <ion-card-subtitle>Directores</ion-card-subtitle>
-            <ion-card-title>{{ metrics.directores_activos }}</ion-card-title>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-      <ion-col size="12" size-md="3">
-        <ion-card class="metric-card">
-          <ion-card-header>
-            <ion-card-subtitle>Funcionarios</ion-card-subtitle>
-            <ion-card-title>{{ metrics.funcionarios_activos }}</ion-card-title>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-      <ion-col size="12" size-md="3">
-        <ion-card class="metric-card">
-          <ion-card-header>
-            <ion-card-subtitle>Nnas Totales</ion-card-subtitle>
-            <ion-card-title>{{ metrics.pacientes_totales }}</ion-card-title>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" *ngIf="metrics">
+    <ion-card class="metric-card m-0">
+      <ion-card-header>
+        <ion-card-subtitle>Centros</ion-card-subtitle>
+        <ion-card-title>{{ metrics.centros_activos }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+    
+    <ion-card class="metric-card m-0">
+      <ion-card-header>
+        <ion-card-subtitle>Directores</ion-card-subtitle>
+        <ion-card-title>{{ metrics.directores_activos }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+    
+    <ion-card class="metric-card m-0">
+      <ion-card-header>
+        <ion-card-subtitle>Funcionarios</ion-card-subtitle>
+        <ion-card-title>{{ metrics.funcionarios_activos }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+    
+    <ion-card class="metric-card m-0">
+      <ion-card-header>
+        <ion-card-subtitle>Nnas Totales</ion-card-subtitle>
+        <ion-card-title>{{ metrics.nnas_totales }}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </div>
 
   <!-- Hierarchy Engine -->
-  <ion-list-header>
-    <ion-label style="font-size: 1.2rem; font-weight: bold; color: #34495e;">Motor de Asignaciones (Jerarquías)</ion-label>
+  <ion-list-header class="px-0 mb-2">
+    <ion-label class="text-xl font-bold">Motor de Asignaciones (Jerarquías)</ion-label>
   </ion-list-header>
   
-  <ion-grid>
-    <ion-row>
-      <!-- Centro -> Director -->
-      <ion-col size="12" size-md="4">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title style="font-size: 1rem;">1. Centro -> Director</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-item>
-              <ion-select label="Centro" labelPlacement="stacked" [(ngModel)]="selectedCentroId">
-                <ion-select-option *ngFor="let c of centros" [value]="c.id">{{ c.nombre }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-select label="Director" labelPlacement="stacked" [(ngModel)]="selectedDirectorParaCentro">
-                <ion-select-option *ngFor="let d of directores" [value]="d.id">{{ d.nombre }} {{ d.apellido }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-button expand="block" class="ion-margin-top" (click)="asignarCentroDirector()">Asignar Director</ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Centro -> Director -->
+    <ion-card class="m-0">
+      <ion-card-header>
+        <ion-card-title class="text-base font-bold">1. Centro -> Director</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="mb-2">
+          <ion-select label="Centro" labelPlacement="stacked" [(ngModel)]="selectedCentroId">
+            <ion-select-option *ngFor="let c of centros" [value]="c.id">{{ c.nombre }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="mb-4">
+          <ion-select label="Director" labelPlacement="stacked" [(ngModel)]="selectedDirectorParaCentro">
+            <ion-select-option *ngFor="let d of directores" [value]="d.id">{{ d.nombre }} {{ d.apellido }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button expand="block" (click)="asignarCentroDirector()">Asignar Director</ion-button>
+      </ion-card-content>
+    </ion-card>
 
-      <!-- Director -> Funcionario -->
-      <ion-col size="12" size-md="4">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title style="font-size: 1rem;">2. Director -> Funcionario</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-item>
-              <ion-select label="Director" labelPlacement="stacked" [(ngModel)]="selectedDirectorId">
-                <ion-select-option *ngFor="let d of directores" [value]="d.id">{{ d.nombre }} {{ d.apellido }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-select label="Funcionario" labelPlacement="stacked" [(ngModel)]="selectedFuncionarioParaDirector">
-                <ion-select-option *ngFor="let f of funcionarios" [value]="f.id">{{ f.nombre }} {{ f.apellido }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-button expand="block" class="ion-margin-top" (click)="asignarDirectorFuncionario()">Asignar Equipo</ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+    <!-- Director -> Funcionario -->
+    <ion-card class="m-0">
+      <ion-card-header>
+        <ion-card-title class="text-base font-bold">2. Director -> Funcionario</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="mb-2">
+          <ion-select label="Director" labelPlacement="stacked" [(ngModel)]="selectedDirectorId">
+            <ion-select-option *ngFor="let d of directores" [value]="d.id">{{ d.nombre }} {{ d.apellido }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="mb-4">
+          <ion-select label="Funcionario" labelPlacement="stacked" [(ngModel)]="selectedFuncionarioParaDirector">
+            <ion-select-option *ngFor="let f of funcionarios" [value]="f.id">{{ f.nombre }} {{ f.apellido }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button expand="block" (click)="asignarDirectorFuncionario()">Asignar Equipo</ion-button>
+      </ion-card-content>
+    </ion-card>
 
-      <!-- Funcionario -> Nna -->
-      <ion-col size="12" size-md="4">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title style="font-size: 1rem;">3. Funcionario -> Nna</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-item>
-              <ion-select label="Funcionario" labelPlacement="stacked" [(ngModel)]="selectedFuncionarioId">
-                <ion-select-option *ngFor="let f of funcionarios" [value]="f.id">{{ f.nombre }} {{ f.apellido }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-select label="Nna" labelPlacement="stacked" [(ngModel)]="selectedPacienteId">
-                <ion-select-option *ngFor="let p of nnas" [value]="p.id">{{ p.nombre }} {{ p.apellido }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-select label="Centro (Contexto)" labelPlacement="stacked" [(ngModel)]="selectedCentroParaPaciente">
-                <ion-select-option *ngFor="let c of centros" [value]="c.id">{{ c.nombre }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-button expand="block" class="ion-margin-top" (click)="asignarPacienteAFuncionario()">Vincular Nna</ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <!-- Funcionario -> Nna -->
+    <ion-card class="m-0">
+      <ion-card-header>
+        <ion-card-title class="text-base font-bold">3. Funcionario -> Nna</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="mb-2">
+          <ion-select label="Funcionario" labelPlacement="stacked" [(ngModel)]="selectedFuncionarioId">
+            <ion-select-option *ngFor="let f of funcionarios" [value]="f.id">{{ f.nombre }} {{ f.apellido }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="mb-2">
+          <ion-select label="Nna" labelPlacement="stacked" [(ngModel)]="selectedPacienteId">
+            <ion-select-option *ngFor="let p of nnas" [value]="p.id">{{ p.nombre }} {{ p.apellido }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="mb-4">
+          <ion-select label="Centro (Contexto)" labelPlacement="stacked" [(ngModel)]="selectedCentroParaPaciente">
+            <ion-select-option *ngFor="let c of centros" [value]="c.id">{{ c.nombre }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button expand="block" (click)="asignarPacienteAFuncionario()">Vincular Nna</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

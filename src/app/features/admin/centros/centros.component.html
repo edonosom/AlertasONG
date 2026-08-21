@@ -3,15 +3,12 @@
   <!-- Header -->
   <div class="page-header">
     <div>
-      <h2 class="page-title">Proyectos</h2>
-      <p class="page-subtitle">Administración de sucursales y regiones de la red clínica</p>
+      <h2 class="page-title">Programas</h2>
+      <p class="page-subtitle">Administración de programas</p>
     </div>
     <button (click)="openAddModal()" class="btn-add-primary" id="add-centro-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Nuevo Centro
+      <ion-icon name="add-outline"></ion-icon>
+      Nuevo Programa
     </button>
   </div>
 
@@ -22,169 +19,180 @@
         <ion-label>✓ Activos ({{ centrosActivos().length }})</ion-label>
       </ion-segment-button>
       @if (isRoot()) {
-        <ion-segment-button value="inactivos">
-          <ion-label>⟳ Historial ({{ centrosInactivos().length }})</ion-label>
-        </ion-segment-button>
+      <ion-segment-button value="inactivos">
+        <ion-label>⟳ Historial ({{ centrosInactivos().length }})</ion-label>
+      </ion-segment-button>
       }
     </ion-segment>
   </div>
 
   <!-- Search -->
-  <div class="filters-bar fade-in" style="flex-wrap: wrap;">
-    <div class="search-wrap flex-1" style="min-width: 280px; position: relative;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">
-        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <div class="filters-bar fade-in" class="flex-wrap">
+    <div class="search-wrap flex-1" class="min-w-[280px] relative">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+        class="absolute left-[14px] top-1/2 -translate-y-1/2 text-text-muted">
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" />
       </svg>
-      <input type="text" placeholder="Buscar por nombre o código del centro..." 
-        style="width: 100%; padding: 10px 14px 10px 40px; border-radius: var(--radius-sm); border: 1px solid var(--clr-border); background: var(--clr-surface-2); color: var(--clr-text); font-size: 0.9rem;"
+      <input type="text" placeholder="Buscar por nombre o código del programa..."
+        class="w-full py-[10px] pr-[14px] pl-[40px] rounded-[var(--radius-sm)] border border-border bg-surface-2 text-text text-[0.9rem]"
         (input)="onSearchChange($event)" [value]="searchQuery()" />
       @if (searchQuery()) {
-        <button (click)="clearSearch()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--clr-text-secondary); cursor: pointer; display: flex;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
+      <button (click)="clearSearch()"
+        class="absolute right-[10px] top-1/2 -translate-y-1/2 bg-transparent border-none text-text-secondary cursor-pointer flex">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
       }
     </div>
   </div>
 
   <!-- Skeletons -->
   @if (isLoading()) {
-    <div class="centros-grid stagger-children">
-      @for (i of [1,2,3,4,5,6]; track i) {
-        <div class="centro-skeleton slide-up">
-          <div class="skeleton" style="width:48px;height:48px;border-radius:14px;flex-shrink:0;"></div>
-          <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
-            <div class="skeleton" style="width:60%;height:14px;"></div>
-            <div class="skeleton" style="width:40%;height:11px;"></div>
-          </div>
-        </div>
-      }
+  <div class="centros-grid stagger-children">
+    @for (i of [1,2,3,4,5,6]; track i) {
+    <div class="centro-skeleton slide-up">
+      <div class="skeleton" class="w-12 h-12 rounded-[14px] shrink-0"></div>
+      <div class="flex-1 flex flex-col gap-2">
+        <div class="skeleton" class="w-[60%] h-[14px]"></div>
+        <div class="skeleton" class="w-[40%] h-[11px]"></div>
+      </div>
     </div>
+    }
+  </div>
   }
 
   <!-- Empty State -->
   @if (!isLoading() && centros().length === 0) {
-    <div class="empty-state fade-in-delayed">
-      <div class="empty-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6"
-                stroke="var(--clr-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <h3>{{ activeTab() === 'activos' ? 'No hay centros registrados' : 'Sin historial de centros' }}</h3>
-      <p>{{ activeTab() === 'activos' ? 'Agrega el primer centro de la red clínica.' : 'Los centros desactivados aparecerán aquí.' }}</p>
-      @if (activeTab() === 'activos') {
-        <button class="btn-add-primary" (click)="openAddModal()">Agregar Centro</button>
-      }
+  <div class="empty-state fade-in-delayed">
+    <div class="empty-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6" stroke="var(--clr-accent)" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
     </div>
+    <h3>{{ activeTab() === 'activos' ? 'No hay programas registrados' : 'Sin historial de programas' }}</h3>
+    <p>{{ activeTab() === 'activos' ? 'Agrega el primer programa de la red clínica.' : 'Los programas desactivados
+      aparecerán aquí.' }}</p>
+    @if (activeTab() === 'activos') {
+    <button class="btn-add-primary" (click)="openAddModal()">Agregar Programa</button>
+    }
+  </div>
   }
 
   <!-- Grid de centros -->
   @if (!isLoading() && centros().length > 0) {
-    <div class="centros-grid stagger-children slide-up pb-20 lg:pb-6">
-      @for (centro of centros(); track centro.id) {
-        <div class="centro-card flex-col items-start"
-             [routerLink]="['/admin/centros', centro.id]"
-             style="cursor: pointer;"
-             [style.opacity]="centro.deleted_at ? '0.45' : '1'"
-             [style.filter]="centro.deleted_at ? 'grayscale(60%)' : 'none'">
+  <div class="centros-grid stagger-children slide-up pb-20 lg:pb-6">
+    @for (centro of centros(); track centro.id) {
+    <div class="centro-card flex-col items-start" [routerLink]="['/admin/centros', centro.id]" class="cursor-pointer"
+      [style.opacity]="centro.deleted_at ? '0.45' : '1'" [style.filter]="centro.deleted_at ? 'grayscale(60%)' : 'none'">
 
-          <!-- Glow orb on hover -->
-          <div class="centro-card-glow"></div>
+      <!-- Glow orb on hover -->
+      <div class="centro-card-glow"></div>
 
-          <!-- Top: Icon & Status -->
-          <div class="flex items-center justify-between w-full relative z-10">
-            <div class="centro-icon" style="width:42px; height:42px; border-radius:12px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            
-            @if (!centro.deleted_at) {
-              <span class="status-badge status-active">
-                <span class="online-dot" style="width:5px;height:5px;"></span>
-                Activo
-              </span>
-            } @else {
-              <span class="status-badge status-inactive">Inactivo</span>
-            }
-          </div>
-
-          <!-- Middle: Info -->
-          <div class="flex flex-col w-full relative z-10 mt-1 mb-2">
-            <h3 class="centro-name" style="white-space: normal; overflow: visible; font-size: 1.05rem; line-height: 1.3;">{{ centro.nombre }}</h3>
-            
-            <div class="flex flex-col gap-1.5 mt-3">
-              @if (centro.codigo) {
-                <span class="centro-code" style="opacity: 0.8;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <path d="M7 8l-4 4 4 4m10-8l4 4-4 4M14 4l-4 16"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  CÓDIGO: {{ centro.codigo }}
-                </span>
-              } @else {
-                <span class="centro-code" style="opacity:0.4;font-style:italic;">Sin código</span>
-              }
-
-              <!-- Director Asignado -->
-              <span class="centro-code" style="opacity: 0.8;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                </svg>
-                DIRECTOR: {{ centro.director?.nombres || centro.director_nombre || centro.director || 'No asignado' }}
-              </span>
-
-              <!-- Funcionarios Asignados -->
-              <span class="centro-code" style="opacity: 0.8;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-                PROFESIONALES: {{ centro.funcionarios_asignados?.length || 0 }} asignado(s)
-              </span>
-
-              @if (centro.asignaciones_con_alerta90_count > 0) {
-                <span class="centro-code" style="color: var(--clr-danger); font-weight: 600; animation: pulse-opacity 2s infinite;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                  </svg>
-                  Tiene {{ centro.asignaciones_con_alerta90_count }} NNA(s) con plazos críticos
-                </span>
-              }
-            </div>
-          </div>
-
-          <!-- Bottom: Actions -->
-          <div class="flex items-center justify-end gap-2 w-full pt-3 mt-auto border-t border-white/5 relative z-10">
-            @if (!centro.deleted_at) {
-              <button (click)="$event.stopPropagation(); editCentro(centro)" title="Editar" class="action-btn action-btn-edit">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                </svg>
-              </button>
-              <button (click)="$event.stopPropagation(); confirmDelete(centro)" title="Desactivar" class="action-btn action-btn-danger">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                </svg>
-              </button>
-            }
-            @if (centro.deleted_at && isRoot()) {
-              <button (click)="$event.stopPropagation(); restoreCentro(centro.id)" title="Restaurar" class="action-btn action-btn-success">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                </svg>
-              </button>
-            }
-          </div>
-
+      <!-- Top: Icon & Status -->
+      <div class="flex items-center justify-between w-full relative z-10">
+        <div class="centro-icon" class="w-[42px] h-[42px] rounded-xl">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M3 21h18M9 21V7l6-4v18M9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
         </div>
-      }
+
+        @if (!centro.deleted_at) {
+        <span class="status-badge status-active">
+          <span class="online-dot" class="w-[5px] h-[5px]"></span>
+          Activo
+        </span>
+        } @else {
+        <span class="status-badge status-inactive">Inactivo</span>
+        }
+      </div>
+
+      <!-- Middle: Info -->
+      <div class="flex flex-col w-full relative z-10 mt-1 mb-2">
+        <h3 class="centro-name" class="whitespace-normal overflow-visible text-[1.05rem] leading-[1.3]">{{ centro.nombre
+          }}</h3>
+
+        <div class="flex flex-col gap-1.5 mt-3">
+          @if (centro.codigo) {
+          <span class="centro-code" class="opacity-80">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M7 8l-4 4 4 4m10-8l4 4-4 4M14 4l-4 16" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            CÓDIGO: {{ centro.codigo }}
+          </span>
+          } @else {
+          <span class="centro-code" class="opacity-40 italic">Sin código</span>
+          }
+
+          <!-- Director Asignado -->
+          <span class="centro-code" class="opacity-80">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            DIRECTOR: {{ centro.director?.nombres || centro.director_nombre || centro.director || 'No asignado' }}
+          </span>
+
+          <!-- Funcionarios Asignados -->
+          <span class="centro-code" class="opacity-80">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            PROFESIONALES: {{ centro.funcionarios_asignados?.length || 0 }} asignado(s)
+          </span>
+
+          @if (centro.asignaciones_con_alerta90_count > 0) {
+          <span class="centro-code" class="text-danger font-semibold animate-pulse">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Tiene {{ centro.asignaciones_con_alerta90_count }} NNA(s) con plazos críticos
+          </span>
+          }
+        </div>
+      </div>
+
+      <!-- Bottom: Actions -->
+      <div class="flex items-center justify-end gap-2 w-full pt-3 mt-auto border-t border-white/5 relative z-10">
+        @if (!centro.deleted_at) {
+        <button (click)="$event.stopPropagation(); editCentro(centro)" title="Editar"
+          class="action-btn action-btn-edit">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </button>
+        <button (click)="$event.stopPropagation(); confirmDelete(centro)" title="Desactivar"
+          class="action-btn action-btn-danger">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+        }
+        @if (centro.deleted_at && isRoot()) {
+        <button (click)="$event.stopPropagation(); restoreCentro(centro.id)" title="Restaurar"
+          class="action-btn action-btn-success">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+        }
+      </div>
+
     </div>
+    }
+  </div>
   }
 
 </div>

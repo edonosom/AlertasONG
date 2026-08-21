@@ -108,10 +108,10 @@ import { switchMap, of, forkJoin, catchError } from 'rxjs';
             @if (needsCentro()) {
               <div class="tw-col slide-down">
                 <div class="tw-input-group">
-                  <label>Asignar Centro Médico <span>*</span></label>
+                  <label>Asignar Programa <span>*</span></label>
                   <div class="tw-input-wrapper" [class.error]="userForm.controls['centro_id'].invalid && userForm.controls['centro_id'].touched">
                     <select formControlName="centro_id">
-                      <option value="null" disabled selected>Seleccione un centro...</option>
+                      <option value="null" disabled selected>Seleccione un programa...</option>
                       @for (centro of centros(); track centro.id) {
                         <option [value]="centro.id">{{ centro.nombre }}</option>
                       }
@@ -405,7 +405,7 @@ export class UsuarioModalComponent implements OnInit {
     const todosLosRoles = [
       { value: 'root', label: 'Super Administrador' },
       { value: 'admin', label: 'Administrador Global' },
-      { value: 'director', label: 'Director de Centro' },
+      { value: 'director', label: 'Director de Programa' },
       { value: 'funcionario', label: 'Profesional' },
     ];
     if (rolAuth === 'root') return todosLosRoles;

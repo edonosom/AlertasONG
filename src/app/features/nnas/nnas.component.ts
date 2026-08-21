@@ -136,6 +136,15 @@ export class PacientesComponent implements OnInit {
     this.selectedComplexity.set(event.target.value);
   }
 
+  filterByComplexity(complejidad: string) {
+    // Si ya está seleccionada esa complejidad, la deseleccionamos (toggle)
+    if (this.selectedComplexity() === complejidad) {
+      this.selectedComplexity.set('');
+    } else {
+      this.selectedComplexity.set(complejidad);
+    }
+  }
+
   clearSearch() {
     this.searchQuery.set('');
   }

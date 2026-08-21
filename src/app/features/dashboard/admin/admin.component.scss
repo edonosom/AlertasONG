@@ -1,26 +1,17 @@
-.bg-light {
-    --background: #f4f6f8;
-}
-
 .metric-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-radius: var(--radius-lg);
     text-align: center;
-    border-top: 4px solid #3498db;
+    border-top: 4px solid var(--clr-accent);
 
     ion-card-title {
         font-size: 2.5rem;
         font-weight: 800;
-        color: #2c3e50;
+        color: var(--clr-text);
     }
     ion-card-subtitle {
         font-size: 0.9rem;
         font-weight: 600;
         letter-spacing: 1px;
+        color: var(--clr-text-secondary);
     }
-}
-
-ion-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
