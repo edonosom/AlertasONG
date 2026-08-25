@@ -164,7 +164,7 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               <span class="adultos-title">Adultos Responsables *</span>
-              <span class="adultos-count">(mín. 2)</span>
+              <span class="adultos-count">(mín. 1)</span>
             </div>
             <button type="button" class="btn-add-adulto" (click)="addAdulto()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
@@ -179,7 +179,7 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
               <div class="adulto-card" [formGroupName]="$index">
                 <div class="adulto-card-header">
                   <span class="adulto-index">Adulto {{ $index + 1 }}</span>
-                  <button type="button" class="btn-remove-adulto" (click)="removeAdulto($index)" [disabled]="adultosArray.length <= 2" [title]="adultosArray.length <= 2 ? 'Mínimo 2 adultos requeridos' : 'Eliminar adulto'">
+                  <button type="button" class="btn-remove-adulto" (click)="removeAdulto($index)" [disabled]="adultosArray.length <= 1" [title]="adultosArray.length <= 1 ? 'Mínimo 1 adulto requerido' : 'Eliminar adulto'">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                       <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -224,8 +224,8 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
               </div>
             }
           </div>
-          <span class="validation-error" *ngIf="adultosArray.length < 2">
-            Se requieren al menos 2 adultos responsables.
+          <span class="validation-error" *ngIf="adultosArray.length < 1">
+            Se requiere al menos 1 adulto responsable.
           </span>
         </div>
 
@@ -541,7 +541,6 @@ export class NnaModalComponent implements OnInit {
     dias_transcurridos: [{ value: 0, disabled: true }, [Validators.min(0), Validators.max(90)]],
     ciclo: [1],
     adultos_responsables: this.fb.array([
-      this.createAdultoGroup(),
       this.createAdultoGroup()
     ])
   });
@@ -565,7 +564,7 @@ export class NnaModalComponent implements OnInit {
   }
 
   removeAdulto(index: number) {
-    if (this.adultosArray.length > 2) {
+    if (this.adultosArray.length > 1) {
       this.adultosArray.removeAt(index);
     }
   }
@@ -611,8 +610,8 @@ export class NnaModalComponent implements OnInit {
         activeAdultos.forEach((a: any) => {
           this.adultosArray.push(this.createAdultoGroup(a));
         });
-        // Ensure minimum 2
-        while (this.adultosArray.length < 2) {
+        // Ensure minimum 1
+        while (this.adultosArray.length < 1) {
           this.adultosArray.push(this.createAdultoGroup());
         }
       }

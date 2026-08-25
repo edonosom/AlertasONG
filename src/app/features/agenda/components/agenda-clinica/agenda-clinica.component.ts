@@ -61,6 +61,20 @@ export class AgendaClinicaComponent implements OnInit {
     return null;
   });
 
+  diasPermanencia = computed(() => {
+    const data = this.nnaData();
+    if (!data?.fecha_ingreso) return 0;
+    
+    const parts = data.fecha_ingreso.split('-');
+    if (parts.length === 3) {
+      const ingreso = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      const hoy = new Date();
+      const diffTime = hoy.getTime() - ingreso.getTime();
+      return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    }
+    return 0;
+  });
+
   daysRemaining = computed(() => {
     const n = this.nnaData();
     if (!n) return 90;
@@ -88,6 +102,7 @@ export class AgendaClinicaComponent implements OnInit {
   
   // Estado que guarda la respuesta del backend
   calendarioData = signal<CalendarioMensualResponse | null>(null);
+  soloPropios = signal<boolean>(false);
 
   // Estado del Detalle Diario
   selectedDate = signal<string | null>(null);
@@ -143,6 +158,10 @@ export class AgendaClinicaComponent implements OnInit {
   weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
   ngOnInit() {
+    this.route.data.subscribe(data => {
+      this.soloPropios.set(!!data['soloPropios']);
+    });
+
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -194,7 +213,7 @@ export class AgendaClinicaComponent implements OnInit {
     
     const params = this.nnaId() ? { nna_id: this.nnaId()! } : undefined;
     
-    this.alertaApi.getResumenMensual(this.currentYear(), this.currentMonth(), params).subscribe({
+    this.alertaApi.getResumenMensual(this.currentYear(), this.currentMonth(), params, this.soloPropios()).subscribe({
       next: (res) => {
         this.calendarioData.set(res);
         this.loading.set(false);
@@ -250,7 +269,7 @@ export class AgendaClinicaComponent implements OnInit {
     this.loadingDetalle.set(true);
     this.detalleData.set([]);
 
-    this.alertaApi.getDetalleDiario(fecha, this.nnaId()).subscribe({
+    this.alertaApi.getDetalleDiario(fecha, this.nnaId(), this.soloPropios()).subscribe({
       next: (res) => {
         this.detalleData.set(res.data);
         this.loadingDetalle.set(false);

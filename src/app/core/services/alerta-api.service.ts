@@ -55,15 +55,21 @@ export class AlertaApiService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/agenda/alertas`;
 
-  getResumenMensual(year: number, month: number, extraParams?: any): Observable<CalendarioMensualResponse> {
-    const params = { year, month, ...extraParams };
+  getResumenMensual(year: number, month: number, extraParams?: any, soloPropios: boolean = false): Observable<CalendarioMensualResponse> {
+    const params: any = { year, month, ...extraParams };
+    if (soloPropios) {
+      params.solo_propios = true;
+    }
     return this.http.get<CalendarioMensualResponse>(`${this.apiUrl}/mensual`, { params });
   }
 
-  getDetalleDiario(fecha: string, nnaId?: string | null): Observable<DetalleDiarioResponse> {
+  getDetalleDiario(fecha: string, nnaId?: string | null, soloPropios: boolean = false): Observable<DetalleDiarioResponse> {
     let params = new HttpParams();
     if (nnaId) {
       params = params.set('nna_id', nnaId);
+    }
+    if (soloPropios) {
+      params = params.set('solo_propios', 'true');
     }
     return this.http.get<DetalleDiarioResponse>(`${this.apiUrl}/fecha/${fecha}`, { params });
   }

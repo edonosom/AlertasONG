@@ -81,6 +81,22 @@ export class NnaDetalleComponent implements OnInit {
     return n.asignaciones.find(a => a.activo) || null;
   }
 
+  get diasPermanencia(): number {
+    const n = this.nna();
+    if (!n || !n.fecha_ingreso) return 0;
+    
+    const parts = n.fecha_ingreso.split('-');
+    if (parts.length === 3) {
+      const baseDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      baseDate.setHours(0, 0, 0, 0);
+      const diffTime = today.getTime() - baseDate.getTime();
+      return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    }
+    return 0;
+  }
+
   get daysRemaining(): number {
     const n = this.nna();
     if (!n) return 90;

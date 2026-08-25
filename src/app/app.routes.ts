@@ -109,9 +109,15 @@ export const routes: Routes = [
         loadComponent: () => import('./features/nnas/nna-detalle/nna-detalle.component').then(m => m.NnaDetalleComponent)
       },
       {
-        path: 'mi-calendario',
+        path: 'calendario-global',
         canActivate: [roleGuard],
         data: { roles: ['root', 'admin', 'director', 'funcionario'] },
+        loadComponent: () => import('./features/agenda/components/agenda-clinica/agenda-clinica.component').then(m => m.AgendaClinicaComponent)
+      },
+      {
+        path: 'mi-calendario',
+        canActivate: [roleGuard],
+        data: { roles: ['root', 'admin', 'director'], soloPropios: true },
         loadComponent: () => import('./features/agenda/components/agenda-clinica/agenda-clinica.component').then(m => m.AgendaClinicaComponent)
       },
       {

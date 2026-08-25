@@ -30,8 +30,8 @@
             <span class="badge badge-primary">{{ nnaData()?.ciclo || 1 }} Informe de proceso</span>
             <span class="badge badge-secondary">Día {{ nnaData()?.dias_transcurridos || 0 }}</span>
             <span class="badge"
-              style="background: var(--clr-surface-2); color: var(--clr-text); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--clr-border);">Lleva
-              {{ nnaData()?.dias_transcurridos || 0 }} días</span>
+              style="background: var(--clr-surface-2); color: var(--clr-text); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--clr-border);">Permanencia de:
+              {{ diasPermanencia() }} días</span>
             <span class="badge"
               style="background: var(--clr-danger, #DC2626); color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; border: none;">Faltan
               {{ daysRemaining() }} días</span>
@@ -61,7 +61,7 @@
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: var(--clr-accent);">
           <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--clr-text); letter-spacing: -0.02em;">Mi Calendario</h2>
+        <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--clr-text); letter-spacing: -0.02em;">{{ soloPropios() ? 'Mi Calendario' : 'Calendario Global' }}</h2>
       </div>
       }
 
