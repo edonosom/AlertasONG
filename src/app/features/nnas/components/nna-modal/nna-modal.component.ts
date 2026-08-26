@@ -205,6 +205,9 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
                       <ion-label position="stacked">Teléfono *</ion-label>
                       <ion-input type="tel" formControlName="telefono" placeholder="+56 9 1234 5678"></ion-input>
                     </ion-item>
+                    <span class="validation-error text-[0.7rem] text-danger mt-1 block" *ngIf="adulto.get('telefono')?.errors?.['pattern'] && adulto.get('telefono')?.touched">
+                      Solo se permiten números, espacios y el símbolo +.
+                    </span>
                   </div>
                   <div class="form-col">
                     <ion-item class="clinical-input">
@@ -554,7 +557,7 @@ export class NnaModalComponent implements OnInit {
       id: [data?.id || null],
       nombre: [data?.nombre || '', Validators.required],
       apellido: [data?.apellido || '', Validators.required],
-      telefono: [data?.telefono || '', Validators.required],
+      telefono: [data?.telefono || '', [Validators.required, Validators.pattern('^[0-9+ ]+$')]],
       parentesco: [data?.parentesco || '', Validators.required]
     });
   }

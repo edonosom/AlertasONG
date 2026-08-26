@@ -52,7 +52,7 @@ interface NavItem {
 
       <!-- User Profile Dropdown Toggle -->
       <div class="user-profile-btn flex items-center gap-3 cursor-pointer p-1 md:pr-3 rounded-xl transition-colors hover:bg-card-hover" id="profile-toggle" (click)="toggleProfileDropdown($event)" [class.bg-card-hover]="profileDropdownOpen()">
-        <div class="avatar-chip flex items-center justify-center w-[40px] h-[40px] rounded-[12px] bg-gradient-to-br from-accent to-accent-dark text-white font-extrabold text-[0.8rem] uppercase tracking-tighter border-[1.5px] border-accent/40 shadow-glow shrink-0 pointer-events-none">
+        <div translate="no" class="avatar-chip flex items-center justify-center w-[40px] h-[40px] rounded-[12px] bg-gradient-to-br from-accent to-accent-dark text-white font-extrabold text-[0.8rem] uppercase tracking-tighter border-[1.5px] border-accent/40 shadow-glow shrink-0 pointer-events-none">
           {{ userInitials() }}
         </div>
         <div class="hidden md:flex flex-col min-w-0">

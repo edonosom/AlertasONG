@@ -61,7 +61,7 @@
         @for (f of filteredFuncionarios(); track f.id) {
         <div (click)="seleccionarFuncionario(f)" class="cmd-team-item"
           [class.cmd-team-item--active]="selectedFuncionarioId() === f.id">
-          <div class="cmd-team-avatar" [class.cmd-team-avatar--active]="selectedFuncionarioId() === f.id">
+          <div translate="no" class="cmd-team-avatar" [class.cmd-team-avatar--active]="selectedFuncionarioId() === f.id">
             {{ f.nombre.charAt(0) }}{{ f.apellido.charAt(0) }}
           </div>
           <div class="cmd-team-info">

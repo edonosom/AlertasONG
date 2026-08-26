@@ -114,7 +114,7 @@
       <!-- Top: Avatar & Status/Role -->
       <div class="flex items-center justify-between w-full relative z-10">
         <!-- Avatar with role color -->
-        <div class="user-avatar" [ngClass]="user.rol?.value || user.rol || 'medium'"
+        <div translate="no" class="user-avatar" [ngClass]="user.rol?.value || user.rol || 'medium'"
           style="width:42px; height:42px; border-radius:12px;">
           {{ user.nombre?.charAt(0)?.toUpperCase() }}{{ user.apellido?.charAt(0)?.toUpperCase() }}
         </div>
