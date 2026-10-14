@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { PacienteService, Nna } from '../../../core/services/nna.service';
+import { NombreFasePipe } from '../../../shared/pipes/nombre-fase.pipe';
 
 @Component({
   selector: 'app-nna-detalle',
   standalone: true,
-  imports: [CommonModule, IonicModule, RouterModule],
+  imports: [CommonModule, IonicModule, RouterModule, NombreFasePipe],
   templateUrl: './nna-detalle.component.html',
   styleUrls: ['./nna-detalle.component.scss']
 })

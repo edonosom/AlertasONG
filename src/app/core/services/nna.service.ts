@@ -12,7 +12,8 @@ export interface Nna {
   fecha_ingreso?: string;
   ciclo?: number;
   dias_transcurridos?: number;
-  complejidad?: string;
+  circular_vigente?: NnaCircular | null;
+  circulares?: NnaCircular[];
   asignaciones?: {
     id: string;
     funcionario_id: string;
@@ -33,6 +34,13 @@ export interface Nna {
       }[];
     };
   }[];
+}
+
+export interface NnaCircular {
+  id: string;
+  circular: string;
+  fecha_inicio: string;
+  fecha_fin: string | null;
 }
 
 export interface PacientesResponse {

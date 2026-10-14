@@ -26,31 +26,28 @@ export class PacientesComponent implements OnInit {
 
   // Filtros
   searchQuery = signal<string>('');
-  selectedComplexity = signal<string>('');
+  selectedCircular = signal<'' | 'con' | 'sin'>('');
 
   // Señales Reactivas de Métricas
   totalCount = computed(() => this.nnas().length);
-  altaCount = computed(() => this.nnas().filter(p => p.complejidad?.toLowerCase() === 'alta').length);
-  mediaCount = computed(() => this.nnas().filter(p => p.complejidad?.toLowerCase() === 'media').length);
-  bajaCount = computed(() => this.nnas().filter(p => p.complejidad?.toLowerCase() === 'baja').length);
+  conCircularCount = computed(() => this.nnas().filter(p => !!p.circular_vigente).length);
+  sinCircularCount = computed(() => this.nnas().filter(p => !p.circular_vigente).length);
 
   // Lista Filtrada
   filteredPacientes = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
-    const comp = this.selectedComplexity().toLowerCase().trim();
+    const circularFiltro = this.selectedCircular();
     return this.nnas().filter(p => {
       const matchQuery = !query || 
         p.nombre.toLowerCase().includes(query) || 
         p.apellido.toLowerCase().includes(query) || 
-        p.rut.toLowerCase().includes(query);
-      
-      const pComp = (p.complejidad || 'No definida').toLowerCase();
-      // Si el filtro es "No definida", busca que sea vacío o "no definida"
-      const matchComp = !comp || 
-        (comp === 'no definida' && (pComp === 'no definida' || pComp === '')) ||
-        pComp === comp;
+        p.rut.toLowerCase().includes(query) ||
+        !!p.circular_vigente?.circular.toLowerCase().includes(query);
 
-      return matchQuery && matchComp;
+      const matchCircular = !circularFiltro ||
+        (circularFiltro === 'con') === !!p.circular_vigente;
+
+      return matchQuery && matchCircular;
     });
   });
 
@@ -110,39 +107,17 @@ export class PacientesComponent implements OnInit {
     return fechaStr;
   }
 
-  getComplexityBadgeClass(complejidad?: string): string {
-    switch (complejidad?.toLowerCase()) {
-      case 'baja': return 'badge-success';
-      case 'media': return 'badge-warning';
-      case 'alta': return 'badge-danger';
-      default: return 'badge-muted';
-    }
-  }
-
-  getComplejidadColor(complejidad?: string): string {
-    switch (complejidad?.toLowerCase()) {
-      case 'baja': return 'success';
-      case 'media': return 'warning';
-      case 'alta': return 'danger';
-      default: return 'medium';
-    }
-  }
-
   onSearchChange(event: any) {
     this.searchQuery.set(event.target.value);
   }
 
-  onComplexityChange(event: any) {
-    this.selectedComplexity.set(event.target.value);
+  onCircularFilterChange(event: any) {
+    this.selectedCircular.set(event.target.value);
   }
 
-  filterByComplexity(complejidad: string) {
-    // Si ya está seleccionada esa complejidad, la deseleccionamos (toggle)
-    if (this.selectedComplexity() === complejidad) {
-      this.selectedComplexity.set('');
-    } else {
-      this.selectedComplexity.set(complejidad);
-    }
+  filterByCircular(filtro: '' | 'con' | 'sin') {
+    // Si ya está seleccionado ese filtro, lo deseleccionamos (toggle)
+    this.selectedCircular.set(this.selectedCircular() === filtro ? '' : filtro);
   }
 
   clearSearch() {
@@ -151,7 +126,7 @@ export class PacientesComponent implements OnInit {
 
   resetFilters() {
     this.searchQuery.set('');
-    this.selectedComplexity.set('');
+    this.selectedCircular.set('');
   }
 
   async openModal(nna?: Nna) {

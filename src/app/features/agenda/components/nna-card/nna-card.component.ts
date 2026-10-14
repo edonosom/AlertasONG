@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { DetalleAlertaDia } from '../../../../core/services/alerta-api.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { NombreFasePipe } from '../../../../shared/pipes/nombre-fase.pipe';
 
 @Component({
   selector: 'app-nna-card',
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, NombreFasePipe],
   templateUrl: './nna-card.component.html',
   styleUrls: ['./nna-card.component.scss']
 })

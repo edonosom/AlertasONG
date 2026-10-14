@@ -6,6 +6,7 @@ import { PacienteService, Nna } from '../../../../core/services/nna.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { CentroService, Centro } from '../../../../core/services/centro.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
+import { FASE_DIAGNOSTICO } from '../../../../shared/pipes/nombre-fase.pipe';
 
 @Component({
   selector: 'app-nna-modal',
@@ -105,7 +106,7 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
           </div>
         </div>
 
-        <!-- Fila 4: Fecha de Ingreso y Complejidad -->
+        <!-- Fila 4: Fecha de Ingreso y Aplicación de Circular -->
         <div class="form-row">
           <div class="form-col">
             <ion-item class="clinical-input" [class.ion-invalid]="nnaForm.get('fecha_ingreso')?.invalid && nnaForm.get('fecha_ingreso')?.touched">
@@ -119,14 +120,12 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
 
           <div class="form-col">
             <ion-item class="clinical-input">
-              <ion-label position="stacked">Complejidad (Opcional)</ion-label>
-              <select formControlName="complejidad" class="modal-native-select">
-                <option value="">Sin definir</option>
-                <option value="baja">Baja</option>
-                <option value="media">Media</option>
-                <option value="alta">Alta</option>
-              </select>
+              <ion-label position="stacked">Aplicación de Circular (Opcional)</ion-label>
+              <ion-input type="text" formControlName="circular" maxlength="255" placeholder="Ej: Circular N° 21"></ion-input>
             </ion-item>
+            @if (nna?.circular_vigente) {
+              <span class="field-hint">Si la cambias, la circular actual se cerrará con fecha de hoy y quedará en el historial.</span>
+            }
           </div>
         </div>
 
@@ -136,6 +135,7 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
             <ion-item class="clinical-input" [class.ion-invalid]="nnaForm.get('numero_fase')?.invalid && nnaForm.get('numero_fase')?.touched">
               <ion-label position="stacked">Proceso de Intervención</ion-label>
               <select formControlName="numero_fase" class="modal-native-select">
+                <option value="0">Informe Diagnóstico</option>
                 <option value="1">1 Informe de proceso</option>
                 <option value="2">2 Informe de proceso</option>
                 <option value="3">3 Informe de proceso</option>
@@ -333,6 +333,14 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
         background: var(--clr-surface-2);
         color: var(--clr-text);
       }
+    }
+    .field-hint {
+      color: var(--clr-text-muted, #6b7280);
+      font-size: 0.75rem;
+      margin-top: -12px;
+      margin-bottom: 14px;
+      padding-left: 6px;
+      display: block;
     }
     .validation-error {
       color: var(--clr-danger);
@@ -537,12 +545,12 @@ export class NnaModalComponent implements OnInit {
     apellido: ['', [Validators.required]],
     fecha_nacimiento: ['', [Validators.required]],
     fecha_ingreso: ['', [Validators.required]],
-    complejidad: [''],
+    circular: ['', [Validators.maxLength(255)]],
     centro_id: [null],
     funcionario_id: [null],
-    numero_fase: [{ value: 1, disabled: true }, [Validators.min(1), Validators.max(5)]],
+    numero_fase: [{ value: FASE_DIAGNOSTICO, disabled: true }, [Validators.min(FASE_DIAGNOSTICO), Validators.max(5)]],
     dias_transcurridos: [{ value: 0, disabled: true }, [Validators.min(0), Validators.max(90)]],
-    ciclo: [1],
+    ciclo: [FASE_DIAGNOSTICO],
     adultos_responsables: this.fb.array([
       this.createAdultoGroup()
     ])
@@ -597,10 +605,10 @@ export class NnaModalComponent implements OnInit {
         apellido: this.nna.apellido,
         fecha_nacimiento: this.nna.fecha_nacimiento ? this.nna.fecha_nacimiento.substring(0, 10) : '',
         fecha_ingreso: this.nna.fecha_ingreso ? this.nna.fecha_ingreso.substring(0, 10) : '',
-        complejidad: this.nna.complejidad || '',
+        circular: this.nna.circular_vigente?.circular || '',
         centro_id: activeAsg?.centro_id || null,
         funcionario_id: activeAsg?.funcionario_id || null,
-        numero_fase: this.nna.ciclo || 1,
+        numero_fase: this.nna.ciclo ?? FASE_DIAGNOSTICO,
         dias_transcurridos: this.nna.dias_transcurridos || 0
       });
       this.nnaForm.get('rut')?.disable();
@@ -633,7 +641,8 @@ export class NnaModalComponent implements OnInit {
         const diffTime = Math.abs(hoy.getTime() - ingreso.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         
-        const ciclo = Math.floor(diffDays / 90) + 1;
+        // Cada proceso dura 90 días: el primero es el Informe Diagnóstico (0) y luego los procesos 1 a 5
+        const ciclo = Math.min(Math.floor(diffDays / 90), 5);
         const diasRestantes = diffDays % 90;
 
         this.nnaForm.patchValue({

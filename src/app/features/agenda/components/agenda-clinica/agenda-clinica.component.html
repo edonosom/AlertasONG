@@ -27,7 +27,7 @@
           <div class="demographics-badges">
             <span class="badge badge-outline">RUT: {{ nnaData()?.rut }}</span>
             <span class="badge badge-outline">Edad: {{ edadNna() }} años</span>
-            <span class="badge badge-primary">{{ nnaData()?.ciclo || 1 }} Informe de proceso</span>
+            <span class="badge badge-primary">{{ nnaData()?.ciclo | nombreFase }}</span>
             <span class="badge badge-secondary">Día {{ nnaData()?.dias_transcurridos || 0 }}</span>
             <span class="badge"
               style="background: var(--clr-surface-2); color: var(--clr-text); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--clr-border);">Permanencia de:

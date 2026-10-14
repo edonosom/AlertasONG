@@ -3,7 +3,7 @@
     <div class="patient-info">
       <h3 class="patient-name">{{ data().nna_nombre_completo }}</h3>
       <span class="patient-rut">RUT: {{ data().rut || maskedRut() }} | Edad: {{ data().edad }} años</span>
-      <span class="patient-demographics">{{ data().ciclo }} Informe de proceso | Día {{ data().dias_nna }}</span>
+      <span class="patient-demographics">{{ data().ciclo | nombreFase }} | Día {{ data().dias_nna }}</span>
     </div>
     
     <div class="alert-badge" [ngClass]="semanticColorClass()">

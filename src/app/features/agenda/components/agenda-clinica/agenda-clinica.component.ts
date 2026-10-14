@@ -7,6 +7,7 @@ import { PacienteService, Nna } from '../../../../core/services/nna.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NnaCardComponent } from '../nna-card/nna-card.component';
 import { AgendaModalComponent } from '../agenda-modal/agenda-modal.component';
+import { NombreFasePipe } from '../../../../shared/pipes/nombre-fase.pipe';
 
 interface CeldaCalendario {
   esVacio: boolean;
@@ -18,7 +19,7 @@ interface CeldaCalendario {
 @Component({
   selector: 'app-agenda-clinica',
   standalone: true,
-  imports: [CommonModule, IonicModule, NnaCardComponent, RouterModule],
+  imports: [CommonModule, IonicModule, NnaCardComponent, RouterModule, NombreFasePipe],
   templateUrl: './agenda-clinica.component.html',
   styleUrls: ['./agenda-clinica.component.scss']
 })

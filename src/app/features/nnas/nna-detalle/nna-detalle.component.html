@@ -53,7 +53,7 @@
                 </div>
                 <div class="info-item">
                   <span class="label">Proceso de Intervención</span>
-                  <span class="value">{{ nna()!.ciclo || 1 }} Informe de proceso</span>
+                  <span class="value">{{ nna()!.ciclo | nombreFase }}</span>
                 </div>
                 <div class="info-item">
                   <span class="label">Días Transcurridos</span>
@@ -63,8 +63,8 @@
                   </div>
                 </div>
                 <div class="info-item">
-                  <span class="label">Complejidad</span>
-                  <span class="value capitalize">{{ nna()!.complejidad || 'No especificada' }}</span>
+                  <span class="label">Aplicación de Circular</span>
+                  <span class="value">{{ nna()!.circular_vigente?.circular || 'Sin circular' }}</span>
                 </div>
               </div>
             </div>
@@ -86,6 +86,30 @@
               </div>
             } @else {
               <p class="italic text-sm" style="color: var(--clr-text-muted);">El NNA no tiene una asignación activa en este momento.</p>
+            }
+          </div>
+
+          <!-- Historial de Circulares -->
+          <div class="glass-card p-6">
+            <h2 class="text-xl font-bold mb-4" style="color: var(--clr-text);">Historial de Circulares</h2>
+            @if (nna()!.circulares?.length) {
+              <div class="flex flex-col gap-3">
+                @for (c of nna()!.circulares; track c.id) {
+                  <div class="p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2" style="background: var(--clr-surface-2); border: 1px solid var(--clr-border);">
+                    <div class="flex items-center gap-2 min-w-0">
+                      @if (!c.fecha_fin) {
+                        <span class="inline-block px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0" style="background: rgba(0,230,118,0.12); color: #00E676; border: 1px solid rgba(0,230,118,0.25);">Vigente</span>
+                      }
+                      <p class="font-bold m-0 break-words" style="color: var(--clr-text);">{{ c.circular }}</p>
+                    </div>
+                    <p class="text-sm m-0 flex-shrink-0" style="color: var(--clr-text-secondary);">
+                      {{ c.fecha_inicio | date:'dd/MM/yyyy':'UTC' }} — {{ c.fecha_fin ? (c.fecha_fin | date:'dd/MM/yyyy':'UTC') : 'Actualidad' }}
+                    </p>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="italic text-sm" style="color: var(--clr-text-muted);">El NNA no tiene circulares registradas.</p>
             }
           </div>
 
