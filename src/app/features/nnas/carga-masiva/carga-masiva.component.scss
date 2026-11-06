@@ -1,0 +1,325 @@
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--clr-text-secondary);
+  text-decoration: none;
+
+  &:hover { color: var(--clr-accent); }
+}
+
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--clr-border);
+  background: var(--clr-card);
+  color: var(--clr-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ─── Stepper ─────────────────────────────────────────── */
+.stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 100px;
+  border: 1px solid var(--clr-border);
+  color: var(--clr-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--clr-surface-2);
+  font-weight: 800;
+}
+
+.step-done {
+  color: var(--clr-text-secondary);
+  .step-num { background: var(--clr-success-dim); color: var(--clr-success); }
+}
+
+.step-active {
+  color: var(--clr-accent);
+  border-color: var(--clr-border-accent);
+  background: var(--clr-accent-dim);
+  .step-num { background: var(--clr-accent); color: #fff; }
+}
+
+/* ─── Paso 1 ──────────────────────────────────────────── */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 240px;
+  padding: 32px 16px;
+  text-align: center;
+  border: 2px dashed var(--clr-border);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover, &.dropzone-over {
+    border-color: var(--clr-accent);
+    background: var(--clr-accent-dim);
+  }
+}
+
+.info-box p { line-height: 1.55; }
+
+/* ─── Comunes ─────────────────────────────────────────── */
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--clr-text);
+  margin: 0 0 4px;
+}
+
+.section-sub {
+  color: var(--clr-text-secondary);
+  font-size: 0.875rem;
+  margin: 0 0 16px;
+}
+
+.note {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--clr-warning-dim);
+  color: var(--clr-text);
+  font-size: 0.85rem;
+}
+
+.link {
+  color: var(--clr-accent);
+  font-weight: 600;
+}
+
+.field-select {
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--clr-input-bd);
+  background: var(--clr-input-bg);
+  color: var(--clr-text);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+
+  &:focus { border-color: var(--clr-accent); }
+
+  option {
+    background: var(--clr-bg);
+    color: var(--clr-text);
+  }
+}
+
+.select-missing { border-color: var(--clr-warning); }
+
+.actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+/* ─── Paso 2 ──────────────────────────────────────────── */
+.map-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 16px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--clr-border);
+
+  &:last-child { border-bottom: none; }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.map-row-missing .field-select { border-color: var(--clr-danger); }
+
+.map-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.map-help {
+  width: 100%;
+  font-size: 0.75rem;
+  color: var(--clr-text-muted);
+}
+
+.map-select {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.map-example {
+  font-size: 0.75rem;
+  color: var(--clr-text-muted);
+}
+
+/* ─── Paso 3 ──────────────────────────────────────────── */
+.assoc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assoc-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--clr-border);
+    .assoc-arrow { display: none; }
+  }
+}
+
+.assoc-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.assoc-arrow { color: var(--clr-text-muted); }
+.assoc-select { width: 100%; }
+
+/* ─── Paso 4 ──────────────────────────────────────────── */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--clr-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--clr-text-secondary);
+  cursor: pointer;
+}
+
+.table-wrap {
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  color: var(--clr-text);
+
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--clr-text-secondary);
+    background: var(--clr-surface);
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  td {
+    padding: 10px 16px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .mono { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .muted { color: var(--clr-text-secondary); }
+}
+
+.row-error td { background: var(--clr-danger-dim); }
+
+.error-list {
+  margin: 6px 0 0;
+  padding-left: 16px;
+  font-size: 0.78rem;
+  color: var(--clr-danger);
+}

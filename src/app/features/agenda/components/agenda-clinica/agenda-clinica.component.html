@@ -101,7 +101,13 @@
           <div class="day-number" [class.today]="isToday(celda.fecha)">{{ celda.dia }}</div>
           <div class="events-container">
             @for (alerta of celda.alertas; track alerta.id) {
-            <div class="calendar-event" [ngClass]="getEventClass(alerta)">
+            <div class="calendar-event" [ngClass]="getEventClass(alerta)"
+              [class.active]="alerta.id === actividadExpandidaId()"
+              [attr.title]="alerta.titulo"
+              (click)="clickEvento($event, celda, alerta)">
+              @if (alerta.tipo === 'PERSONALIZADA') {
+              <ion-icon class="event-icon" [name]="alerta.es_personal ? 'person' : 'people'"></ion-icon>
+              }
               <span class="event-time" *ngIf="alerta.hora">{{ alerta.hora }}</span>
               <span class="event-title">{{ alerta.titulo }}</span>
             </div>
@@ -146,9 +152,15 @@
       } @else {
       <div class="cards-container">
         @for (alerta of detalleData(); track alerta.alerta_id) {
+        @if (alerta.tipo === 'PERSONALIZADA') {
+        <app-actividad-card [attr.id]="'actividad-' + alerta.alerta_id" [data]="alerta"
+          [expanded]="alerta.alerta_id === actividadExpandidaId()"
+          (expandedChange)="toggleActividad(alerta.alerta_id, $event)"></app-actividad-card>
+        } @else {
         <app-nna-card [data]="alerta" (onConfirmarGestion)="cerrarGestionDesdeCard($event)"
           (onEnviarDocumentos)="enviarDocumentos($event)"
           (onConfirmarRecepcion)="confirmarRecepcion($event)"></app-nna-card>
+        }
         }
       </div>
       @if (!selectedDate()) {

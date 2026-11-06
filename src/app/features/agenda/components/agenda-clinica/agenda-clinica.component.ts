@@ -6,6 +6,7 @@ import { DetalleAlertaDia, AlertaApiService, CalendarioMensualResponse, AlertaRe
 import { PacienteService, Nna } from '../../../../core/services/nna.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NnaCardComponent } from '../nna-card/nna-card.component';
+import { ActividadCardComponent } from '../actividad-card/actividad-card.component';
 import { AgendaModalComponent } from '../agenda-modal/agenda-modal.component';
 import { NombreFasePipe } from '../../../../shared/pipes/nombre-fase.pipe';
 
@@ -19,7 +20,7 @@ interface CeldaCalendario {
 @Component({
   selector: 'app-agenda-clinica',
   standalone: true,
-  imports: [CommonModule, IonicModule, NnaCardComponent, RouterModule, NombreFasePipe],
+  imports: [CommonModule, IonicModule, NnaCardComponent, ActividadCardComponent, RouterModule, NombreFasePipe],
   templateUrl: './agenda-clinica.component.html',
   styleUrls: ['./agenda-clinica.component.scss']
 })
@@ -110,6 +111,8 @@ export class AgendaClinicaComponent implements OnInit {
   loadingDetalle = signal(false);
   detalleData = signal<DetalleAlertaDia[]>([]);
   hasEventosEnFechaSeleccionada = signal(false);
+  // Actividad personalizada con el detalle desplegado en la columna derecha
+  actividadExpandidaId = signal<string | null>(null);
 
   formatSelectedDate(fechaStr: string | null): string {
     if (!fechaStr) return '';
@@ -262,11 +265,13 @@ export class AgendaClinicaComponent implements OnInit {
     if (alerta.tipo === 'SLA' && alerta.nivel) {
       return `event-sla-${alerta.nivel}`;
     }
-    return 'event-personalizada';
+    const clase = alerta.es_personal ? 'event-personal' : 'event-personalizada';
+    return alerta.es_critica ? `${clase} event-critica` : clase;
   }
 
-  seleccionarFecha(fecha: string) {
+  seleccionarFecha(fecha: string, expandirId: string | null = null) {
     this.selectedDate.set(fecha);
+    this.actividadExpandidaId.set(expandirId);
     this.loadingDetalle.set(true);
     this.detalleData.set([]);
 
@@ -274,12 +279,40 @@ export class AgendaClinicaComponent implements OnInit {
       next: (res) => {
         this.detalleData.set(res.data);
         this.loadingDetalle.set(false);
+        if (expandirId) {
+          this.scrollAActividad(expandirId);
+        }
       },
       error: (err) => {
         console.error('Error cargando detalle diario', err);
         this.loadingDetalle.set(false);
       }
     });
+  }
+
+  toggleActividad(id: string, expandida: boolean) {
+    this.actividadExpandidaId.set(expandida ? id : null);
+  }
+
+  // Click sobre una actividad dentro de la grilla: abre el día y despliega su detalle
+  clickEvento(event: Event, celda: CeldaCalendario, alerta: AlertaResumen) {
+    if (alerta.tipo !== 'PERSONALIZADA' || !celda.fecha) return;
+    event.stopPropagation();
+    this.hasEventosEnFechaSeleccionada.set(true);
+
+    if (this.selectedDate() === celda.fecha && this.detalleData().length > 0) {
+      this.actividadExpandidaId.set(alerta.id);
+      this.scrollAActividad(alerta.id);
+    } else {
+      this.seleccionarFecha(celda.fecha, alerta.id);
+    }
+  }
+
+  private scrollAActividad(id: string) {
+    // Esperar a que Angular renderice la tarjeta antes de desplazar
+    setTimeout(() => {
+      document.getElementById(`actividad-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
   }
 
   cerrarDetalle() {

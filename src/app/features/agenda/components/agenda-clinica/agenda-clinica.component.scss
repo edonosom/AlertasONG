@@ -7,6 +7,7 @@ $color-sla-75: var(--clr-warning);
 $color-sla-80: #e67e22; // Naranja precaución
 $color-sla-89: var(--clr-danger);
 $color-custom: var(--clr-accent-2);
+$color-personal: var(--clr-personal);
 
 :host {
   display: block;
@@ -319,6 +320,33 @@ $color-custom: var(--clr-accent-2);
       background: var(--clr-accent-2-dim);
       color: var(--clr-text);
       border-left-color: $color-custom;
+    }
+    &.event-personal {
+      background: var(--clr-personal-dim);
+      color: var(--clr-text);
+      border-left-color: $color-personal;
+      border-left-style: dashed;
+    }
+    &.event-personalizada,
+    &.event-personal {
+      cursor: pointer;
+
+      &:hover,
+      &.active {
+        filter: brightness(1.15);
+        box-shadow: 0 0 0 1px currentColor inset;
+      }
+    }
+    &.event-critica {
+      border-left-color: $color-sla-89;
+      border-left-style: solid;
+    }
+
+    .event-icon {
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      margin-right: 3px;
+      opacity: 0.8;
     }
     
     .event-time { 

@@ -9,6 +9,8 @@ export interface AlertaResumen {
   nivel?: number;
   hora?: string;
   estado?: string;
+  es_personal?: boolean;
+  es_critica?: boolean;
 }
 
 export interface CalendarioMensualResponse {
@@ -40,6 +42,11 @@ export interface DetalleAlertaDia {
   tiempo_restante?: string;
   documentacion_subida?: boolean;
   fase_estado?: string;
+  es_personal?: boolean;
+  hora?: string;
+  es_critica?: boolean;
+  notificar_email?: boolean;
+  creado_por?: string | null;
 }
 
 export interface DetalleDiarioResponse {

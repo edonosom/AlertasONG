@@ -103,6 +103,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/nnas/nnas.component').then(m => m.PacientesComponent)
       },
       {
+        path: 'nnas/carga-masiva',
+        canActivate: [roleGuard],
+        data: { roles: ['root', 'admin'] },
+        loadComponent: () => import('./features/nnas/carga-masiva/carga-masiva.component').then(m => m.CargaMasivaComponent)
+      },
+      {
         path: 'nnas/:id',
         canActivate: [roleGuard],
         data: { roles: ['root', 'admin', 'director', 'funcionario'] },

@@ -62,6 +62,25 @@ export interface AlertaPersonalizada {
   es_critica?: boolean;
 }
 
+export interface CargaMasivaFila {
+  fila: number;
+  rut: string | null;
+  nombre: string | null;
+  apellido: string | null;
+  fecha_nacimiento: string | null;
+  fecha_ingreso?: string | null;
+  circular?: string | null;
+  centro_id?: string | null;
+  funcionario_id?: string | null;
+  adultos_responsables?: { nombre: string | null; apellido: string | null; telefono: string | null; parentesco: string | null }[];
+}
+
+export interface CargaMasivaResultado {
+  simulacion: boolean;
+  resumen: { total: number; validas: number; creadas: number; con_error: number };
+  filas: { fila: number; rut: string | null; estado: 'valida' | 'creada' | 'error'; errores: string[]; nna_id?: string }[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -87,6 +106,10 @@ export class PacienteService {
 
   deletePaciente(id: string): Observable<{ success: boolean; message: string }> {
     return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/nnas/${id}`);
+  }
+
+  cargaMasiva(filas: CargaMasivaFila[], simular: boolean): Observable<{ success: boolean; data: CargaMasivaResultado }> {
+    return this.http.post<{ success: boolean; data: CargaMasivaResultado }>(`${this.apiUrl}/nnas/carga-masiva`, { filas, simular });
   }
 
   createAlerta(data: AlertaPersonalizada): Observable<any> {
